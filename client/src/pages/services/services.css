@@ -55,7 +55,7 @@
     margin: 0 auto;
     font-size: 13px;
     line-height: 1.7;
-    color: rgba(20, 20, 20, 0.62);
+    color: #000;
 }
 
 .sp-hero-actions {
@@ -75,7 +75,7 @@
     font-weight: 800;
     font-size: 13px;
     text-decoration: none;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border);
     transition:
         transform 180ms ease,
         filter 180ms ease,
@@ -83,7 +83,7 @@
 }
 
 .sp-btn-primary {
-    color: #fff;
+    color: #000;
     background: linear-gradient(
         90deg,
         var(--primary-color),
@@ -93,7 +93,7 @@
 
 .sp-btn-ghost {
     background: rgba(255, 255, 255, 0.25);
-    color: rgba(20, 20, 20, 0.82);
+    color: #000;
     border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
@@ -107,7 +107,8 @@
 }
 
 .sp-btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.35);
+    background: var(--purple-bg);
+    border: 1px solid var(--primary-color);
 }
 
 /* ---------- Section ---------- */
@@ -131,7 +132,7 @@
     margin: 14px auto 0;
     width: min(820px, 92%);
     text-align: center;
-    color: rgba(20, 20, 20, 0.62);
+    color: #000;
     font-size: 13px;
     line-height: 1.7;
 }
@@ -164,7 +165,7 @@
 
 .sp-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 14px 28px var(--box-shadow);
 }
 
 .sp-card-icon {
@@ -180,7 +181,7 @@
     margin: 0;
     font-weight: 800;
     font-size: 13px;
-    color: rgba(20, 20, 20, 0.84);
+    color: #000;
     line-height: 1.4;
 }
 
@@ -195,8 +196,8 @@
 .sp-mock {
     margin-top: 28px;
     border-radius: 10px;
-    border: 2px solid rgba(150, 170, 190, 0.55);
-    background: rgba(245, 248, 252, 0.9);
+    border: 2px solid var(--border);
+    background: var(--bg);
     overflow: hidden;
 }
 

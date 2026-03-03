@@ -59,7 +59,6 @@ export default function FullClassFeedback() {
             setLoading(true);
             setErr("");
 
-            // This is the same endpoint your panel uses.
             const res = await apiUtils.get(`/classes/${classId}/feedback`);
             const data = unwrap(res);
 
@@ -81,7 +80,6 @@ export default function FullClassFeedback() {
 
     useEffect(() => {
         fetchAll();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classId]);
 
     const avg = useMemo(() => avgRating(feedbacks), [feedbacks]);

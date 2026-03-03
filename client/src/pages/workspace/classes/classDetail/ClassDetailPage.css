@@ -504,7 +504,8 @@
 }
 
 .cd-btn-danger:hover {
-    background: #ffe8e8;
+    background: linear-gradient(90deg, var(--danger), var(--animation-danger));
+    color: #fff;
 }
 
 /* =========================

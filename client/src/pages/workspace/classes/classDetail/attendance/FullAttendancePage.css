@@ -1,10 +1,5 @@
 /* src/pages/workspace/classes/fullAttendance/FullAttendancePage.css */
 
-.fa-wrap,
-.fa-wrap * {
-    box-sizing: border-box;
-}
-
 .fa-wrap {
     width: 100%;
     background: var(--bg);
@@ -17,7 +12,7 @@
 
 .fa-muted {
     padding: 16px;
-    color: #6b7280;
+    color: var(--muted);
     font-weight: 800;
     font-size: 14px;
 }
@@ -36,8 +31,8 @@
     height: 40px;
     padding: 0 12px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
 
     display: inline-flex;
     align-items: center;
@@ -46,7 +41,7 @@
     cursor: pointer;
     font-weight: 800;
     font-size: 13px;
-    color: #111827;
+    color: #000;
 
     transition:
         transform 0.16s ease,
@@ -82,7 +77,7 @@
 .fa-title {
     font-size: 18px;
     font-weight: 900;
-    color: #111827;
+    color: #000;
 
     margin-right: auto;
     min-width: 0;
@@ -116,7 +111,7 @@
 .fa-label {
     font-size: 12px;
     font-weight: 900;
-    color: #6b7280;
+    color: var(--muted);
 }
 
 .fa-date-input {
@@ -169,7 +164,7 @@
 .fa-date-icon-btn svg {
     width: 18px;
     height: 18px;
-    color: #111827;
+    color: var(--text-color-dark);
 }
 
 .fa-real-date {
@@ -184,7 +179,7 @@
     margin: 8px 0 12px;
     font-size: 12px;
     font-weight: 800;
-    color: #6b7280;
+    color: var(--muted);
 }
 
 /* ===== Cards list ===== */
@@ -267,7 +262,7 @@
     font-weight: 900;
     font-size: 12px;
     letter-spacing: 0.02em;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--muted);
 }
 
 .fa-th-empty {
@@ -286,13 +281,13 @@
 .fa-day-num {
     font-size: 12px;
     font-weight: 900;
-    color: #111827;
+    color: var(--text-color-dark);
 }
 
 .fa-day-name {
     font-size: 11px;
     font-weight: 900;
-    color: rgba(0, 0, 0, 0.55);
+    color: var(--muted);
 }
 
 .fa-td-cell {
@@ -307,17 +302,17 @@
 
 .fa-name-main {
     font-weight: 900;
-    color: #111827;
+    color: var(--text-color-dark);
 }
 
 .fa-name-sub {
     font-size: 12px;
     font-weight: 800;
-    color: #6b7280;
+    color: var(--muted);
 }
 
 .fa-dash {
-    color: rgba(0, 0, 0, 0.35);
+    color: var(--muted);
     font-weight: 900;
 }
 
@@ -346,7 +341,7 @@
     padding: 16px;
     text-align: center;
     font-weight: 900;
-    color: #6b7280;
+    color: var(--muted);
 }
 
 /* Checkbox */
@@ -408,4 +403,28 @@
         transform: none;
         box-shadow: none;
     }
+}
+
+.fa-card-table tbody td.fa-col-name,
+.fa-card-table thead th.fa-col-name {
+    white-space: normal;
+}
+
+.fa-card-table td.fa-col-name .fa-name {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.25;
+}
+
+.fa-col-name {
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+}
+
+.fa-wrap,
+.fa-card,
+.fa-card-table-wrap {
+    min-width: 0;
 }

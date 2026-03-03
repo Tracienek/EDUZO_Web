@@ -5,7 +5,6 @@
     border: 1px solid #ece7ff;
     border-radius: 16px;
     padding: 16px;
-    box-shadow: 0 8px 20px rgba(17, 24, 39, 0.04);
 }
 
 .fp-head {
@@ -20,14 +19,14 @@
     margin: 0;
     font-size: 18px;
     font-weight: 900;
-    color: #111827;
+    color: #000;
     letter-spacing: -0.2px;
 }
 
 .fp-sub {
     margin-top: 6px;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--muted);
     font-weight: 650;
     line-height: 1.35;
 }
@@ -40,13 +39,13 @@
 }
 
 .fp-chip {
-    border: 1px solid #ece7ff;
-    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid var(--border-color);
+    background: var(--bg-chip);
     padding: 6px 10px;
     border-radius: 999px;
     font-size: 12px;
     font-weight: 900;
-    color: #111827;
+    color: #000;
 }
 
 /* ---------- buttons ---------- */
@@ -54,12 +53,12 @@
     height: 40px;
     padding: 0 12px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
     cursor: pointer;
     font-weight: 900;
     font-size: 13px;
-    color: #111827;
+    color: #000;
 
     transition:
         box-shadow 0.16s ease,
@@ -73,8 +72,8 @@
 }
 
 .fp-btn:hover {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow: 0 10px 24px var(--border-shadow);
+    border-color: var(--border-color);
 }
 
 .fp-btn:active {
@@ -89,14 +88,14 @@
 
 .fp-btn:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+    box-shadow: 0 0 0 4px var(--box-shadow);
     border-color: var(--tertiary-color);
 }
 
 .fp-btn--primary {
     background: var(--secondary-color);
     border-color: var(--secondary-color);
-    color: #fff; /* FIX: contrast */
+    color: #fff;
 }
 
 .fp-btn--primary:hover {
@@ -109,11 +108,18 @@
 }
 
 .fp-btn--ghost {
-    background: rgba(168, 85, 247, 0.06);
+    background: #fff;
 }
 
 .fp-btn--ghost:hover {
-    background: rgba(168, 85, 247, 0.12);
+    transform: translateY(-2px);
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--secondary-color)
+    );
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    color: #fff;
 }
 
 /* ---------- QR card ---------- */
@@ -122,11 +128,7 @@
     border: 1px solid #ece7ff;
     border-radius: 16px;
     padding: 14px;
-    background: linear-gradient(
-        180deg,
-        rgba(168, 85, 247, 0.06),
-        rgba(168, 85, 247, 0.02)
-    );
+    background: linear-gradient(180deg, var(--bg), var(--secondary-color));
     display: grid;
     grid-template-columns: 1fr 240px;
     gap: 14px;
@@ -136,12 +138,12 @@
 .fp-qrTitle {
     font-weight: 900;
     font-size: 14px;
-    color: #111827;
+    color: #000;
 }
 
 .fp-qrDesc {
     margin-top: 6px;
-    color: #6b7280;
+    color: var(--muted);
     font-size: 13px;
     font-weight: 650;
     line-height: 1.35;
@@ -160,11 +162,11 @@
     min-width: 220px;
     height: 40px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
+    border: 1px solid var(--border);
     padding: 0 12px;
     font-size: 13px;
     outline: none;
-    background: #fff;
+    background: var(--bg);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -172,13 +174,13 @@
 
 .fp-linkInput:focus-visible {
     border-color: var(--tertiary-color);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.14);
+    box-shadow: 0 0 0 4px var(--box-shadow);
 }
 
 .fp-note {
     margin-top: 10px;
     font-size: 12px;
-    color: #6b7280;
+    color: var(--muted);
     font-weight: 650;
     line-height: 1.35;
 }
@@ -200,8 +202,8 @@
     width: 220px;
     height: 220px;
     border-radius: 14px;
-    border: 1px solid #ece7ff;
-    background: #fff;
+    border: 1px solid var(--border);
+    background: var(--bg);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
 }
 
@@ -209,9 +211,9 @@
     width: 220px;
     height: 220px;
     border-radius: 14px;
-    border: 1px dashed #e5e7eb;
-    background: #fff;
-    color: #6b7280;
+    border: 1px dashed var(--border);
+    background: var(--bg);
+    color: var(--muted);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -221,10 +223,10 @@
 /* ---------- Form ---------- */
 .fp-form {
     margin-top: 12px;
-    border: 1px solid #ece7ff;
+    border: 1px solid var(--border);
     border-radius: 16px;
     padding: 14px;
-    background: #fff;
+    background: var(--bg);
 }
 
 .fp-formGrid {
@@ -241,7 +243,7 @@
     display: block;
     font-size: 13px;
     font-weight: 900;
-    color: #111827;
+    color: #000;
     margin-bottom: 6px;
 }
 
@@ -249,12 +251,12 @@
 .fp-select,
 .fp-textarea {
     width: 100%;
-    border: 1px solid #e6e2ff;
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 10px 12px;
     font-size: 14px;
     outline: none;
-    background: #fff;
+    background: var(--bg);
     transition:
         box-shadow 0.16s ease,
         border-color 0.16s ease;
@@ -264,7 +266,7 @@
 .fp-select:focus,
 .fp-textarea:focus {
     border-color: var(--tertiary-color);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.14);
+    box-shadow: 0 0 0 4px var(--box-shadow);
 }
 
 .fp-textarea {
@@ -284,8 +286,8 @@
     width: 42px;
     height: 42px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border);
+    background: var(--bg);
     cursor: pointer;
     font-size: 18px;
     line-height: 1;
@@ -298,24 +300,24 @@
 }
 
 .fp-rateBtn:hover {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow: 0 10px 24px var(--border-shadow);
+    border-color: var(--border-color);
 }
 
 .fp-rateBtn:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+    box-shadow: 0 0 0 4px var(--box-shadow);
     border-color: var(--tertiary-color);
 }
 
 .fp-rateBtn--on {
-    background: rgba(168, 85, 247, 0.12);
-    border-color: rgba(168, 85, 247, 0.45);
+    background: var(--tertiary-color);
+    border-color: var(--border-color);
 }
 
 .fp-rateVal {
     font-size: 13px;
-    color: #111827;
+    color: #000;
     font-weight: 900;
     padding-left: 6px;
 }
@@ -340,7 +342,7 @@
     margin: 0;
     font-size: 14px;
     font-weight: 900;
-    color: #111827;
+    color: #000;
 }
 
 .fp-list {
@@ -350,18 +352,18 @@
 }
 
 .fp-item {
-    border: 1px solid #efeaff;
+    border: 1px solid var(--border);
     border-radius: 14px;
     padding: 12px;
-    background: #fff;
+    background: var(--bg);
     transition:
         box-shadow 0.16s ease,
         border-color 0.16s ease;
 }
 
 .fp-item:hover {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-    border-color: rgba(139, 92, 246, 0.25);
+    box-shadow: 0 10px 24px var(--border-shadow);
+    border-color: var(--border-color);
 }
 
 .fp-itemTop {
@@ -373,7 +375,7 @@
 
 .fp-itemName {
     font-weight: 900;
-    color: #111827;
+    color: #000;
     font-size: 14px;
     min-width: 0;
     overflow: hidden;
@@ -391,13 +393,13 @@
 
 .fp-itemTime {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--muted);
     font-weight: 700;
 }
 
 .fp-itemComment {
     margin-top: 8px;
-    color: #111827;
+    color: var(--text);
     font-size: 13px;
     font-weight: 650;
     white-space: pre-wrap;
@@ -422,7 +424,7 @@
 /* states */
 .fp-muted {
     margin-top: 10px;
-    color: #6b7280;
+    color: var(--muted);
     font-size: 13px;
     font-weight: 650;
 }
@@ -430,19 +432,19 @@
 .fp-empty {
     margin-top: 10px;
     text-align: center;
-    color: #6b7280;
+    color: var(--muted);
     padding: 14px;
-    border: 1px dashed #e5e7eb;
+    border: 1px dashed var(--border);
     border-radius: 12px;
-    background: #fff;
+    background: var(--bg);
     font-weight: 700;
 }
 
 .fp-error {
     margin-top: 10px;
-    color: #b91c1c;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+    color: var(--error);
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
     padding: 10px 12px;
     border-radius: 12px;
     font-weight: 800;
@@ -456,7 +458,7 @@
     }
 
     .fp-qrRight {
-        order: -1; /* show QR first on mobile */
+        order: -1;
     }
 
     .fp-qrImg,

@@ -60,17 +60,13 @@
     font-weight: 800;
     font-size: 13px;
     text-decoration: none;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-color);
     transition:
         transform 180ms ease,
         filter 180ms ease,
         box-shadow 180ms ease;
-    color: #fff;
-    background: linear-gradient(
-        90deg,
-        var(--primary-color),
-        var(--secondary-color)
-    );
+    color: #000;
+    background: var(--bg);
 }
 
 .lp-btn:hover {

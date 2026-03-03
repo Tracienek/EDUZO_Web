@@ -11,6 +11,7 @@ router.use("/students", require("./student.routes"));
 router.use("/search", require("./search.routes"));
 router.use("/center", require("./center.routes"));
 router.use("/class-notes", require("./classNote.routes"));
+router.use("/students", require("./student.routes"));
 router.use("/notifications", require("./notification.routes"));
 router.use("/feedback", require("./feedback.routes"));
 // router.use("/mail-test", require("./mailTest.routes"));

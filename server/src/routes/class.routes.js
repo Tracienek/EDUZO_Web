@@ -23,6 +23,7 @@ router.get("/:id/attendance", attendanceController.getByDates);
 router.patch("/:id/attendance/bulk", attendanceController.bulkSaveAttendance);
 
 router.delete("/:id", ctrl.deleteClass);
+router.delete("/:id/students/:studentId", ctrl.removeStudentFromClass);
 
 router.get("/:id/notes", authMiddleware, noteCtrl.listByClass);
 // router.get("/:id/notes/:noteId", authMiddleware, noteCtrl.getById);

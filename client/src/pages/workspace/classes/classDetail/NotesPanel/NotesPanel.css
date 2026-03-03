@@ -1,20 +1,20 @@
 .cd-note-box {
     margin-top: 10px;
-    border: 1px solid rgba(139, 92, 246, 0.14);
-    background: rgba(255, 255, 255, 0.75);
+    /* border: 1px solid var(--border); */
+    background: var(--bg);
     border-radius: 14px;
-    padding: 12px;
+    padding: 2px;
 }
 
 .cd-note-input {
     width: 100%;
     resize: vertical;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--border);
     padding: 10px 12px;
     font-weight: 700;
     outline: none;
-    background: #fff;
+    background: var(--bg);
 }
 
 .cd-note-actions {
@@ -30,8 +30,8 @@
 }
 
 .cd-note-item {
-    border: 1px solid rgba(139, 92, 246, 0.12);
-    background: rgba(248, 246, 255, 0.85);
+    border: 1px solid var(--border);
+    background: var(--bg);
     border-radius: 14px;
     padding: 10px 12px;
 }
@@ -42,13 +42,117 @@
     gap: 10px;
     font-size: 12px;
     font-weight: 900;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--muted);
 }
 
 .cd-note-msg {
     margin-top: 6px;
     font-weight: 800;
     font-size: 14px;
-    color: #111;
+    color: #000;
     white-space: pre-wrap;
+}
+
+.cd-empty {
+    margin-top: 10px;
+    text-align: center;
+    color: var(--muted);
+    padding: 14px;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+    font-weight: 700;
+}
+
+/* ================================
+   Responsive: cd-note
+================================ */
+
+@media (max-width: 768px) {
+    .cd-note-box {
+        border-radius: 12px;
+        padding: 2px;
+    }
+
+    .cd-note-input {
+        border-radius: 10px;
+        padding: 9px 10px;
+        font-size: 14px;
+    }
+
+    .cd-note-actions {
+        margin-top: 8px;
+    }
+
+    .cd-note-item {
+        border-radius: 12px;
+        padding: 9px 10px;
+    }
+
+    .cd-note-meta {
+        font-size: 11.5px;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .cd-note-msg {
+        font-size: 13.5px;
+    }
+
+    .cd-empty {
+        padding: 12px;
+        border-radius: 10px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .cd-note-box {
+        margin-top: 8px;
+        border-radius: 12px;
+    }
+
+    .cd-note-input {
+        padding: 10px;
+        font-size: 14px;
+        min-height: 110px;
+    }
+
+    .cd-note-actions {
+        justify-content: stretch;
+    }
+
+    .cd-note-actions > button,
+    .cd-note-actions > .btn,
+    .cd-note-actions > .cd-btn {
+        width: 100%;
+        height: 40px;
+    }
+
+    .cd-note-item {
+        padding: 10px;
+    }
+
+    .cd-note-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .cd-note-msg {
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--text-color-dark);
+    }
+
+    .cd-empty {
+        padding: 12px 10px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cd-note-item {
+        padding: 12px 14px;
+    }
 }

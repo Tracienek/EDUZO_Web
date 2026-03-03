@@ -137,3 +137,100 @@ exports.update = async (req, res) => {
         return res.status(500).json({ message: err.message });
     }
 };
+
+const ClassNote = require("../models/ClassNote");
+
+// GET /students/:id/profile
+exports.getStudentProfile = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const student = await Student.findById(id).lean();
+        if (!student)
+            return res.status(404).json({ message: "Student not found" });
+
+        // student belongs to which class? (Class.students is array of ObjectId)
+        const klass = await Class.findOne({ students: id })
+            .select(
+                "name scheduleText durationMinutes totalSessions heldCount centerId",
+            )
+            .lean();
+
+        return res.status(200).json({
+            metadata: {
+                student,
+                class: klass || null,
+            },
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to load profile" });
+    }
+};
+
+// GET /students/:id/notes
+exports.listStudentNotes = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Only notes for this student
+        const notes = await ClassNote.find({ studentId: id })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        return res.status(200).json({ metadata: { notes } });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to load notes" });
+    }
+};
+
+// POST /students/:id/notes
+exports.createStudentNote = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { content, classId } = req.body;
+
+        const text = String(content || "").trim();
+        if (!text)
+            return res.status(400).json({ message: "Content is required" });
+
+        // must provide classId because ClassNote requires it
+        if (!classId) {
+            return res.status(400).json({ message: "classId is required" });
+        }
+
+        // get current user info from auth middleware
+        const userId = req.user?._id || req.userInfo?._id;
+        const role = req.user?.role || req.userInfo?.role;
+
+        if (!userId || !role) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        if (role !== "teacher" && role !== "center") {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
+        // decide receiver role (simple rule: send to the other side)
+        const toRole = role === "teacher" ? "center" : "teacher";
+
+        // centerId: from class if possible
+        const klass = await Class.findById(classId).select("centerId").lean();
+        const centerId = klass?.centerId || null;
+
+        const note = await ClassNote.create({
+            classId,
+            studentId: id,
+            content: text,
+            fromUserId: userId,
+            fromRole: role,
+            toRole,
+            centerId,
+        });
+
+        return res.status(201).json({ metadata: { note } });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to create note" });
+    }
+};

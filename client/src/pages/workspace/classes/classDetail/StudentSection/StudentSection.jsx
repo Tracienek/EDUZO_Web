@@ -1,5 +1,7 @@
 // src/pages/workspace/classes/classDetail/StudentSection/StudentSection.jsx
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
+import "./StudentSection.css";
 
 const getStudentId = (s) => String(s?._id || s?.id || "");
 
@@ -37,8 +39,12 @@ export default function StudentsSection({
 
     fmtDMY,
 }) {
+    const navigate = useNavigate();
     const canClickSendTuition =
         canSendTuition && !sendingTuition && heldCount >= threshold;
+
+    const colSpan =
+        2 + sessionDates.length * 2 + 1 + (canDeleteStudent ? 1 : 0);
 
     return (
         <div className="cd-section">
@@ -139,7 +145,17 @@ export default function StudentsSection({
                                 <tr key={studentId}>
                                     <td data-label="No">{idx + 1}</td>
                                     <td data-label="Name">
-                                        {s.fullName || s.name}
+                                        <button
+                                            type="button"
+                                            className="cd-link"
+                                            onClick={() =>
+                                                navigate(
+                                                    `/workspace/students/${studentId}`,
+                                                )
+                                            }
+                                        >
+                                            {s.fullName || s.name}
+                                        </button>
                                     </td>
 
                                     {dateKeys.map((dk, i) => {
@@ -276,18 +292,8 @@ export default function StudentsSection({
 
                         {students.length === 0 && (
                             <tr>
-                                <td
-                                    colSpan={
-                                        2 +
-                                        sessionDates.length * 2 +
-                                        1 +
-                                        (canDeleteStudent ? 1 : 0)
-                                    }
-                                    className="cd-empty"
-                                >
-                                    <td colSpan={colSpan} className="cd-empty">
-                                        No students
-                                    </td>
+                                <td colSpan={colSpan} className="cd-empty">
+                                    No students
                                 </td>
                             </tr>
                         )}

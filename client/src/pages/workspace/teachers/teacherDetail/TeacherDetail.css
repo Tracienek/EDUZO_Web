@@ -1,19 +1,26 @@
-/* ===== Root wrapper (consistent with other pages) ===== */
+/* =========================
+   Teacher Detail (td-*)
+   Theme: base.scss purple
+========================= */
+
+/* Root wrapper */
 .td-wrap {
     width: 100%;
     box-sizing: border-box;
 
     background: var(--bg);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 18px;
 
     flex: 1;
     min-height: 0;
+    min-width: 0;
 }
 
-/* ===== Top bar ===== */
+/* Top bar */
 .td-topbar {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 12px;
     margin-bottom: 14px;
@@ -23,7 +30,7 @@
 .td-title {
     font-size: 18px;
     font-weight: 900;
-    color: #111827;
+    color: var(--text-color-dark);
 
     min-width: 0;
     white-space: nowrap;
@@ -31,13 +38,14 @@
     text-overflow: ellipsis;
 }
 
-/* ===== Back button (consistent with cd-btn / teachers-add style) ===== */
-.td-back {
+/* Buttons (consistent) */
+.td-back,
+.td-btn {
     height: 40px;
     padding: 0 12px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
 
     display: inline-flex;
     align-items: center;
@@ -46,15 +54,17 @@
     cursor: pointer;
     font-weight: 800;
     font-size: 13px;
-    color: #111827;
+    color: var(--text-color-dark);
 
     transition:
         transform 0.16s ease,
         background 0.16s ease,
-        box-shadow 0.16s ease;
+        box-shadow 0.16s ease,
+        color 0.16s ease;
 }
 
-.td-back:hover {
+.td-back:hover,
+.td-btn:hover {
     transform: translateY(-2px);
     background: linear-gradient(
         90deg,
@@ -65,12 +75,15 @@
     color: #ffffff;
 }
 
-.td-back:active {
+.td-back:active,
+.td-btn:active {
     transform: translateY(0);
 }
 
-.td-back:focus-visible {
-    outline-offset: 3px;
+.td-back:focus-visible,
+.td-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .td-back-icon {
@@ -78,20 +91,58 @@
     line-height: 1;
 }
 
-/* ===== Grid layout ===== */
+/* Delete button */
+.td-delete {
+    margin-left: auto;
+
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+
+    border: 1px solid var(--animation-danger);
+    background: rgba(239, 68, 68, 0.12);
+
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--danger);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease,
+        color 0.16s ease;
+}
+
+.td-delete:hover {
+    background: linear-gradient(90deg, var(--danger), var(--animation-danger));
+    color: #fff;
+}
+
+.td-delete:active {
+    transform: translateY(0);
+}
+
+/* Grid layout */
 .td-grid {
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: 16px;
     min-height: 0;
+    min-width: 0;
 }
 
-/* ===== Cards ===== */
+/* Cards */
 .td-card {
-    border: 1px solid #ece7ff;
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 14px;
-    /* box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04); */
+    background: var(--bg);
     min-width: 0;
 }
 
@@ -108,7 +159,7 @@
     margin: 0;
     font-size: 16px;
     font-weight: 900;
-    color: #111827;
+    color: var(--text-color-dark);
 
     min-width: 0;
     white-space: nowrap;
@@ -116,7 +167,7 @@
     text-overflow: ellipsis;
 }
 
-/* ===== Profile card ===== */
+/* Profile card */
 .td-profile {
     text-align: center;
 }
@@ -127,8 +178,8 @@
     border-radius: 50%;
     overflow: hidden;
     margin: 0 auto 12px;
-    background: #f1f5f9;
-    border: 1px solid #eef2ff;
+    background: var(--purple-bg);
+    border: 1px solid var(--border);
 }
 
 .td-avatar img {
@@ -141,7 +192,7 @@
     font-size: 18px;
     font-weight: 900;
     margin-bottom: 10px;
-    color: #111827;
+    color: var(--text-color-dark);
 }
 
 .td-meta {
@@ -154,7 +205,7 @@
     justify-content: space-between;
     gap: 10px;
     padding: 8px 0;
-    border-bottom: 1px solid #f1f1f5;
+    border-bottom: 1px solid var(--border);
     font-size: 14px;
 }
 
@@ -163,13 +214,13 @@
 }
 
 .td-label {
-    color: #6b7280;
+    color: var(--muted);
     font-weight: 800;
     flex: 0 0 auto;
 }
 
 .td-value {
-    color: #111827;
+    color: var(--text-color-dark);
     font-weight: 700;
     text-align: right;
     min-width: 0;
@@ -178,137 +229,107 @@
     white-space: nowrap;
 }
 
-/* ===== Chips ===== */
+/* Chips */
 .td-chip {
     font-size: 12px;
     padding: 6px 10px;
     border-radius: 999px;
-    background: #e5e7eb;
-    color: #374151;
-    font-weight: 800;
+    background: var(--bg);
+    border: 1px solid var(--border-color);
+    color: #000;
+    font-weight: 900;
     flex: 0 0 auto;
 }
 
 .td-chip--soon {
-    background: #fde68a;
-    color: #92400e;
+    background: rgba(233, 216, 249, 0.8);
+    border: 1px solid var(--border-color);
+    color: var(--tertiary-color);
 }
 
-/* ===== Feedback ===== */
+/* Feedback / placeholder */
 .td-placeholder {
-    background: #f9fafb;
-    border: 1px solid #eef2ff;
+    background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--muted);
     white-space: pre-wrap;
+    font-weight: 700;
 }
 
-.td-note {
+.td-note,
+.td-footnote,
+.td-muted {
     margin-top: 10px;
     font-size: 12px;
-    color: #6b7280;
+    color: var(--muted);
+    font-weight: 700;
 }
 
-/* ===== Classes ===== */
-.td-classes {
-    grid-column: span 2;
-}
-
-.td-footnote {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #6b7280;
-}
-
-/* ===== States ===== */
+/* States */
 .td-muted {
     padding: 16px;
-    color: #6b7280;
     font-size: 14px;
 }
 
 .td-error {
     padding: 16px;
-    color: #b91c1c;
+    color: var(--text-color-light);
+    background: var(--error);
+    border: 1px solid var(--danger);
+    border-radius: 12px;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 900;
 }
 
 .td-error-inline {
     font-size: 13px;
-    color: #b91c1c;
+    color: var(--danger);
     margin-bottom: 8px;
-}
-
-.td-delete {
-    margin-left: auto; /* đẩy nút về góc phải */
-
-    height: 40px;
-    padding: 0 14px;
-    border-radius: 12px;
-
-    border: 1px solid #efeaff;
-    background: #ffd3d3;
-
-    cursor: pointer;
     font-weight: 900;
-    font-size: 13px;
-    color: #ff4545;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-
-    transition:
-        background 0.15s ease,
-        color 0.15s ease,
-        transform 0.12s ease;
 }
 
-.td-delete:hover {
-    background: var(--danger);
-    color: #fff;
-    transform: translateY(-1px);
+/* Classes area */
+.td-classes {
+    grid-column: span 2;
 }
 
-.td-delete:active {
-    transform: translateY(0);
-}
-
+/* Logs */
 .td-log-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .td-log-item {
     display: flex;
     justify-content: space-between;
     gap: 12px;
     align-items: center;
-    padding: 10px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-}
-.td-log-title {
-    font-weight: 600;
-}
-.td-log-sub {
-    opacity: 0.8;
-    font-size: 13px;
-    margin-top: 2px;
-}
-.td-btn {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background: #fff;
-    cursor: pointer;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg);
 }
 
-/* ===== Responsive ===== */
+.td-log-title {
+    font-weight: 900;
+    color: var(--text-color-dark);
+}
+
+.td-log-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+    font-weight: 700;
+}
+
+/* =========================
+   Responsive
+========================= */
+
 @media (max-width: 1100px) {
     .td-grid {
         grid-template-columns: 300px 1fr;
@@ -334,44 +355,61 @@
     }
 }
 
+/* Mobile */
 @media (max-width: 600px) {
     .td-wrap {
         padding: 14px;
         border-radius: 12px;
     }
 
+    /* Topbar xếp dọc cho dễ nhìn */
     .td-topbar {
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        align-items: stretch;
     }
 
-    .td-back {
-        height: 38px;
-        padding: 0 10px;
-        font-size: 12px;
+    .td-title {
+        white-space: normal;
     }
 
+    .td-back,
     .td-delete {
+        width: 100%;
+        justify-content: center;
         height: 38px;
         padding: 0 12px;
         font-size: 12px;
+    }
+
+    /* Row meta: wrap đẹp hơn */
+    .td-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .td-value {
+        text-align: left;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        overflow-wrap: anywhere;
     }
 }
 
 /* reduce motion */
 @media (prefers-reduced-motion: reduce) {
     .td-back,
+    .td-btn,
+    .td-delete,
     .td-card {
         transition: none;
     }
-    .td-back:hover {
-        transform: none;
-        box-shadow: none;
-    }
-
-    .td-delete {
-        transition: none;
-    }
+    .td-back:hover,
+    .td-btn:hover,
     .td-delete:hover {
         transform: none;
+        box-shadow: none;
     }
 }

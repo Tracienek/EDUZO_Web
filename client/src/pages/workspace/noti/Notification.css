@@ -47,13 +47,13 @@
     height: 40px;
     padding: 0 14px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
     cursor: pointer;
 
     font-weight: 800;
     font-size: 13px;
-    color: #111827;
+    color: #000;
 
     transition:
         transform 0.16s ease,
@@ -69,25 +69,24 @@
         var(--tertiary-color),
         var(--secondary-color)
     );
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 24px var(--box-shadow);
     color: #ffffff;
 }
 
 .noti-btn:active,
 .noti-btn-primary:active {
     transform: translateY(0);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 18px var(--box-shadow);
 }
 
 .noti-btn:focus-visible,
 .noti-btn-primary:focus-visible {
-    outline: 3px solid rgba(139, 92, 246, 0.25);
+    outline: 3px solid var(--border-color);
     outline-offset: 3px;
 }
 
-/* primary emphasis (still subtle) */
 .noti-btn-primary {
-    background: rgba(124, 58, 237, 0.08);
+    background: var(--bg-form);
 }
 
 .noti-btn:disabled,
@@ -99,18 +98,18 @@
 }
 
 .noti-muted {
-    color: #6b7280;
+    color: var(--muted);
     padding: 10px 0;
     font-weight: 800;
     font-size: 14px;
 }
 
 .noti-empty {
-    border: 1px dashed rgba(17, 24, 39, 0.2);
+    border: 1px dashed var(--border-color);
     border-radius: 16px;
     padding: 16px;
-    color: #6b7280;
-    background: #fff;
+    color: var(--muted);
+    background: var(--bg);
     font-weight: 800;
 }
 
@@ -125,8 +124,8 @@
     text-align: left;
     border-radius: 16px;
     padding: 14px;
-    background: #fff;
-    border: 1px solid rgba(17, 24, 39, 0.08);
+    background: var(--bg);
+    border: 1px solid var(--border-color);
     cursor: pointer;
 
     transition:
@@ -137,17 +136,17 @@
 
 .noti-item:hover {
     transform: translateY(-1px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-    border-color: rgba(124, 58, 237, 0.25);
+    box-shadow: 0 10px 24px var(--box-shadow);
+    border-color: var(--border-color);
 }
 
 .noti-item:focus-visible {
-    outline: 3px solid rgba(139, 92, 246, 0.25);
+    outline: 3px solid var(--border-color);
     outline-offset: 3px;
 }
 
 .noti-item.is-unread {
-    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.12) inset;
+    box-shadow: 0 0 0 2px var(--box-shadow) inset;
     border-color: rgba(124, 58, 237, 0.28);
 }
 
@@ -164,7 +163,7 @@
 
 .noti-item-time {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--muted);
     white-space: nowrap;
     margin-top: 2px;
 }
@@ -173,7 +172,7 @@
     width: 10px;
     height: 10px;
     border-radius: 999px;
-    background: rgba(124, 58, 237, 0.9);
+    background: var(--primary-color);
     flex: 0 0 auto;
     margin-top: 4px;
 }
@@ -182,18 +181,17 @@
     margin-top: 6px;
     font-size: 13px;
     font-weight: 900;
-    color: rgba(124, 58, 237, 0.95);
+    color: var(--tertiary-color);
 }
 
 .noti-item-content {
     margin-top: 10px;
     white-space: pre-wrap;
-    color: #111827;
+    color: #000;
     line-height: 1.45;
     font-weight: 700;
 }
 
-/* right side group (dot + delete icon) */
 .noti-item-right {
     display: inline-flex;
     align-items: center;
@@ -201,16 +199,15 @@
     flex: 0 0 auto;
 }
 
-/* delete icon on each notification (similar UX to class delete) */
 .noti-delete {
     width: 32px;
     height: 32px;
     border-radius: 10px;
-    border: 1px solid #efeaff;
+    border: 1px solid var(--border);
     background: #ffd3d3;
     cursor: pointer;
     font-weight: 900;
-    color: #ff4545;
+    color: var(--danger);
 
     display: inline-flex;
     align-items: center;
@@ -223,23 +220,22 @@
 }
 
 .noti-delete:hover {
-    background: var(--danger);
+    background: linear-gradient(90deg, var(--danger), var(--animation-danger));
     color: #fff;
-    transform: translateY(-1px);
 }
 
-/* Delete all button (same row) */
+/* Delete all button */
 .noti-btn-danger {
     height: 40px;
     padding: 0 14px;
     border-radius: 12px;
-    border: 1px solid #efeaff;
+    border: 1px solid var(--border);
     background: #ffd3d3;
     cursor: pointer;
 
     font-weight: 800;
     font-size: 13px;
-    color: #ff4545;
+    color: var(--danger);
 
     transition:
         transform 0.16s ease,
@@ -249,9 +245,7 @@
 }
 
 .noti-btn-danger:hover {
-    transform: translateY(-2px);
-    background: var(--danger);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(90deg, var(--danger), var(--animation-danger));
     color: #fff;
 }
 
@@ -267,7 +261,7 @@
 }
 
 .noti-item.is-tuition {
-    border-left: 4px solid #e53935;
+    border-left: 4px solid var(--danger);
 }
 .noti-item-title {
     font-weight: 700;

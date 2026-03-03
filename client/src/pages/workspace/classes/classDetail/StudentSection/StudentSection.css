@@ -1,0 +1,41 @@
+.cd-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-color-dark);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.cd-table.cd-table-att {
+    table-layout: fixed;
+}
+
+.cd-table.cd-table-att td[data-label="Name"],
+.cd-table.cd-table-att th:nth-child(2) {
+    white-space: normal;
+}
+
+.cd-table.cd-table-att th:nth-child(2),
+.cd-table.cd-table-att td:nth-child(2) {
+    width: 250px;
+}
+
+.cd-table.cd-table-att td[data-label="Name"] .cd-link {
+    display: inline-block;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.3;
+    max-width: 100%;
+}
+
+@media (max-width: 720px) {
+    .cd-card-name {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        overflow-wrap: anywhere;
+        line-height: 1.25;
+    }
+}

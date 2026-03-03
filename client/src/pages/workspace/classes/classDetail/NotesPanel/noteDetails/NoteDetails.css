@@ -4,13 +4,11 @@
     box-sizing: border-box;
 }
 
-/* consistent container like td-wrap / noti-wrap */
 .nd-wrap {
     width: 100%;
     background: var(--bg);
     border-radius: 14px;
     padding: 18px;
-
     flex: 1;
     min-height: 0;
 }
@@ -28,25 +26,24 @@
 .nd-title {
     font-size: 18px;
     font-weight: 900;
-    color: #111827;
+    color: #000;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* back button style similar to td-back */
 .nd-back {
     height: 40px;
     padding: 0 12px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
 
     cursor: pointer;
     font-weight: 800;
     font-size: 13px;
-    color: #111827;
+    color: #000;
 
     transition:
         transform 0.16s ease,
@@ -70,7 +67,7 @@
 }
 
 .nd-back:focus-visible {
-    outline: 3px solid rgba(139, 92, 246, 0.25);
+    outline: 3px solid var(--border-color);
     outline-offset: 3px;
 }
 
@@ -86,18 +83,17 @@
     font-size: 12px;
     padding: 6px 10px;
     border-radius: 999px;
-    background: rgba(124, 58, 237, 0.1);
-    color: rgba(124, 58, 237, 0.95);
+    background: var(--bg);
+    color: var(--primary-color);
     font-weight: 900;
 }
 
-/* refresh button (simple) */
 .nd-btn {
     height: 40px;
     padding: 0 14px;
     border-radius: 12px;
-    border: 1px solid #e6e2ff;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
 
     cursor: pointer;
     font-weight: 800;
@@ -117,7 +113,7 @@
         var(--tertiary-color),
         var(--secondary-color)
     );
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 24px var(--box-shadow);
     color: #ffffff;
 }
 
@@ -134,7 +130,7 @@
 
 /* states */
 .nd-muted {
-    color: #6b7280;
+    color: var(--muted);
     padding: 10px 0;
     font-weight: 800;
     font-size: 14px;
@@ -143,19 +139,19 @@
 .nd-error {
     padding: 12px;
     border-radius: 14px;
-    border: 1px solid rgba(185, 28, 28, 0.2);
-    background: rgba(254, 226, 226, 0.6);
-    color: #b91c1c;
+    border: 1px solid var(--error-border);
+    background: var(--error-bg);
+    color: var(--error-text);
     font-weight: 800;
     font-size: 14px;
 }
 
 .nd-empty {
-    border: 1px dashed rgba(17, 24, 39, 0.2);
+    border: 1px dashed var(--border);
     border-radius: 16px;
     padding: 16px;
-    color: #6b7280;
-    background: #fff;
+    color: var(--muted);
+    background: var(--bg);
     font-weight: 800;
 }
 
@@ -167,8 +163,8 @@
 }
 
 .nd-item {
-    border: 1px solid rgba(139, 92, 246, 0.12);
-    background: rgba(248, 246, 255, 0.85);
+    border: 1px solid var(--border);
+    background: var(--bg);
     border-radius: 14px;
     padding: 12px;
 }
@@ -180,7 +176,7 @@
     gap: 10px;
     font-size: 12px;
     font-weight: 900;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--muted);
     margin-bottom: 6px;
 }
 
@@ -192,8 +188,8 @@
     font-size: 12px;
     padding: 4px 8px;
     border-radius: 999px;
-    background: rgba(17, 24, 39, 0.06);
-    color: rgba(17, 24, 39, 0.72);
+    background: var(--bg);
+    color: var(--muted);
     font-weight: 900;
     flex: 0 0 auto;
 }
@@ -201,7 +197,7 @@
 .nd-msg {
     font-weight: 800;
     font-size: 14px;
-    color: #111;
+    color: #000;
     white-space: pre-wrap;
     line-height: 1.45;
 }

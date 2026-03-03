@@ -73,15 +73,9 @@ export default function ServicesPage() {
                         <div className="sp-hero-actions">
                             <Link
                                 className="sp-btn sp-btn-primary"
-                                to="/auth/sign-up"
+                                to="/auth/signIp"
                             >
                                 Start free trial
-                            </Link>
-                            <Link
-                                className="sp-btn sp-btn-ghost"
-                                to="/auth/sign-in"
-                            >
-                                Sign in
                             </Link>
                         </div>
                     </div>

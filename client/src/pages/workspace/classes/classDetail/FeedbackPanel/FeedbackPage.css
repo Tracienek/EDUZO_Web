@@ -1,7 +1,5 @@
 /* src/pages/feedback/FeedbackPage.css */
-/* Depends on variables in base.scss (:root) */
 
-/* Page background */
 .fbp-wrap {
     min-height: 100vh;
     display: flex;
@@ -74,7 +72,7 @@
     padding: 10px 12px;
     border-radius: 14px;
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.6);
+    background: var(--bg);
 }
 
 .fbp-chip-label {
@@ -96,13 +94,13 @@
     padding: 12px;
     border-radius: 16px;
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.55);
+    background: var(--bg);
 }
 
 .fbp-section-title {
     font-size: 13px;
     font-weight: 900;
-    color: rgba(28, 28, 28, 0.86);
+    color: var(--text-color-dark);
     margin-bottom: 10px;
 }
 
@@ -129,13 +127,13 @@
 
 .fbp-input::placeholder,
 .fbp-textarea::placeholder {
-    color: rgba(115, 115, 115, 0.9);
+    color: var(--muted);
 }
 
 .fbp-input:focus,
 .fbp-textarea:focus {
     border-color: var(--border-color);
-    box-shadow: 0 0 0 4px rgba(171, 121, 220, 0.22);
+    box-shadow: 0 0 0 4px var(--border-color);
 }
 
 .fbp-textarea {
@@ -161,7 +159,7 @@
     gap: 10px;
     align-items: flex-start;
     font-weight: 800;
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--bg);
 }
 
 .fbp-alert-icon {
@@ -226,7 +224,6 @@
     border-radius: 14px;
 }
 
-/* If you switched to roving tabindex (recommended), use focus-visible on the buttons */
 .fbp-star {
     width: 44px;
     height: 44px;
@@ -236,7 +233,7 @@
     cursor: pointer;
     font-size: 20px;
     line-height: 1;
-    color: rgba(128, 92, 163, 0.9);
+    color: var(--primary-color);
     transition:
         transform 0.06s ease,
         box-shadow 0.15s ease,
@@ -279,7 +276,7 @@
     background: #ffffff;
     cursor: pointer;
     font-weight: 900;
-    color: rgba(28, 28, 28, 0.9);
+    color: var(--text-color-dark);
     transition:
         transform 0.06s ease,
         box-shadow 0.15s ease,
@@ -391,12 +388,167 @@
     }
 }
 
+/* ================================
+   Responsive: FeedbackPage
+================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .fbp-wrap {
+        padding: 14px;
+    }
+
+    .fbp-card {
+        width: min(760px, 96vw);
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .fbp-header {
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .fbp-h1 {
+        font-size: 24px;
+    }
+
+    .fbp-sub {
+        font-size: 12.5px;
+    }
+
+    .fbp-chip {
+        min-width: 140px;
+        padding: 9px 10px;
+        border-radius: 12px;
+    }
+
+    .fbp-section {
+        padding: 10px;
+        border-radius: 14px;
+    }
+
+    .fbp-input,
+    .fbp-textarea {
+        padding: 10px 11px;
+        border-radius: 12px;
+    }
+
+    .fbp-textarea {
+        min-height: 110px;
+    }
+
+    /* Stars: tránh tràn ngang */
+    .fbp-stars {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .fbp-star {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        font-size: 19px;
+    }
+
+    .fbp-pill {
+        height: 36px;
+        padding: 0 11px;
+    }
+
+    .fbp-btn {
+        height: 42px;
+        border-radius: 12px;
+    }
+}
+
+/* Mobile */
 @media (max-width: 520px) {
+    .fbp-wrap {
+        padding: 12px;
+        align-items: flex-start; /* đỡ bị "kẹt giữa" khi màn thấp */
+    }
+
+    .fbp-card {
+        width: 100%;
+        padding: 12px;
+        border-radius: 14px;
+    }
+
     .fbp-header {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
     }
+
+    .fbp-h1 {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+
     .fbp-chip {
         min-width: unset;
+        width: 100%;
+    }
+
+    .fbp-section {
+        padding: 10px;
+    }
+
+    /* Stars: chuyển sang grid 5 cột cho chắc chắn */
+    .fbp-stars {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .fbp-star {
+        width: 100%;
+        height: 44px;
+    }
+
+    .fbp-stars-head {
+        gap: 10px;
+    }
+
+    /* Teachers: pill full-width nếu muốn “dễ bấm” */
+    .fbp-teachers {
+        gap: 8px;
+    }
+
+    .fbp-pill {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Actions: button full-width */
+    .fbp-actions {
+        justify-content: stretch;
+    }
+
+    .fbp-btn {
+        width: 100%;
+        height: 44px;
+    }
+}
+
+/* Mobile nhỏ */
+@media (max-width: 360px) {
+    .fbp-h1 {
+        font-size: 18px;
+    }
+
+    .fbp-input,
+    .fbp-textarea {
+        padding: 9px 10px;
+    }
+
+    .fbp-stars {
+        gap: 6px;
+    }
+
+    .fbp-star {
+        height: 42px;
+        font-size: 18px;
     }
 }

@@ -22,6 +22,12 @@ const ClassNoteSchema = new Schema(
         toRole: { type: String, enum: ["teacher", "center"], required: true },
 
         centerId: { type: Schema.Types.ObjectId, ref: "User", index: true },
+        studentId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student",
+            default: null,
+            index: true,
+        },
     },
     { timestamps: true }, // createdAt, updatedAt
 );

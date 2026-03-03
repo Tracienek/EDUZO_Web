@@ -8,5 +8,8 @@ router.post("/", authMiddleware, ctrl.createStudent);
 router.get("/", authMiddleware, ctrl.getAll);
 router.get("/:id", authMiddleware, ctrl.getById);
 router.patch("/:id", authMiddleware, ctrl.update);
+router.get("/:id/profile", ctrl.getStudentProfile);
+router.get("/:id/notes", ctrl.listStudentNotes);
+router.post("/:id/notes", ctrl.createStudentNote);
 
 module.exports = router;

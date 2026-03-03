@@ -29,6 +29,7 @@ import FeedbackPage from "./pages/workspace/classes/classDetail/FeedbackPanel/Fe
 import NoteDetails from "./pages/workspace/classes/classDetail/NotesPanel/noteDetails/NoteDetails.jsx";
 import FullFeedback from "./pages/workspace/teachers/teacherDetail/fullFeedback/FullFeedback.jsx";
 import FullClassFeedback from "./pages/workspace/classes/classDetail/FeedbackPanel/fullFeedback/FullClassFeedback.jsx";
+import StudentProfilePage from "./pages/workspace/classes/classDetail/StudentSection/students/StudentProfilePage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
             {
                 path: "classes/:classId/feedbacks",
                 element: <FullClassFeedback />,
+            },
+            {
+                path: "students/:studentId",
+                element: <StudentProfilePage />,
             },
 
             {

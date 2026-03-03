@@ -605,3 +605,51 @@ exports.sendTuitionEmails = async (req, res) => {
         return res.status(500).json({ message: err.message });
     }
 };
+
+exports.removeStudentFromClass = async (req, res) => {
+    try {
+        const { id: classId, studentId } = req.params;
+
+        // ✅ optional: role guard (only center)
+        // tùy bạn lưu role ở req.user hay req.userInfo
+        const role = req.user?.role || req.userInfo?.role;
+        if (role && role !== "center") {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
+        const Class = require("../models/Class");
+        const Student = require("../models/Student");
+
+        const klass = await Class.findById(classId);
+        if (!klass) return res.status(404).json({ message: "Class not found" });
+
+        // Remove student from class.students
+        // Case A: students is [ObjectId]
+        klass.students = (klass.students || []).filter(
+            (sid) => String(sid) !== String(studentId),
+        );
+
+        // Update counts if you store them
+        const count = klass.students.length;
+        if (typeof klass.totalStudents !== "undefined")
+            klass.totalStudents = count;
+        if (typeof klass.studentCount !== "undefined")
+            klass.studentCount = count;
+
+        await klass.save();
+
+        // Optional: clear student's class reference if your Student schema has it
+        // (if not, this does nothing harmful if field doesn't exist)
+        await Student.findByIdAndUpdate(studentId, {
+            $unset: { classId: "" },
+        }).catch(() => {});
+
+        return res.status(200).json({
+            message: "Student removed",
+            metadata: { classId, studentId, totalStudents: count },
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Failed to remove student" });
+    }
+};
