@@ -1,0 +1,127 @@
+.fcf-wrap {
+    padding: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.fcf-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.fcf-title {
+    font-size: 18px;
+    font-weight: 800;
+    flex: 1;
+}
+
+.fcf-back,
+.fcf-btn {
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.fcf-back:hover,
+.fcf-btn:hover {
+    background: #fafafa;
+}
+
+.fcf-summary {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.fcf-chip {
+    background: #f4f4f7;
+    border: 1px solid #eee;
+    padding: 8px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.fcf-muted {
+    color: #777;
+    padding: 10px 0;
+}
+
+.fcf-error {
+    color: #b00020;
+    background: #fff2f2;
+    border: 1px solid #ffd0d0;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.fcf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fcf-item {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+.fcf-itemTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.fcf-name {
+    font-weight: 800;
+    font-size: 15px;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fcf-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.fcf-time {
+    font-size: 12px;
+    color: #777;
+}
+
+.fcf-sub {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+.fcf-comment {
+    margin-top: 8px;
+    white-space: pre-wrap;
+    line-height: 1.35;
+}
+
+.fcf-stars {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.fcf-star {
+    font-size: 14px;
+    opacity: 0.25;
+}
+
+.fcf-star--on {
+    opacity: 1;
+}

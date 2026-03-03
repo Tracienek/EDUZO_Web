@@ -1,0 +1,235 @@
+/* Services page only */
+.sp-page {
+    background: var(--bg);
+    color: var(--text-color-dark);
+}
+
+/* ---------- Container ---------- */
+.sp-container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+}
+
+/* ---------- Hero ---------- */
+.sp-hero {
+    background: linear-gradient(
+        180deg,
+        var(--light-purple),
+        var(--secondary-color)
+    );
+    border-bottom-left-radius: 70px;
+    border-bottom-right-radius: 70px;
+    padding: 36px 0 48px;
+    overflow: hidden;
+}
+
+.sp-hero-inner {
+    text-align: center;
+    padding-top: 38px;
+}
+
+.sp-kicker {
+    font-family: cursive;
+    font-size: 36px;
+    font-weight: 700;
+    opacity: 0.85;
+    margin: 0 0 24px;
+    color: var(--primary-color);
+}
+
+.sp-kicker-center {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.sp-hero-title {
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin: 0 0 24px;
+}
+
+.sp-hero-desc {
+    width: min(820px, 92%);
+    margin: 0 auto;
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(20, 20, 20, 0.62);
+}
+
+.sp-hero-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.sp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    transition:
+        transform 180ms ease,
+        filter 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.sp-btn-primary {
+    color: #fff;
+    background: linear-gradient(
+        90deg,
+        var(--primary-color),
+        var(--secondary-color)
+    );
+}
+
+.sp-btn-ghost {
+    background: rgba(255, 255, 255, 0.25);
+    color: rgba(20, 20, 20, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.sp-btn:hover {
+    transform: translateY(-3px) scale(1);
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--secondary-color)
+    );
+}
+
+.sp-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ---------- Section ---------- */
+.sp-section {
+    padding: 64px 0;
+}
+
+.sp-section-title {
+    text-align: center;
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.sp-accent {
+    color: var(--primary-color);
+}
+
+.sp-section-subtitle {
+    margin: 14px auto 0;
+    width: min(820px, 92%);
+    text-align: center;
+    color: rgba(20, 20, 20, 0.62);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* ---------- Grid cards ---------- */
+.sp-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.sp-card {
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(
+        180deg,
+        var(--light-purple),
+        var(--secondary-color)
+    );
+    padding: 18px 14px;
+    min-height: 110px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.sp-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+}
+
+.sp-card-icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 10px;
+    font-size: 18px;
+}
+
+.sp-card-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 13px;
+    color: rgba(20, 20, 20, 0.84);
+    line-height: 1.4;
+}
+
+.sp-grid-student {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+/* ---------- Mocks ---------- */
+.sp-mock {
+    margin-top: 28px;
+    border-radius: 10px;
+    border: 2px solid rgba(150, 170, 190, 0.55);
+    background: rgba(245, 248, 252, 0.9);
+    overflow: hidden;
+}
+
+.sp-mock-dashboard {
+    border-radius: 10px;
+}
+
+/* ---------- Rating row ---------- */
+.sp-rating-row {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+    .sp-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .sp-rating-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .sp-grid {
+        grid-template-columns: 1fr;
+    }
+    .sp-hero {
+        border-bottom-left-radius: 44px;
+        border-bottom-right-radius: 44px;
+        padding: 26px 0 34px;
+    }
+}

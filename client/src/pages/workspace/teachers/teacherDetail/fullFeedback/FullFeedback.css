@@ -1,0 +1,131 @@
+.ff-wrap {
+    padding: 16px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.ff-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.ff-title {
+    font-size: 20px;
+    font-weight: 700;
+    flex: 1;
+}
+
+.ff-back,
+.ff-btn {
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.ff-back:hover,
+.ff-btn:hover {
+    background: #fafafa;
+}
+
+.ff-summary {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.ff-chip {
+    background: #f4f4f7;
+    border: 1px solid #eee;
+    padding: 8px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.ff-muted {
+    color: #777;
+    padding: 10px 0;
+}
+
+.ff-error {
+    color: #b00020;
+    background: #fff2f2;
+    border: 1px solid #ffd0d0;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.ff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ff-item {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+.ff-itemTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ff-student {
+    font-weight: 700;
+    font-size: 15px;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ff-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.ff-time {
+    font-size: 12px;
+    color: #777;
+}
+
+.ff-sub {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+.ff-class {
+    font-weight: 600;
+}
+
+.ff-text {
+    margin-top: 8px;
+    white-space: pre-wrap;
+    line-height: 1.35;
+}
+
+.ff-stars {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.ff-star {
+    font-size: 14px;
+    opacity: 0.25;
+}
+
+.ff-star--on {
+    opacity: 1;
+}

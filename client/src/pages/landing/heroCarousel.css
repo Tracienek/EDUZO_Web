@@ -1,0 +1,123 @@
+.hc {
+    position: relative;
+    width: 100%;
+    max-width: 860px;
+    margin: 8px auto 18px;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+}
+
+/* keep your track behavior */
+.hc-track {
+    display: flex;
+    width: 100%;
+    transition: transform 450ms ease;
+}
+
+/* ✅ responsive height: phone -> tablet -> desktop */
+.hc-slide {
+    min-width: 100%;
+    height: clamp(200px, 30vw, 360px);
+}
+
+/* image fills slide */
+.hc-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* dots */
+.hc-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+
+    /* prevent dots being too close to edge on small screens */
+    padding-inline: 12px;
+}
+
+.hc-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+
+    background: var(--secondary-color);
+    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35);
+    opacity: 1;
+    transition: all 0.25s ease;
+}
+
+.hc-dot:hover {
+    background: var(--hover-btn);
+}
+
+.hc-dot.is-active {
+    background: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--light-purple);
+    transform: scale(1.15);
+}
+
+/* --- Phone tweaks --- */
+@media (max-width: 480px) {
+    .hc {
+        border-radius: 12px;
+        margin: 8px 12px 16px;
+        max-width: none; /* use full width with side padding */
+    }
+
+    .hc-slide {
+        height: clamp(180px, 52vw, 260px);
+    }
+
+    .hc-dots {
+        bottom: 10px;
+        gap: 8px;
+    }
+
+    .hc-dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* --- iPad / tablets --- */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .hc {
+        margin: 10px auto 18px;
+        max-width: min(860px, 92vw);
+    }
+
+    .hc-slide {
+        height: clamp(240px, 34vw, 380px);
+    }
+
+    /* make dots easier to tap */
+    .hc-dot {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* Optional: large tablets / iPad landscape */
+@media (min-width: 1025px) and (max-width: 1366px) {
+    .hc {
+        max-width: min(860px, 86vw);
+    }
+
+    .hc-slide {
+        height: clamp(280px, 26vw, 360px);
+    }
+}

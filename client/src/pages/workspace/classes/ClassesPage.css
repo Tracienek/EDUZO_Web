@@ -1,0 +1,274 @@
+/* pages/workspace/classes/ClassesPage.css */
+
+.classes-page {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 18px;
+
+    /* IMPORTANT: fill the main area nicely (no bottom weird gap) */
+    flex: 1;
+    min-height: 0;
+}
+
+/* ---------- Section header ---------- */
+.classes-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.classes-page-header h2 {
+    margin: 0;
+    font-size: clamp(20px, 3.2vw, 26px);
+    font-weight: 800;
+    color: #111827;
+}
+
+/* ---------- States ---------- */
+.classes-muted {
+    color: #6b7280;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+/* ---------- Grid ---------- */
+.classes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 14px;
+}
+
+/* =========================
+   CARD
+========================= */
+.class-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ece7ff;
+    border-radius: 16px;
+    padding: 14px;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    transition:
+        box-shadow 0.18s ease,
+        transform 0.12s ease;
+}
+
+.class-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.class-card:focus {
+    outline: none;
+}
+.class-card:focus-visible {
+    box-shadow:
+        0 0 0 4px rgba(139, 92, 246, 0.18),
+        0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Card Top ---------- */
+.class-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.class-card-title {
+    font-weight: 800;
+    color: #111827;
+    font-size: clamp(16px, 2.6vw, 20px);
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- Status Dot ---------- */
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex: 0 0 auto;
+}
+.dot-green {
+    background: #22c55e;
+}
+.dot-gray {
+    background: #9ca3af;
+}
+
+/* ---------- Delete Button ---------- */
+.class-card-delete {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    border: 1px solid #efeaff;
+    background: #ffd3d3;
+    cursor: pointer;
+    font-weight: 900;
+    color: #ff4545;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        transform 0.12s ease;
+}
+
+.class-card-delete:hover {
+    background: var(--danger);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* ---------- Subtitle ---------- */
+.class-card-sub {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* ---------- Meta ---------- */
+.class-card-meta {
+    margin-top: 6px;
+    display: grid;
+    gap: 8px;
+}
+
+.class-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 14px;
+    color: #374151;
+}
+
+.class-card-row .label {
+    color: #6b7280;
+    flex: 0 0 auto;
+}
+
+.class-card-row .value {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+
+/* ---------- Pill ---------- */
+.pill {
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #111827;
+    font-weight: 700;
+}
+
+/* ---------- Footer ---------- */
+.class-card-footer {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f1f1f5;
+    display: flex;
+    justify-content: center;
+}
+
+.linkish {
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--tertiary-color);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1100px) {
+    .classes-page {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .classes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+}
+
+@media (max-width: 720px) {
+    .classes-page {
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .classes-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .class-card {
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    .class-card-row {
+        font-size: 13px;
+    }
+
+    .class-card-sub {
+        font-size: 13px;
+    }
+
+    .linkish {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 420px) {
+    .pill {
+        font-size: 12px;
+        padding: 2px 8px;
+    }
+
+    .class-card-title {
+        font-size: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .class-card,
+    .class-card-delete {
+        transition: none;
+    }
+    .class-card:hover,
+    .class-card-delete:hover {
+        transform: none;
+    }
+}

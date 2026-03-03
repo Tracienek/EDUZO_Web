@@ -1,0 +1,98 @@
+.ctm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.ctm-modal {
+    width: 520px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.ctm-header {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.ctm-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.ctm-subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.ctm-x {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.ctm-form {
+    padding: 16px;
+}
+
+.ctm-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+.ctm-field input {
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 0 12px;
+}
+
+.ctm-error {
+    color: #e53935;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.ctm-error--server {
+    text-align: center;
+}
+
+.ctm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.ctm-btn {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--primary-color)
+    );
+    color: #fff;
+}
+
+.ctm-btn--ghost {
+    background: #e0e0e0;
+    color: #333;
+}

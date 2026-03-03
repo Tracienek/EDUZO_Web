@@ -1,0 +1,250 @@
+/* src/pages/workspace/classDetail/NotesPanel/NoteDetail/NoteDetails.css */
+.nd-wrap,
+.nd-wrap * {
+    box-sizing: border-box;
+}
+
+/* consistent container like td-wrap / noti-wrap */
+.nd-wrap {
+    width: 100%;
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 18px;
+
+    flex: 1;
+    min-height: 0;
+}
+
+/* topbar */
+.nd-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    min-width: 0;
+}
+
+.nd-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #111827;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* back button style similar to td-back */
+.nd-back {
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 12px;
+    border: 1px solid #e6e2ff;
+    background: #fff;
+
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 13px;
+    color: #111827;
+
+    transition:
+        transform 0.16s ease,
+        background 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+.nd-back:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--secondary-color)
+    );
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    color: #ffffff;
+}
+
+.nd-back:active {
+    transform: translateY(0);
+}
+
+.nd-back:focus-visible {
+    outline: 3px solid rgba(139, 92, 246, 0.25);
+    outline-offset: 3px;
+}
+
+.nd-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+
+/* chip */
+.nd-chip {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(124, 58, 237, 0.1);
+    color: rgba(124, 58, 237, 0.95);
+    font-weight: 900;
+}
+
+/* refresh button (simple) */
+.nd-btn {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid #e6e2ff;
+    background: #fff;
+
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 13px;
+    color: #111827;
+
+    transition:
+        transform 0.16s ease,
+        background 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+.nd-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--secondary-color)
+    );
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    color: #ffffff;
+}
+
+.nd-btn:active {
+    transform: translateY(0);
+}
+
+.nd-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* states */
+.nd-muted {
+    color: #6b7280;
+    padding: 10px 0;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.nd-error {
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(185, 28, 28, 0.2);
+    background: rgba(254, 226, 226, 0.6);
+    color: #b91c1c;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.nd-empty {
+    border: 1px dashed rgba(17, 24, 39, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+    color: #6b7280;
+    background: #fff;
+    font-weight: 800;
+}
+
+/* list */
+.nd-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.nd-item {
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    background: rgba(248, 246, 255, 0.85);
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.nd-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 6px;
+}
+
+.nd-time {
+    white-space: nowrap;
+}
+
+.nd-badge {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(17, 24, 39, 0.06);
+    color: rgba(17, 24, 39, 0.72);
+    font-weight: 900;
+    flex: 0 0 auto;
+}
+
+.nd-msg {
+    font-weight: 800;
+    font-size: 14px;
+    color: #111;
+    white-space: pre-wrap;
+    line-height: 1.45;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .nd-wrap {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .nd-title {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .nd-wrap {
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .nd-topbar {
+        gap: 10px;
+    }
+
+    .nd-back,
+    .nd-btn {
+        height: 38px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .nd-back,
+    .nd-btn {
+        transition: none;
+    }
+    .nd-back:hover,
+    .nd-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}

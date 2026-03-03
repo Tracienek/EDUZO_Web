@@ -1,0 +1,322 @@
+/* Landing page only */
+
+.lp-page {
+    background: var(--bg);
+    color: var(--text-color-dark);
+}
+
+/* ---------- Container ---------- */
+.lp-container {
+    width: min(1100px, 92%);
+    margin: 200px auto;
+}
+
+/* ---------- Hero ---------- */
+.lp-hero {
+    background: linear-gradient(
+        180deg,
+        var(--light-purple),
+        var(--secondary-color)
+    );
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+    padding: 10px 0 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.lp-hero-inner {
+    text-align: center;
+}
+
+.lp-hero-title {
+    font-size: clamp(30px, 4vw, 44px);
+
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+}
+
+.lp-hero-desc {
+    margin: 14px auto 22px;
+    font-size: 14px;
+    color: #5b5b5b;
+    line-height: 1.6;
+}
+
+.landing-hero-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.lp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    transition:
+        transform 180ms ease,
+        filter 180ms ease,
+        box-shadow 180ms ease;
+    color: #fff;
+    background: linear-gradient(
+        90deg,
+        var(--primary-color),
+        var(--secondary-color)
+    );
+}
+
+.lp-btn:hover {
+    transform: translateY(-3px) scale(1);
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--secondary-color)
+    );
+    color: #fff;
+}
+
+/* hero image placeholder */
+.lp-hero-mock {
+    margin: 34px auto 0;
+    width: min(860px, 96%);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
+    background: white;
+    overflow: hidden;
+}
+
+.lp-hero-mock img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ---------- Features ---------- */
+.lp-section {
+    padding: 54px 0;
+}
+
+.lp-section-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.lp-section-subtitle {
+    margin-top: 20px;
+    text-align: center;
+    color: #6b6b6b;
+    font-size: 14px;
+}
+
+.lp-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.lp-card {
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(
+        180deg,
+        var(--light-purple),
+        var(--secondary-color)
+    );
+    padding: 18px 14px;
+    min-height: 110px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.lp-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+}
+
+.lp-icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 10px;
+    font-size: 18px;
+}
+
+.lp-card h3 {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.lp-card p {
+    text-align: center;
+    font-size: 12px;
+    color: #6a6a6a;
+    line-height: 1.55;
+}
+
+/* ---------- About ---------- */
+.lp-about-subtitle {
+    margin: 40px auto;
+    color: var(--text-color-dark);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ---------- CTA Box ---------- */
+.lp-cta-box {
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(
+        180deg,
+        var(--light-purple),
+        var(--secondary-color)
+    );
+    padding: 44px 24px;
+    text-align: center;
+}
+
+.lp-cta-box h2 {
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.lp-cta-box p {
+    margin: 10px auto 18px;
+    width: min(720px, 92%);
+    color: #6a6a6a;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* --- Responsive improvements (mobile + tablet + iPad) --- */
+
+/* Container: replace the fixed 200px margin */
+.lp-container {
+    width: min(1100px, 92%);
+    margin: clamp(72px, 10vw, 160px) auto; /* was 200px auto */
+}
+
+/* Hero: scale padding + radius a bit more smoothly */
+.lp-hero {
+    padding: clamp(18px, 4vw, 28px) 0 clamp(22px, 5vw, 36px);
+    border-bottom-left-radius: clamp(28px, 6vw, 60px);
+    border-bottom-right-radius: clamp(28px, 6vw, 60px);
+}
+
+/* Hero text */
+.lp-hero-title {
+    font-size: clamp(26px, 4.2vw, 44px);
+}
+
+.lp-hero-desc {
+    width: min(720px, 92%);
+    font-size: clamp(13px, 1.8vw, 14px);
+}
+
+/* Buttons: better touch target on tablets/phones */
+.lp-btn {
+    min-height: 44px;
+    padding: 12px 18px;
+}
+
+/* Mock image box: responsive and safe on small screens */
+.lp-hero-mock {
+    width: min(860px, 96%);
+    margin: clamp(18px, 5vw, 34px) auto 0;
+}
+
+/* Sections spacing scales */
+.lp-section {
+    padding: clamp(36px, 6vw, 54px) 0;
+}
+
+.lp-section-title {
+    font-size: clamp(22px, 3.6vw, 32px);
+}
+
+.lp-section-subtitle {
+    width: min(720px, 92%);
+    margin-inline: auto;
+}
+
+/* Grid: smooth responsive columns without feeling “jumpy” */
+.lp-grid {
+    margin-top: 28px;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Tablets / iPad */
+@media (max-width: 1024px) {
+    .lp-container {
+        width: min(1100px, 94%);
+        margin: clamp(64px, 8vw, 120px) auto;
+    }
+
+    .lp-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lp-card {
+        padding: 18px 16px;
+    }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+    .lp-container {
+        width: min(1100px, 92%);
+        margin: 56px auto;
+    }
+
+    .landing-hero-actions {
+        padding-inline: 12px;
+    }
+
+    .lp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-card {
+        min-height: 96px;
+    }
+
+    .lp-cta-box {
+        padding: 28px 16px;
+    }
+
+    .lp-cta-box h2 {
+        font-size: 20px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 420px) {
+    .lp-hero-desc {
+        font-size: 13px;
+    }
+
+    .lp-btn {
+        width: 100%;
+        max-width: 320px;
+    }
+}

@@ -1,0 +1,130 @@
+// base.scss
+
+/* ================================
+   Google Fonts
+================================ */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:wght@400;700&display=swap');
+
+/* ================================
+   CSS Variables (Purple Theme)
+================================ */
+:root {
+    --primary-color: #ab79dc;
+    --secondary-color: #e9d8f9;
+    --tertiary-color: #805ca3;
+    --light-purple: #f6f0fe;
+
+    /* Button */
+    --btn-color: rgba(139, 92, 246, 0.16);
+    --hover-btn: #5211c2;
+
+    /* Text */
+    --text-color-dark: #1c1c1c;
+    --text-color-light: #ffffff;
+    --muted: #737373;
+
+    /* Status */
+    --danger: #ef4444;
+
+    /* Backgrounds */
+    --bg: #fefeff;
+    --purple-bg: #f5f3ff;
+    --bg-form: #fcf9ff;
+
+    /* Border & shadow */
+    --border: #e5e7eb;
+    --border-color: rgba(139, 92, 246, 0.55);
+    --box-shadow: rgba(0, 0, 0, 0.15);
+}
+
+/* ================================
+   Reset & Base
+================================ */
+a,
+a:visited {
+    // color: inherit;
+    text-decoration: none;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+    font-family: 'Manrope', sans-serif;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+    background-color: var(--bg);
+    color: var(--text-color-dark);
+    overflow-x: hidden;
+}
+
+/* ================================
+   Media Defaults
+================================ */
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+/* ================================
+   Form Defaults
+================================ */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* ================================
+   Layout Helpers
+================================ */
+.app-layer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Background effect layer (for signIn page, hero, etc.) */
+.finisher-header {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ================================
+   Utility classes
+================================ */
+svg {
+    &.size-6 {
+        width: 20px;
+        height: 20px;
+    }
+}
