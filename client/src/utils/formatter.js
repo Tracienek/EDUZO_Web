@@ -132,7 +132,7 @@ export function formatTimeAgo(date) {
         const then = dayjs(date);
         const diffSec = now.diff(then, "second");
 
-        // ✅ NEW: if less than 2 seconds → "just now"
+        //  NEW: if less than 2 seconds → "just now"
         if (diffSec < 2) return "just now";
 
         if (diffSec < 60) return `${diffSec}s`;

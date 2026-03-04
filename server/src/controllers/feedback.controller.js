@@ -147,7 +147,6 @@ exports.getByTeacher = async (req, res) => {
 
         const limit = Math.min(Number(req.query.limit || 50), 200);
 
-        // Load viewer + target teacher from DB to enforce center boundary
         const [viewer, targetTeacher] = await Promise.all([
             User.findById(viewerId).select("_id role centerId").lean(),
             User.findById(teacherId).select("_id role centerId").lean(),
@@ -166,18 +165,17 @@ exports.getByTeacher = async (req, res) => {
             return res.status(403).json({ message: "Forbidden" });
         }
 
-        // Center can only view teachers in same center
+        // Center boundary:
+        // teacher.centerId should match center's _id (most common)
         if (viewer.role === "center") {
-            if (
-                !viewer.centerId ||
-                !targetTeacher.centerId ||
-                String(viewer.centerId) !== String(targetTeacher.centerId)
-            ) {
+            const viewerCenterKey = String(viewer.centerId || viewer._id); //  FIX
+            const teacherCenterKey = String(targetTeacher.centerId || "");
+
+            if (!teacherCenterKey || viewerCenterKey !== teacherCenterKey) {
                 return res.status(403).json({ message: "Forbidden" });
             }
         }
 
-        // Optionally: deny other roles
         if (viewer.role !== "center" && viewer.role !== "teacher") {
             return res.status(403).json({ message: "Forbidden" });
         }

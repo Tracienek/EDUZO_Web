@@ -211,7 +211,6 @@ exports.createStudentNote = async (req, res) => {
             return res.status(403).json({ message: "Forbidden" });
         }
 
-        // decide receiver role (simple rule: send to the other side)
         const toRole = role === "teacher" ? "center" : "teacher";
 
         // centerId: from class if possible

@@ -10,11 +10,9 @@ const TeacherAttendanceLog = require("../models/TeacherAttendanceLog");
 
 const TUITION_KEY = "__TUITION__";
 
-// Helper: validate YYYY-MM-DD
 const isISODateKey = (s) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || ""));
 
 exports.getByDates = async (req, res) => {
-    // (optional) stop caching for this endpoint
     res.set("Cache-Control", "no-store");
 
     try {
@@ -38,8 +36,8 @@ exports.getByDates = async (req, res) => {
 
         const records = raw.map((r) => ({
             ...r,
-            studentId: String(r.studentId), // ✅ IMPORTANT
-            classId: String(r.classId), // ✅ optional but good
+            studentId: String(r.studentId),
+            classId: String(r.classId),
         }));
 
         return res.status(200).json({ metadata: { records } });
@@ -69,7 +67,6 @@ exports.bulkSaveAttendance = async (req, res) => {
         for (const c of changes) {
             if (!c?.studentId || !c?.dateKey) continue;
 
-            // protect against invalid dateKey format (optional)
             if (c.dateKey !== TUITION_KEY && !isISODateKey(c.dateKey)) continue;
 
             const set = {};
@@ -123,7 +120,6 @@ exports.bulkSaveAttendance = async (req, res) => {
             });
         }
 
-        // If nothing to save, just sync heldCount from ClassSession
         if (!ops.length) {
             const heldCount = await ClassSession.countDocuments({
                 classId: classObjectId,
@@ -138,7 +134,6 @@ exports.bulkSaveAttendance = async (req, res) => {
             return res.json({ metadata: { saved: 0, heldCount } });
         }
 
-        // count before (to detect "crossing" threshold)
         const heldCountBefore = await ClassSession.countDocuments({
             classId: classObjectId,
             held: true,
@@ -289,7 +284,8 @@ exports.bulkSaveAttendance = async (req, res) => {
                 let logDateKey = String(meta.dateKey || "").trim();
                 if (!isISODateKey(logDateKey)) {
                     // fallback: first edited dateKey
-                    logDateKey = changedDateKeys?.[0] || "";
+                    logDateKey =
+                        (changedDateKeys || []).sort().slice(-1)[0] || "";
                 }
 
                 if (

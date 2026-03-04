@@ -185,7 +185,7 @@
 
 .ff-class {
     font-weight: 900;
-    color: var(--text-color-dark);
+    color: var(--tertiary-color);
 }
 
 .ff-text {

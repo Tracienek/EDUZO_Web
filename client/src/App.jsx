@@ -12,6 +12,7 @@ import AuthLayout from "./pages/auth/AuthLayout.jsx";
 import SignIn from "./pages/auth/SignIn.jsx";
 import SignUp from "./pages/auth/SignUp.jsx";
 import Verification from "./pages/auth/Verification.jsx";
+import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
 // import Layout from "./components/layout/Layout.jsx";
 import LandingPage from "./pages/landing/LandingPage.jsx";
 // import About from "./pages/landing/About.jsx";
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
             { path: "signIn", element: <SignIn /> },
             { path: "signup", element: <SignUp /> },
             { path: "verification", element: <Verification /> },
+            { path: "forgot-password", element: <ForgotPassword /> },
         ],
     },
     { path: "/feedback/:classId", element: <FeedbackPage /> },

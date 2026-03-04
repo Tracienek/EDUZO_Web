@@ -27,14 +27,14 @@ export default function WorkspaceLayout() {
         localStorage.setItem("ws_collapsed", JSON.stringify(collapsed));
     }, [collapsed]);
 
-    // ✅ dropdown ref (<=900px)
+    //  dropdown ref (<=900px)
     const mobileMenuRef = useRef(null);
 
     const closeMobileMenu = () => {
         if (mobileMenuRef.current) mobileMenuRef.current.open = false;
     };
 
-    // ✅ click outside để đóng (chỉ khi <=900px)
+    //  click outside để đóng (chỉ khi <=900px)
     useEffect(() => {
         const onDocClick = (e) => {
             const mq = window.matchMedia("(max-width: 900px)");
@@ -50,7 +50,7 @@ export default function WorkspaceLayout() {
         return () => document.removeEventListener("mousedown", onDocClick);
     }, []);
 
-    // ✅ khi resize từ mobile -> desktop thì đóng dropdown cho sạch
+    //  khi resize từ mobile -> desktop thì đóng dropdown cho sạch
     useEffect(() => {
         const mq = window.matchMedia("(max-width: 900px)");
         const sync = () => {
@@ -61,7 +61,7 @@ export default function WorkspaceLayout() {
         return () => mq.removeEventListener("change", sync);
     }, []);
 
-    // ✅ dùng chung nav items, click là tự đóng menu (<=900)
+    //  dùng chung nav items, click là tự đóng menu (<=900)
     const NavItems = ({ onItemClick }) => (
         <>
             <li>

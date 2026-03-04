@@ -4,11 +4,11 @@ import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import HeroCarousel from "./HeroCarousel";
 
-import img1 from "../../assets/hero/img1.png";
-import img2 from "../../assets/hero/img2.png";
-import img3 from "../../assets/hero/img3.png";
-import img4 from "../../assets/hero/img4.png";
-import img5 from "../../assets/hero/img5.png";
+import img1 from "../../assets/hero/img10.jpg";
+import img2 from "../../assets/hero/img5.jpg";
+import img3 from "../../assets/hero/img3.jpg";
+import img4 from "../../assets/hero/img6.jpg";
+import img5 from "../../assets/hero/img8.jpg";
 
 const FEATURES = [
     {
@@ -110,30 +110,42 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            <section className="lp-about" id="about">
+            {/* ABOUT */}
+            <section
+                className="lp-about"
+                id="about"
+                aria-labelledby="about-title"
+            >
                 <div className="lp-container">
                     <div className="lp-about-text">
-                        <h2 className="lp-section-title" id="about">
+                        <h2 className="lp-section-title" id="about-title">
                             About EDUZO
                         </h2>
+
                         <p className="lp-about-subtitle">
                             EDUZO is a student-developed education platform
                             created to simplify classroom management and improve
                             communication between teachers and students. Our
                             goal is to reduce administrative workload for
                             teachers while providing students with an easy and
-                            accessible way to share their feedback. <br />{" "}
-                            <br /> I believe that effective learning
-                            environments are built on clear organization and
-                            open communication. By combining class management,
-                            scheduling, and anonymous student feedback into a
-                            single platform, EDUZO helps educators better
-                            understand their classrooms and continuously improve
-                            the learning experience. <br /> <br /> EDUZO is
-                            designed with simplicity and usability in mind,
-                            making it suitable for both small classes and larger
-                            learning environments without requiring complex
-                            setup or training.
+                            accessible way to share their feedback.
+                        </p>
+
+                        <p className="lp-about-subtitle">
+                            I believe that effective learning environments are
+                            built on clear organization and open communication.
+                            By combining class management, scheduling, and
+                            anonymous student feedback into a single platform,
+                            EDUZO helps educators better understand their
+                            classrooms and continuously improve the learning
+                            experience.
+                        </p>
+
+                        <p className="lp-about-subtitle">
+                            EDUZO is designed with simplicity and usability in
+                            mind, making it suitable for both small classes and
+                            larger learning environments without requiring
+                            complex setup or training.
                         </p>
                     </div>
                 </div>

@@ -98,7 +98,7 @@ export default function NotificationsPage() {
             try {
                 await apiUtils.get(`/classes/${n.classId}`);
 
-                // ✅ optional: jump to tuition area if it's a tuition due notification
+                //  optional: jump to tuition area if it's a tuition due notification
                 const q = n.title === "Tuition due" ? "?tab=tuition" : "";
                 navigate(`/workspace/classes/${n.classId}${q}`);
             } catch (err) {
@@ -175,7 +175,7 @@ export default function NotificationsPage() {
                     const read = isRead(n);
                     const isTuition = n.title === "Tuition due";
 
-                    // ✅ IMPORTANT: use div role="button" to avoid nested button warning
+                    //  IMPORTANT: use div role="button" to avoid nested button warning
                     return (
                         <div
                             key={n._id}
@@ -223,7 +223,7 @@ export default function NotificationsPage() {
                                 </div>
                             </div>
 
-                            {/* ✅ show title if exists */}
+                            {/*  show title if exists */}
                             {!!n.title && (
                                 <div className="noti-item-title">{n.title}</div>
                             )}

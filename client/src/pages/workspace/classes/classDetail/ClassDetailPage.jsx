@@ -105,7 +105,7 @@ const toLocalISODate = (d) => {
     return `${y}-${m}-${day}`;
 };
 
-// ✅ Stable student id: only backend id
+//  Stable student id: only backend id
 const getStudentId = (s) => String(s?._id || s?.id || "");
 
 export default function ClassDetailPage() {
@@ -412,6 +412,12 @@ export default function ClassDetailPage() {
             }),
         );
 
+        const editedDateKeys = Array.from(
+            new Set(changes.map((c) => c.dateKey).filter(Boolean)),
+        ).sort();
+
+        const logDateKey = editedDateKeys.slice(-1)[0] || startDate;
+
         if (!changes.length && !tuitionChanges.length) {
             exitAttendanceEditMode();
             return;
@@ -424,7 +430,7 @@ export default function ClassDetailPage() {
                     changes,
                     tuitionChanges,
                     logMeta: {
-                        dateKey: dateKeys?.[0] || startDate,
+                        dateKey: logDateKey, // ✅ FIX HERE
                         timeLabel: extractTimeFromSchedule(
                             cls?.scheduleText || "",
                         ),
@@ -458,7 +464,6 @@ export default function ClassDetailPage() {
             );
         }
     };
-
     const cancelAttendance = () => {
         const snap = snapshotRef.current;
         if (snap) setCheckState(snap);
@@ -468,7 +473,7 @@ export default function ClassDetailPage() {
     const sendTuitionEmail = async () => {
         if (!canSendTuition) return;
 
-        // ✅ hard guard: even if button somehow enabled, block request
+        //  hard guard: even if button somehow enabled, block request
         if (cycleHeld < threshold) {
             alert(`Not enough sessions held: ${cycleHeld}/${threshold}`);
             return;

@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema(
             select: false,
         },
 
+        passwordResetToken: { type: String },
+        passwordResetExpires: { type: Date },
+
         role: { type: String, enum: ["center", "teacher"], default: "center" },
 
         centerId: {
@@ -27,7 +30,7 @@ const userSchema = new mongoose.Schema(
             default: null,
         },
 
-        gender: { type: String, default: "" }, // "male" | "female" | "other" | ""
+        gender: { type: String, default: "" },
         languageOrSpeciality: { type: String, default: "" },
         avatar: { type: String, default: "" },
         dob: { type: Date, default: null },

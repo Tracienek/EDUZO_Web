@@ -15,7 +15,7 @@
     min-height: 0;
 }
 
-/* ✅ add shell (you are using it in JSX) */
+/*  add shell (you are using it in JSX) */
 .profile-shell {
     width: 100%;
     min-height: 0;
@@ -120,7 +120,7 @@
     flex-wrap: wrap;
 }
 
-/* ✅ unified button base */
+/*  unified button base */
 .profile-outline-btn,
 .profile-cancel-btn,
 .profile-primary-btn {

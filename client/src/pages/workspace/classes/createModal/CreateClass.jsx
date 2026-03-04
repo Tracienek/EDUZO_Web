@@ -17,10 +17,10 @@ const DAYS = [
 const DEFAULT_FORM = {
     name: "",
     subject: "",
-    scheduleDays: ["Mon", "Wed", "Fri"], // ✅ default to pass validation
+    scheduleDays: ["Mon", "Wed", "Fri"], //  default to pass validation
     scheduleTime: "9:00 AM",
     durationMinutes: 90,
-    totalSessions: 12, // ✅ denominator (set to 10 if you want default 10)
+    totalSessions: 12, //  denominator (set to 10 if you want default 10)
 };
 
 const unwrap = (res) => {
@@ -116,7 +116,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                 subject: form.subject.trim(),
                 scheduleText: scheduleTextPreview,
                 durationMinutes: Number(form.durationMinutes) || 90,
-                totalSessions: Math.max(1, Number(form.totalSessions) || 12), // ✅
+                totalSessions: Math.max(1, Number(form.totalSessions) || 12), //
             };
 
             const res = await apiUtils.post("/classes", payload);
@@ -245,7 +245,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                         />
                     </label>
 
-                    {/* ✅ Total sessions */}
+                    {/*  Total sessions */}
                     <label className="cm-label">
                         <span>Total sessions</span>
                         <input

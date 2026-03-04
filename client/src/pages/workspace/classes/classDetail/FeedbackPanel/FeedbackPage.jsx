@@ -48,7 +48,7 @@ export default function FeedbackPage() {
         [teacherId, teachers],
     );
 
-    // ✅ load meta
+    //  load meta
     useEffect(() => {
         if (!cid) return;
 
@@ -236,7 +236,7 @@ export default function FeedbackPage() {
 
                 {done && (
                     <div className="fbp-alert fbp-alert-success" role="status">
-                        <span className="fbp-alert-icon">✅</span>
+                        <span className="fbp-alert-icon"></span>
                         <div className="fbp-alert-body">
                             Thank you! Your feedback has been submitted.
                         </div>

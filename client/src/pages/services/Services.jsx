@@ -2,6 +2,8 @@ import "./services.css";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
+import img3 from "../../assets/hero/img3.jpg";
+import img5 from "../../assets/hero/img5.jpg";
 
 const TEACHER_FEATURES = [
     {
@@ -112,7 +114,11 @@ export default function ServicesPage() {
                         className="sp-mock sp-mock-dashboard"
                         aria-label="Dashboard preview"
                     >
-                        <p>để ảnh ở đây nha</p>
+                        <img
+                            src={img3}
+                            alt="Dashboard preview"
+                            className="sp-mock-img"
+                        />
                     </div>
                 </div>
             </section>
@@ -149,7 +155,11 @@ export default function ServicesPage() {
 
                     {/* rating mocks */}
                     <div className="sp-rating-row">
-                        <p>để ảnh ở đây nè</p>
+                        <img
+                            src={img5}
+                            alt="Student rating preview"
+                            className="sp-mock-img"
+                        />
                     </div>
                 </div>
             </section>

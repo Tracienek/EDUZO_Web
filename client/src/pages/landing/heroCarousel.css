@@ -17,7 +17,7 @@
     transition: transform 450ms ease;
 }
 
-/* ✅ responsive height: phone -> tablet -> desktop */
+/*  responsive height: phone -> tablet -> desktop */
 .hc-slide {
     min-width: 100%;
     height: clamp(200px, 30vw, 360px);

@@ -79,12 +79,14 @@ const avgRating = (items) => {
 
 function Stars({ value = 0 }) {
     const v = Math.max(0, Math.min(5, Number(value) || 0));
+    const full = Math.floor(v);
+
     return (
         <span className="fp-stars" aria-label={`Rating ${v} out of 5`}>
             {"★★★★★".split("").map((ch, i) => (
                 <span
                     key={i}
-                    className={i < v ? "fp-star fp-star--on" : "fp-star"}
+                    className={i < full ? "fp-star fp-star--on" : "fp-star"}
                 >
                     {ch}
                 </span>
@@ -100,7 +102,6 @@ export default function TeacherDetail() {
 
     const role = userInfo?.role;
 
-    // viewer guards: center can view any; teacher can view only self
     const viewerId = String(userInfo?._id || userInfo?.id || "");
     const viewingTeacherId = String(teacherId || "");
 
@@ -109,10 +110,11 @@ export default function TeacherDetail() {
         role === "center" ||
         (role === "teacher" && viewerId === viewingTeacherId);
 
-    // feedback permissions (same rule as logs)
     const canViewFeedback =
         role === "center" ||
         (role === "teacher" && viewerId === viewingTeacherId);
+
+    const canDeleteTeacher = role === "center";
 
     const [loading, setLoading] = useState(true);
     const [pageError, setPageError] = useState("");
@@ -162,7 +164,6 @@ export default function TeacherDetail() {
             setFbLoading(true);
             setFbError("");
 
-            // ✅ backend should implement: GET /v1/api/feedback/teacher/:teacherId
             const res = await apiUtils.get(
                 `/feedback/teacher/${teacherId}?limit=50`,
             );
@@ -183,7 +184,6 @@ export default function TeacherDetail() {
 
     useEffect(() => {
         if (!canViewLogs) {
-            // if cannot view, ensure not showing stale logs
             setAttendanceLogs([]);
             setLogsError("");
             setLogsLoading(false);
@@ -232,8 +232,6 @@ export default function TeacherDetail() {
                 setLoading(true);
                 setPageError("");
 
-                // NOTE: current backend loads list then finds by id
-                // recommended later: GET /center/teachers/:id
                 const res = await apiUtils.get("/center/teachers");
                 const data = unwrap(res);
                 const list = data?.teachers ?? data ?? [];
@@ -288,6 +286,13 @@ export default function TeacherDetail() {
         }
     };
 
+    const fbCountLabel =
+        feedbacks.length === 1 ? "1 feedback" : `${feedbacks.length} feedbacks`;
+    const attCountLabel =
+        attendanceLogs.length === 1
+            ? "1 attendance"
+            : `${attendanceLogs.length} attendance`;
+
     return (
         <div className="td-wrap">
             <div className="td-topbar">
@@ -303,14 +308,16 @@ export default function TeacherDetail() {
                     {teacherName}
                 </div>
 
-                <button
-                    className="td-delete"
-                    type="button"
-                    title="Delete teacher"
-                    onClick={handleDeleteTeacher}
-                >
-                    Delete
-                </button>
+                {canDeleteTeacher && (
+                    <button
+                        className="td-delete"
+                        type="button"
+                        title="Delete teacher"
+                        onClick={handleDeleteTeacher}
+                    >
+                        Delete
+                    </button>
+                )}
             </div>
 
             <div className="td-grid">
@@ -376,7 +383,7 @@ export default function TeacherDetail() {
                                     ? "Hidden"
                                     : fbLoading
                                       ? "Loading..."
-                                      : `${feedbacks.length} feedback`}
+                                      : fbCountLabel}
                             </span>
 
                             {canViewFeedback && (
@@ -423,64 +430,72 @@ export default function TeacherDetail() {
                         !fbLoading &&
                         !fbError &&
                         feedbacks.length > 0 && (
-                            <div className="td-log-list">
-                                {feedbacks.slice(0, 3).map((f, idx) => {
-                                    const id = f?._id || f?.id || `${idx}`;
-                                    const student = safeText(f?.studentName);
-                                    const clsName = safeText(f?.className);
-                                    const r = Number(f?.rating) || 0;
+                            <>
+                                <div className="td-log-list">
+                                    {feedbacks.slice(0, 3).map((f, idx) => {
+                                        const id = f?._id || f?.id || `${idx}`;
+                                        const student = safeText(
+                                            f?.studentName,
+                                        );
+                                        const clsName = safeText(f?.className);
+                                        const r = Number(f?.rating) || 0;
 
-                                    // support both FE variants
-                                    const text = String(
-                                        f?.comment || f?.message || "",
-                                    ).trim();
+                                        const text = String(
+                                            f?.comment || f?.message || "",
+                                        ).trim();
 
-                                    const ts =
-                                        f?.createdAt || f?.updatedAt || f?.time;
+                                        const ts =
+                                            f?.createdAt ||
+                                            f?.updatedAt ||
+                                            f?.time;
 
-                                    {
-                                        feedbacks.length > 3 && (
+                                        return (
                                             <div
-                                                className="td-muted"
-                                                style={{ marginTop: 8 }}
+                                                key={id}
+                                                className="td-log-item"
                                             >
-                                                Showing latest 3. Click “View
-                                                full feedbacks” to see all.
+                                                <div>
+                                                    <div className="td-log-title">
+                                                        {student}
+                                                    </div>
+
+                                                    <div className="td-log-sub">
+                                                        <Stars value={r} />{" "}
+                                                        <span
+                                                            style={{
+                                                                marginLeft: 8,
+                                                            }}
+                                                        >
+                                                            {clsName} •{" "}
+                                                            {fmtDateTime(ts)}
+                                                        </span>
+                                                    </div>
+
+                                                    {text ? (
+                                                        <div
+                                                            style={{
+                                                                marginTop: 6,
+                                                            }}
+                                                        >
+                                                            {text}
+                                                        </div>
+                                                    ) : null}
+                                                </div>
                                             </div>
                                         );
-                                    }
+                                    })}
+                                </div>
 
-                                    return (
-                                        <div key={id} className="td-log-item">
-                                            <div>
-                                                <div className="td-log-title">
-                                                    {student}
-                                                </div>
-
-                                                <div className="td-log-sub">
-                                                    <Stars value={r} />{" "}
-                                                    <span
-                                                        style={{
-                                                            marginLeft: 8,
-                                                        }}
-                                                    >
-                                                        {clsName} •{" "}
-                                                        {fmtDateTime(ts)}
-                                                    </span>
-                                                </div>
-
-                                                {text ? (
-                                                    <div
-                                                        style={{ marginTop: 6 }}
-                                                    >
-                                                        {text}
-                                                    </div>
-                                                ) : null}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                                {feedbacks.length > 3 && (
+                                    <div
+                                        className="td-muted"
+                                        style={{ marginTop: 8 }}
+                                    >
+                                        Showing latest 3. Click “View full
+                                        feedbacks” to see all.
+                                    </div>
+                                )}
+                            </>
                         )}
                 </section>
 
@@ -501,7 +516,7 @@ export default function TeacherDetail() {
                                     ? "Hidden"
                                     : logsLoading
                                       ? "Loading..."
-                                      : `${attendanceLogs.length} attendance`}
+                                      : attCountLabel}
                             </span>
 
                             {canClearLogs && (
@@ -555,7 +570,7 @@ export default function TeacherDetail() {
                                     const className = safeText(
                                         x.classNameSnapshot,
                                     );
-                                    const date = fmtDOB(x.dateKey); // yyyy-mm-dd -> dd/mm/yyyy
+                                    const date = fmtDOB(x.dateKey);
                                     const time = safeText(x.timeLabel);
 
                                     return (

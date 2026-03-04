@@ -71,22 +71,21 @@
         border-color 0.15s ease;
 }
 
-.teachers-add .plus {
-    font-size: 16px;
+.teachers-add {
+    font-size: 14px;
     line-height: 1;
-    color: var(--tertiary-color, #7c3aed);
+    color: #000;
 }
 
-/* hover đẹp + cùng “feel” với cd-btn */
 .teachers-add:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-    border-color: rgba(124, 58, 237, 0.35);
+    transform: translateY(-2px);
     background: linear-gradient(
         90deg,
-        rgba(124, 58, 237, 0.1),
-        rgba(168, 85, 247, 0.08)
+        var(--tertiary-color),
+        var(--secondary-color)
     );
+    box-shadow: 0 10px 24px var(--box-shadow);
+    color: #ffffff;
 }
 
 .teachers-add:active {

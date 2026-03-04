@@ -184,10 +184,7 @@ export default function TeacherPage({ onOpenTeacher }) {
                     className="teachers-add"
                     onClick={() => setOpenCreate(true)}
                 >
-                    <span className="plus" aria-hidden="true">
-                        ＋
-                    </span>
-                    Teachers
+                    ＋ Teachers
                 </button>
             </div>
 

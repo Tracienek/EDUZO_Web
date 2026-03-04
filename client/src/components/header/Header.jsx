@@ -1,6 +1,7 @@
 import "./header.css";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import { HashLink } from "react-router-hash-link";
 
 const Header = () => {
     return (
@@ -19,9 +20,9 @@ const Header = () => {
                         <Link to="/" className="lp-links">
                             Home
                         </Link>
-                        <Link to="/#about" className="lp-links">
+                        <HashLink smooth to="/#about" className="lp-links">
                             About us
-                        </Link>
+                        </HashLink>
                         <Link to="/services" className="lp-links">
                             Services
                         </Link>

@@ -134,16 +134,18 @@ export default function FullFeedback() {
                                         {student}
                                     </div>
 
+                                    <div className="ff-sub">
+                                        <span className="ff-class">
+                                            {clsName}
+                                        </span>
+                                    </div>
+
                                     <div className="ff-meta">
                                         <Stars value={r} />
                                         <span className="ff-time">
                                             {fmtDateTime(ts)}
                                         </span>
                                     </div>
-                                </div>
-
-                                <div className="ff-sub">
-                                    <span className="ff-class">{clsName}</span>
                                 </div>
 
                                 {text ? (

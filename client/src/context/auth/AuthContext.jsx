@@ -124,7 +124,6 @@ export const AuthProvider = ({ children }) => {
                 password,
             });
 
-            // ✅ bắt mọi kiểu backend hay trả
             const accessToken =
                 res?.data?.metadata?.accessToken ||
                 res?.data?.metadata?.token ||

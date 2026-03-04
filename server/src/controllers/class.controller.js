@@ -10,11 +10,6 @@ const User = require("../models/User");
 
 const getMyId = (req) => req.user?.userId || req.user?._id;
 
-/**
- * Resolve centerId based on role:
- * - center: centerId = myId
- * - teacher: centerId = User.centerId
- */
 const resolveCenterId = async (req) => {
     const myId = getMyId(req);
     if (!myId) return { error: { status: 401, message: "Invalid token" } };
@@ -64,18 +59,10 @@ const loadOwnedClass = async (req, classId) => {
     return { cls, centerId };
 };
 
-/**
- * Notify center when class reaches tuition milestone (cycleHeld >= totalSessions).
- * - Create in-app Notification (recipients = centerId)
- * - Send email to center (if email exists)
- *
- * NOTE: This helper does NOT do gating. Caller should gate by tuitionMilestoneNotifiedAt.
- */
 const notifyTuitionMilestone = async ({ cls, threshold }) => {
     const centerId = cls.centerId;
     if (!centerId) return;
 
-    // ✅ always create in-app notification even if email missing
     try {
         await Notification.create({
             title: "Tuition due",
@@ -168,10 +155,8 @@ exports.createClass = async (req, res) => {
             totalSessions: Math.max(1, Number(totalSessions) || 12),
             heldCount: 0,
 
-            // ✅ cycle baseline
             tuitionCycleStartHeldCount: 0,
 
-            // milestone + sent flags
             tuitionMilestoneNotifiedAt: null,
             tuitionEmailSentAt: null,
         });
@@ -220,7 +205,6 @@ exports.getById = async (req, res) => {
                     heldCount: Number(cls.heldCount || 0),
                     totalSessions: Math.max(1, Number(cls.totalSessions || 12)),
 
-                    // ✅ cycle baseline (for FE if needed)
                     tuitionCycleStartHeldCount: Number(
                         cls.tuitionCycleStartHeldCount || 0,
                     ),
@@ -365,7 +349,6 @@ exports.deleteClass = async (req, res) => {
     }
 };
 
-// sessions summary for FE (owned + denominator = totalSessions), cycle-based
 exports.getSessionSummary = async (req, res) => {
     try {
         const classId = req.params.id;
@@ -381,8 +364,8 @@ exports.getSessionSummary = async (req, res) => {
 
         return res.json({
             metadata: {
-                heldCount, // lifetime (optional)
-                cycleHeld, // ✅ FE should display this
+                heldCount,
+                cycleHeld,
                 threshold,
                 canSendTuition: cycleHeld >= threshold,
             },
@@ -392,8 +375,6 @@ exports.getSessionSummary = async (req, res) => {
     }
 };
 
-// Manual mark session held endpoint (legacy; prefer attendance.bulkSaveAttendance)
-// NOTE: This increments heldCount and uses lifetime milestone logic. Consider removing it.
 exports.markSessionHeld = async (req, res) => {
     try {
         const classId = req.params.id;
@@ -447,7 +428,6 @@ exports.markSessionHeld = async (req, res) => {
         const base = Number(updated?.tuitionCycleStartHeldCount || 0);
         const cycleHeld = Math.max(0, heldCount - base);
 
-        // OPTIONAL: cycle-based milestone gate (if you still keep this endpoint)
         if (cycleHeld >= threshold) {
             const milestoneHit = await Class.findOneAndUpdate(
                 { _id: classId, tuitionMilestoneNotifiedAt: null },
@@ -473,7 +453,6 @@ exports.markSessionHeld = async (req, res) => {
     }
 };
 
-// manual tuition emails (center-only, only after totalSessions are held IN THIS CYCLE)
 exports.sendTuitionEmails = async (req, res) => {
     try {
         const classId = req.params.id;
@@ -495,7 +474,6 @@ exports.sendTuitionEmails = async (req, res) => {
             held: true,
         });
 
-        // sync to Class to avoid stale heldCount
         await Class.updateOne({ _id: classObjectId }, { $set: { heldCount } });
 
         const threshold = Math.max(1, Number(cls.totalSessions || 12));
@@ -610,8 +588,6 @@ exports.removeStudentFromClass = async (req, res) => {
     try {
         const { id: classId, studentId } = req.params;
 
-        // ✅ optional: role guard (only center)
-        // tùy bạn lưu role ở req.user hay req.userInfo
         const role = req.user?.role || req.userInfo?.role;
         if (role && role !== "center") {
             return res.status(403).json({ message: "Forbidden" });
@@ -623,13 +599,10 @@ exports.removeStudentFromClass = async (req, res) => {
         const klass = await Class.findById(classId);
         if (!klass) return res.status(404).json({ message: "Class not found" });
 
-        // Remove student from class.students
-        // Case A: students is [ObjectId]
         klass.students = (klass.students || []).filter(
             (sid) => String(sid) !== String(studentId),
         );
 
-        // Update counts if you store them
         const count = klass.students.length;
         if (typeof klass.totalStudents !== "undefined")
             klass.totalStudents = count;
@@ -638,8 +611,6 @@ exports.removeStudentFromClass = async (req, res) => {
 
         await klass.save();
 
-        // Optional: clear student's class reference if your Student schema has it
-        // (if not, this does nothing harmful if field doesn't exist)
         await Student.findByIdAndUpdate(studentId, {
             $unset: { classId: "" },
         }).catch(() => {});

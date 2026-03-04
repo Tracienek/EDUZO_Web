@@ -52,7 +52,7 @@ exports.updateMe = async (req, res) => {
             return res.status(400).json({ message: "Invalid gender" });
         }
 
-        // ✅ DOB: accept "", null, undefined => clear DOB
+        //  DOB: accept "", null, undefined => clear DOB
         // accept "YYYY-MM-DD" => store as Date safely (no timezone shift issues for date input)
         let dobValue = null;
         if (dob != null && String(dob).trim() !== "") {
@@ -92,7 +92,7 @@ exports.updateMe = async (req, res) => {
             fullName: String(fullName).trim(),
             gender: g,
             languageOrSpeciality: String(languageOrSpeciality || "").trim(),
-            dob: dobValue, // ✅ add
+            dob: dobValue, //  add
         };
 
         const user = await User.findByIdAndUpdate(userId, update, {
@@ -115,7 +115,7 @@ exports.updateMe = async (req, res) => {
                     avatar: user.avatar || "",
                     dob: user.dob
                         ? new Date(user.dob).toISOString().slice(0, 10)
-                        : "", // ✅ return YYYY-MM-DD
+                        : "", //  return YYYY-MM-DD
                     mustChangePassword: user.mustChangePassword || false,
                 },
             },
@@ -180,7 +180,7 @@ exports.changePassword = async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        // ✅ match FE payload
+        //  match FE payload
         const currentPassword =
             req.body.currentPassword ?? req.body.oldPassword;
         const newPassword = req.body.newPassword;

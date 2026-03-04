@@ -1,4 +1,5 @@
 // server/src/app.js
+const sib = require("@getbrevo/brevo");
 
 require("dotenv").config();
 const express = require("express");
@@ -26,7 +27,7 @@ app.use(morgan("dev"));
 
 mongoose
     .connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 3000 })
-    .then(() => console.log("✅ MongoDB connected"))
+    .then(() => console.log("📌 MongoDB connected"))
     .catch((err) => console.error("Mongo error:", err.message));
 
 app.get("/", (req, res) => res.send("EDUZO API OK"));
