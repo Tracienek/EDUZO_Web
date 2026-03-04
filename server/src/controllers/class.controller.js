@@ -487,14 +487,20 @@ exports.sendTuitionEmails = async (req, res) => {
         }
 
         const lock = await Class.findOneAndUpdate(
-            { _id: classId, tuitionEmailSentAt: null },
-            { $set: { tuitionEmailSentAt: new Date() } },
+            { _id: classObjectId, tuitionCycleStartHeldCount: base },
+            {
+                $set: {
+                    tuitionEmailSentAt: new Date(),
+                    tuitionCycleStartHeldCount: heldCount,
+                    tuitionMilestoneNotifiedAt: null,
+                },
+            },
             { new: true },
         ).lean();
 
         if (!lock) {
             return res.status(409).json({
-                message: "Tuition emails were already sent for this class",
+                message: "Tuition emails were already sent for this cycle",
             });
         }
 
@@ -524,16 +530,16 @@ exports.sendTuitionEmails = async (req, res) => {
             }
         }
 
-        await Class.updateOne(
-            { _id: classId },
-            {
-                $set: {
-                    tuitionEmailSentAt: new Date(),
-                    tuitionCycleStartHeldCount: heldCount,
-                    tuitionMilestoneNotifiedAt: null,
-                },
-            },
-        );
+        // await Class.updateOne(
+        //     { _id: classId },
+        //     {
+        //         $set: {
+        //             tuitionEmailSentAt: new Date(),
+        //             tuitionCycleStartHeldCount: heldCount,
+        //             tuitionMilestoneNotifiedAt: null,
+        //         },
+        //     },
+        // );
 
         try {
             if (cls.centerId) {

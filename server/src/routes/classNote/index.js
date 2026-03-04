@@ -1,9 +1,9 @@
-// server/src/routes/classNote.routes.js
-const router = require("express").Router();
-const auth = require("../middlewares/auth.middleware");
-const ctrl = require("../controllers/classNote.controller");
+// server/src/routes/classNote/index.js
 
-// Mount: /v1/api/class-notes
+const router = require("express").Router();
+
+const auth = require("../../middlewares/auth.middleware");
+const ctrl = require("../../controllers/classNote.controller");
 
 // GET /v1/api/class-notes/:id  (id = classId)
 router.get("/:id", auth, ctrl.listByClass);

@@ -1,9 +1,8 @@
-// attendance.routes.js
-const express = require("express");
-const router = express.Router();
+// server/src/routes/attendance/index.js
+const router = require("express").Router();
 
-const auth = require("../middlewares/auth.middleware");
-const attendanceController = require("../controllers/attendance.controller");
+const auth = require("../../middlewares/auth.middleware");
+const attendanceController = require("../../controllers/attendance.controller");
 
 // PATCH /attendance/:id/bulk
 router.patch("/:id/bulk", auth, attendanceController.bulkSaveAttendance);

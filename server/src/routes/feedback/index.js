@@ -1,8 +1,9 @@
-// server/src/routes/feedback.routes.js
+// server/src/routes/feedback/index.js
 
 const router = require("express").Router();
-const feedback = require("../controllers/feedback.controller");
-const auth = require("../middlewares/auth.middleware");
+
+const feedback = require("../../controllers/feedback.controller");
+const auth = require("../../middlewares/auth.middleware");
 
 // public
 router.get("/public/:classId", feedback.getPublicMeta);

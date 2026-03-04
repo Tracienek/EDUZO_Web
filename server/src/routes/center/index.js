@@ -1,12 +1,14 @@
-// routes/center.routes.js
+// server/src/routes/center/index.js
 const router = require("express").Router();
-const auth = require("../middlewares/auth.middleware");
-const ctrl = require("../controllers/center.controller");
-const attendanceController = require("../controllers/attendance.controller");
+
+const auth = require("../../middlewares/auth.middleware");
+const ctrl = require("../../controllers/center.controller");
+const attendanceController = require("../../controllers/attendance.controller");
 
 router.get("/teachers", auth, ctrl.getTeachers);
 router.post("/teachers", auth, ctrl.createTeacher);
 router.delete("/teachers/:id", auth, ctrl.deleteTeacher);
+
 router.get(
     "/teachers/:id/attendance-logs",
     auth,

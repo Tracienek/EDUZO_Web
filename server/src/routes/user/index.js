@@ -1,8 +1,10 @@
-// server/src/routes/user.routes.js
+// server/src/routes/user/index.js
+
 const router = require("express").Router();
-const ctrl = require("../controllers/user.controller");
-const authMiddleware = require("../middlewares/auth.middleware");
-const { uploadAvatar } = require("../middlewares/upload.middleware");
+
+const ctrl = require("../../controllers/user.controller");
+const authMiddleware = require("../../middlewares/auth.middleware");
+const { uploadAvatar } = require("../../middlewares/upload.middleware");
 
 router.get("/me", authMiddleware, ctrl.me);
 router.patch("/me", authMiddleware, ctrl.updateMe);

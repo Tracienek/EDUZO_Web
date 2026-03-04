@@ -2,6 +2,7 @@
 
 const { sendResetPasswordEmail } = require("../utils/mailer");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
@@ -36,7 +37,7 @@ exports.signUp = async (req, res) => {
         if (existed)
             return res.status(409).json({ message: "Email already exists" });
 
-        const passwordHash = await bcrypt.hash(password, 10);
+        user.passwordHash = await bcrypt.hash(password, 10);
 
         const user = await User.create({
             email: normalizedEmail,
@@ -120,8 +121,6 @@ exports.signIn = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
     try {
         const email = (req.body.email || "").trim().toLowerCase();
-
-        // luôn trả message chung để tránh leak email tồn tại hay không
         const genericMsg =
             "If an account exists for this email, a password reset link has been sent.";
 
@@ -130,28 +129,28 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(200).json({ message: genericMsg });
 
-        // 1) raw token
         const rawToken = crypto.randomBytes(32).toString("hex");
-        // 2) hash token lưu DB
         const hashedToken = crypto
             .createHash("sha256")
             .update(rawToken)
             .digest("hex");
 
         user.passwordResetToken = hashedToken;
-        user.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 phút
+        user.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
         await user.save();
 
         const resetUrl = `${process.env.CLIENT_URL}/auth/reset-password/${rawToken}`;
+
+        // quan trọng: để mailer throw nếu fail
         await sendResetPasswordEmail(user.email, resetUrl);
 
         return res.status(200).json({ message: genericMsg });
     } catch (err) {
+        console.error("forgotPassword error:", err.message);
         return res.status(500).json({ message: "Server error" });
     }
 };
 
-// ✅ POST /api/auth/reset-password/:token
 exports.resetPassword = async (req, res) => {
     try {
         const rawToken = req.params.token;
@@ -173,7 +172,7 @@ exports.resetPassword = async (req, res) => {
         const user = await User.findOne({
             passwordResetToken: hashedToken,
             passwordResetExpires: { $gt: new Date() },
-        });
+        }).select("+passwordHash"); // optional
 
         if (!user) {
             return res
@@ -181,11 +180,8 @@ exports.resetPassword = async (req, res) => {
                 .json({ message: "Token is invalid or expired." });
         }
 
-        // update password
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
+        user.passwordHash = await bcrypt.hash(password, 10);
 
-        // clear token
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
 
@@ -195,6 +191,7 @@ exports.resetPassword = async (req, res) => {
             .status(200)
             .json({ message: "Password reset successful. Please sign in." });
     } catch (err) {
+        console.error("resetPassword error:", err.message);
         return res.status(500).json({ message: "Server error" });
     }
 };

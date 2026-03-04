@@ -1,7 +1,8 @@
-// server/src/routes/notification.routes.js
+// server/src/routes/notification/index.js
 const router = require("express").Router();
-const auth = require("../middlewares/auth.middleware");
-const ctrl = require("../controllers/notification.controller");
+
+const auth = require("../../middlewares/auth.middleware");
+const ctrl = require("../../controllers/notification.controller");
 
 router.get("/", auth, ctrl.getMyNotifications);
 

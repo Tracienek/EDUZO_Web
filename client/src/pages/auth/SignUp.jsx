@@ -93,9 +93,8 @@ export default function SignUp() {
             if (token) tokenStore.set(token);
 
             await loadUserMe();
-            navigate("/workspace");
+            navigate("/signIn");
         } catch (err) {
-            // put server error near email by default (common case: email exists)
             const msg =
                 err?.response?.data?.message ||
                 err?.message ||
