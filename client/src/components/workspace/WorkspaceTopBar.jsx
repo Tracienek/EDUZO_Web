@@ -1,7 +1,7 @@
 // components/workspace/WorkspaceTopBar.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import "./WorkspaceTopBar.css";
+import "./workspaceTopBar.css";
 import { useAuth } from "../../context/auth/AuthContext";
 import { apiUtils } from "../../utils/newRequest";
 import CreateClass from "../../pages/workspace/classes/createModal/CreateClass";
