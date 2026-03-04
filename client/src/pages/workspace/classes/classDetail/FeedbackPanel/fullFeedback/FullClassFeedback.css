@@ -35,16 +35,19 @@
     border: 1px solid var(--border-color);
     background: var(--bg);
 
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
     cursor: pointer;
     font-weight: 800;
     font-size: 13px;
-    color: var(--text-color-dark);
+    color: #000;
 
     transition:
         transform 0.16s ease,
         background 0.16s ease,
-        box-shadow 0.16s ease,
-        color 0.16s ease;
+        box-shadow 0.16s ease;
 }
 
 .fcf-back:hover,

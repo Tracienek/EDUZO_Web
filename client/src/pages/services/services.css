@@ -163,11 +163,6 @@
         box-shadow 180ms ease;
 }
 
-.sp-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 28px var(--box-shadow);
-}
-
 .sp-card-icon {
     width: 36px;
     height: 36px;

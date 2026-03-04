@@ -120,7 +120,6 @@ export default function StudentProfilePage() {
 
                 <div className="sp-titleBlock">
                     <h1 className="sp-title">{name}</h1>
-                    <div className="sp-subtitle">Student profile & notes</div>
                 </div>
             </div>
 
@@ -186,10 +185,6 @@ export default function StudentProfilePage() {
                         />
 
                         <div className="sp-actions">
-                            <div className="sp-tip">
-                                Tip: Ctrl/⌘ + Enter to add
-                            </div>
-
                             <button
                                 type="button"
                                 className={`sp-btnPrimary ${!canAddNote ? "disabled" : ""}`}

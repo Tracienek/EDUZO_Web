@@ -471,11 +471,11 @@
 
 .cd-badge-danger {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 2px 12px;
     border-radius: 8px;
     font-size: 12px;
     font-weight: 700;
-    background: #e53935;
+    background: linear-gradient(90deg, var(--danger), var(--animation-danger));
     color: #fff;
 }
 
@@ -485,7 +485,7 @@
     border-radius: 8px;
     font-size: 12px;
     font-weight: 700;
-    background: #2e7d32;
+    background: linear-gradient(90deg, #2e7d32, #4caf50);
     color: #fff;
 }
 

@@ -93,7 +93,7 @@ export default function SignUp() {
             if (token) tokenStore.set(token);
 
             await loadUserMe();
-            navigate("/signIn");
+            navigate("/auth/signIn");
         } catch (err) {
             const msg =
                 err?.response?.data?.message ||
