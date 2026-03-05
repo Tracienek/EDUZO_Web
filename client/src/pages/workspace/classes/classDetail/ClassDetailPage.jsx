@@ -696,6 +696,7 @@ export default function ClassDetailPage() {
                 displayDate={displayDate}
                 startDate={startDate}
                 isEditingAttendance={isEditingAttendance}
+                isSavingAttendance={isSavingAttendance}
                 canSendTuition={isCenter}
                 canDeleteStudent={isCenter}
                 sendingTuition={sendingTuition}

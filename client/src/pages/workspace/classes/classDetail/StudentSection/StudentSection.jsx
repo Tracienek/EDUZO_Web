@@ -13,6 +13,7 @@ export default function StudentsSection({
     displayDate,
     startDate,
     isEditingAttendance,
+    isSavingAttendance,
 
     canSendTuition,
     canDeleteStudent,
@@ -40,11 +41,24 @@ export default function StudentsSection({
     fmtDMY,
 }) {
     const navigate = useNavigate();
+
     const canClickSendTuition =
         canSendTuition && !sendingTuition && heldCount >= threshold;
 
     const colSpan =
         2 + sessionDates.length * 2 + 1 + (canDeleteStudent ? 1 : 0);
+
+    const [isSavingAttendance, setIsSavingAttendance] = useState(false);
+
+    const onSaveAttendance = async () => {
+        try {
+            setIsSavingAttendance(true);
+            await apiSaveAttendance();
+            // success...
+        } finally {
+            setIsSavingAttendance(false);
+        }
+    };
 
     return (
         <div className="cd-section">
@@ -316,8 +330,9 @@ export default function StudentsSection({
                         className="cd-btn-save"
                         onClick={onSaveAttendance}
                         type="button"
+                        disabled={isSavingAttendance}
                     >
-                        Save
+                        {isSavingAttendance ? "Saving..." : "Save"}
                     </button>
                 </div>
             )}
