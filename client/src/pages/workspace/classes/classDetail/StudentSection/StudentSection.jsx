@@ -48,18 +48,6 @@ export default function StudentsSection({
     const colSpan =
         2 + sessionDates.length * 2 + 1 + (canDeleteStudent ? 1 : 0);
 
-    const [isSavingAttendance, setIsSavingAttendance] = useState(false);
-
-    const onSaveAttendance = async () => {
-        try {
-            setIsSavingAttendance(true);
-            await apiSaveAttendance();
-            // success...
-        } finally {
-            setIsSavingAttendance(false);
-        }
-    };
-
     return (
         <div className="cd-section">
             {/* ===== HEADER ===== */}

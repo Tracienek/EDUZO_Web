@@ -135,6 +135,7 @@ export default function ClassDetailPage() {
 
     const [checkState, setCheckState] = useState({});
     const [isEditingAttendance, setIsEditingAttendance] = useState(false);
+    const [isSavingAttendance, setIsSavingAttendance] = useState(false);
     const snapshotRef = useRef(null);
 
     const [pendingAttendance, setPendingAttendance] = useState({});
@@ -424,13 +425,15 @@ export default function ClassDetailPage() {
         }
 
         try {
+            setIsSavingAttendance(true);
+
             const res = await apiUtils.patch(
                 `/classes/${classId}/attendance/bulk`,
                 {
                     changes,
                     tuitionChanges,
                     logMeta: {
-                        dateKey: logDateKey, // ✅ FIX HERE
+                        dateKey: logDateKey,
                         timeLabel: extractTimeFromSchedule(
                             cls?.scheduleText || "",
                         ),
@@ -462,6 +465,8 @@ export default function ClassDetailPage() {
                 err?.response?.data?.message ||
                     "Save failed. Please try again.",
             );
+        } finally {
+            setIsSavingAttendance(false);
         }
     };
     const cancelAttendance = () => {
