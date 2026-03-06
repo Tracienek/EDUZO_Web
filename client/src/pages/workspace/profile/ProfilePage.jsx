@@ -10,17 +10,14 @@ const isoToDMY = (value) => {
     if (!value) return "";
     const s = String(value).trim();
 
-    // already DMY
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return s;
 
-    // ISO yyyy-mm-dd
     const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (m) {
         const [, yyyy, mm, dd] = m;
         return `${dd}/${mm}/${yyyy}`;
     }
 
-    // fallback parse date string
     const d = new Date(s);
     if (Number.isNaN(d.getTime())) return "";
     const dd = String(d.getDate()).padStart(2, "0");
@@ -69,7 +66,6 @@ export default function ProfilePage() {
 
     const [avatarBust, setAvatarBust] = useState(0);
 
-    // ===== BASIC PROFILE =====
     const [profileOriginal, setProfileOriginal] = useState({
         fullName: "",
         email: "",
@@ -88,7 +84,6 @@ export default function ProfilePage() {
         dob: "",
     });
 
-    // ===== PASSWORD DRAFT =====
     const [pwDraft, setPwDraft] = useState({
         currentPassword: "",
         newPassword: "",
@@ -101,14 +96,27 @@ export default function ProfilePage() {
         confirm: false,
     });
 
+    const [pwErrors, setPwErrors] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+    });
+
+    const [pwSuccess, setPwSuccess] = useState("");
+
     const resetPwVisible = () =>
         setPwVisible({ current: false, new: false, confirm: false });
 
-    // ===== EDIT MODES =====
+    const resetPwErrors = () =>
+        setPwErrors({
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: "",
+        });
+
     const [editingProfile, setEditingProfile] = useState(false);
     const [editingPw, setEditingPw] = useState(false);
 
-    // ===== LOADING =====
     const [savingProfile, setSavingProfile] = useState(false);
     const [savingAvatar, setSavingAvatar] = useState(false);
     const [savingPw, setSavingPw] = useState(false);
@@ -129,16 +137,28 @@ export default function ProfilePage() {
         };
 
         setProfileOriginal(p);
-
         setProfileDraft((prev) => (editingProfile ? prev : p));
     }, [userInfo, editingProfile]);
 
-    // ===== ACTIONS =====
+    const isPwFilled =
+        !!pwDraft.currentPassword &&
+        !!pwDraft.newPassword &&
+        !!pwDraft.confirmNewPassword;
+
+    const isPwMinLength = pwDraft.newPassword.length >= 8;
+
+    const isPwMismatch =
+        !!pwDraft.confirmNewPassword &&
+        pwDraft.newPassword !== pwDraft.confirmNewPassword;
+
+    const canSavePw = editingPw && isPwFilled && !savingPw;
+
     const onSaveProfile = async () => {
         setMsg({ type: "", text: "" });
 
-        if (!profileDraft.fullName.trim())
+        if (!profileDraft.fullName.trim()) {
             return toast("error", "Name is required");
+        }
 
         const dobISO = dmyToISO(profileDraft.dob);
 
@@ -161,9 +181,11 @@ export default function ProfilePage() {
             const status = e?.response?.status;
             const serverMsg = e?.response?.data?.message;
 
-            if (status === 401)
+            if (status === 401) {
                 toast("error", "Unauthorized. Please sign in again.");
-            else toast("error", serverMsg || "Update profile failed");
+            } else {
+                toast("error", serverMsg || "Update profile failed");
+            }
         } finally {
             setSavingProfile(false);
         }
@@ -207,7 +229,6 @@ export default function ProfilePage() {
             }
 
             await loadUserMe();
-
             toast("success", "Avatar updated");
         } catch (e) {
             const status = e?.response?.status;
@@ -228,28 +249,42 @@ export default function ProfilePage() {
         }
     };
 
-    const canSavePw =
-        pwDraft.currentPassword &&
-        pwDraft.newPassword &&
-        pwDraft.confirmNewPassword &&
-        pwDraft.newPassword.length >= 8 &&
-        pwDraft.newPassword === pwDraft.confirmNewPassword;
-
     const onSavePassword = async () => {
-        setMsg({ type: "", text: "" });
+        setPwSuccess("");
+        resetPwErrors();
 
-        if (
-            !pwDraft.currentPassword ||
-            !pwDraft.newPassword ||
-            !pwDraft.confirmNewPassword
-        ) {
-            return toast("error", "Please fill all password fields");
+        let hasError = false;
+        const nextErrors = {
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: "",
+        };
+
+        if (!pwDraft.currentPassword) {
+            nextErrors.currentPassword = "Please enter current password";
+            hasError = true;
         }
-        if (pwDraft.newPassword.length < 8) {
-            return toast("error", "New password must be at least 8 characters");
+
+        if (!pwDraft.newPassword) {
+            nextErrors.newPassword = "Please enter new password";
+            hasError = true;
+        } else if (pwDraft.newPassword.length < 8) {
+            nextErrors.newPassword =
+                "Password should be at least 8 characters.";
+            hasError = true;
         }
-        if (pwDraft.newPassword !== pwDraft.confirmNewPassword) {
-            return toast("error", "Confirm password does not match");
+
+        if (!pwDraft.confirmNewPassword) {
+            nextErrors.confirmNewPassword = "Please confirm new password";
+            hasError = true;
+        } else if (pwDraft.newPassword !== pwDraft.confirmNewPassword) {
+            nextErrors.confirmNewPassword = "Confirm password does not match";
+            hasError = true;
+        }
+
+        if (hasError) {
+            setPwErrors(nextErrors);
+            return;
         }
 
         try {
@@ -265,30 +300,51 @@ export default function ProfilePage() {
                 newPassword: "",
                 confirmNewPassword: "",
             });
+            resetPwErrors();
+            setPwSuccess("Password changed successfully");
 
             await loadUserMe();
-            toast("success", "Password changed successfully");
             setEditingPw(false);
             resetPwVisible();
         } catch (e) {
             const status = e?.response?.status;
             const serverMsg = e?.response?.data?.message;
+            const normalizedMsg = String(serverMsg || "").toLowerCase();
 
-            if (status === 401)
-                toast("error", "Unauthorized. Please sign in again.");
-            else toast("error", serverMsg || "Change password failed");
+            if (status === 401) {
+                setPwErrors((prev) => ({
+                    ...prev,
+                    currentPassword: "Unauthorized. Please sign in again.",
+                }));
+            } else if (
+                normalizedMsg.includes("current password") &&
+                (normalizedMsg.includes("incorrect") ||
+                    normalizedMsg.includes("invalid") ||
+                    normalizedMsg.includes("wrong"))
+            ) {
+                setPwErrors((prev) => ({
+                    ...prev,
+                    currentPassword: "Current password is incorrect",
+                }));
+            } else {
+                setPwErrors((prev) => ({
+                    ...prev,
+                    confirmNewPassword: serverMsg || "Change password failed",
+                }));
+            }
         } finally {
             setSavingPw(false);
         }
     };
 
     const onCancelPw = () => {
-        setMsg({ type: "", text: "" });
         setPwDraft({
             currentPassword: "",
             newPassword: "",
             confirmNewPassword: "",
         });
+        resetPwErrors();
+        setPwSuccess("");
         setEditingPw(false);
         resetPwVisible();
     };
@@ -302,7 +358,6 @@ export default function ProfilePage() {
     return (
         <div className="profile-page">
             <div className="profile-shell">
-                {/* HEADER */}
                 <div className="profile-head">
                     <div className="profile-head-left">
                         <h1 className="profile-title">Account</h1>
@@ -321,7 +376,6 @@ export default function ProfilePage() {
                     </div>
                 )}
 
-                {/* BASIC INFO */}
                 <section className="profile-card">
                     <div className="profile-card-head">
                         <h2 className="profile-card-title">
@@ -342,7 +396,6 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-                    {/* AVATAR CENTER */}
                     <div className="profile-avatar-center">
                         <img
                             className="profile-avatar"
@@ -353,8 +406,9 @@ export default function ProfilePage() {
                                     e.currentTarget.src.endsWith(
                                         FALLBACK_AVATAR,
                                     )
-                                )
+                                ) {
                                     return;
+                                }
                                 e.currentTarget.src = FALLBACK_AVATAR;
                             }}
                         />
@@ -431,7 +485,6 @@ export default function ProfilePage() {
                             </select>
                         </div>
 
-                        {/* DOB: DD/MM/YYYY */}
                         <div className="profile-field">
                             <label className="profile-label">
                                 Date of Birth
@@ -494,7 +547,6 @@ export default function ProfilePage() {
                     )}
                 </section>
 
-                {/* CHANGE PASSWORD */}
                 <section className="profile-card">
                     <div className="profile-card-head">
                         <h2 className="profile-card-title">Change Password</h2>
@@ -504,7 +556,8 @@ export default function ProfilePage() {
                                 className="profile-outline-btn"
                                 type="button"
                                 onClick={() => {
-                                    setMsg({ type: "", text: "" });
+                                    resetPwErrors();
+                                    setPwSuccess("");
                                     setEditingPw(true);
                                 }}
                             >
@@ -514,7 +567,6 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="profile-grid three">
-                        {/* Current */}
                         <div className="profile-field">
                             <label className="profile-label">
                                 Current password
@@ -522,18 +574,28 @@ export default function ProfilePage() {
 
                             <div className="profile-input-wrap">
                                 <input
-                                    className="profile-input profile-input-hasIcon"
+                                    className={`profile-input profile-input-hasIcon ${
+                                        pwErrors.currentPassword
+                                            ? "profile-input-error"
+                                            : ""
+                                    }`}
                                     type={
                                         pwVisible.current ? "text" : "password"
                                     }
                                     disabled={!editingPw}
                                     value={pwDraft.currentPassword}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const value = e.target.value;
                                         setPwDraft((p) => ({
                                             ...p,
-                                            currentPassword: e.target.value,
-                                        }))
-                                    }
+                                            currentPassword: value,
+                                        }));
+                                        setPwErrors((prev) => ({
+                                            ...prev,
+                                            currentPassword: "",
+                                        }));
+                                        setPwSuccess("");
+                                    }}
                                     placeholder="Current password"
                                     autoComplete="current-password"
                                 />
@@ -556,9 +618,14 @@ export default function ProfilePage() {
                                     )}
                                 </button>
                             </div>
+
+                            {pwErrors.currentPassword && (
+                                <div className="profile-field-error">
+                                    {pwErrors.currentPassword}
+                                </div>
+                            )}
                         </div>
 
-                        {/* New */}
                         <div className="profile-field">
                             <label className="profile-label">
                                 New password
@@ -566,16 +633,33 @@ export default function ProfilePage() {
 
                             <div className="profile-input-wrap">
                                 <input
-                                    className="profile-input profile-input-hasIcon"
+                                    className={`profile-input profile-input-hasIcon ${
+                                        pwErrors.newPassword
+                                            ? "profile-input-error"
+                                            : ""
+                                    }`}
                                     type={pwVisible.new ? "text" : "password"}
                                     disabled={!editingPw}
                                     value={pwDraft.newPassword}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const value = e.target.value;
                                         setPwDraft((p) => ({
                                             ...p,
-                                            newPassword: e.target.value,
-                                        }))
-                                    }
+                                            newPassword: value,
+                                        }));
+
+                                        setPwErrors((prev) => ({
+                                            ...prev,
+                                            newPassword: "",
+                                            confirmNewPassword:
+                                                pwDraft.confirmNewPassword &&
+                                                value !==
+                                                    pwDraft.confirmNewPassword
+                                                    ? "Confirm password does not match"
+                                                    : "",
+                                        }));
+                                        setPwSuccess("");
+                                    }}
                                     placeholder="New password"
                                     autoComplete="new-password"
                                 />
@@ -598,9 +682,14 @@ export default function ProfilePage() {
                                     )}
                                 </button>
                             </div>
+
+                            {pwErrors.newPassword && (
+                                <div className="profile-field-error">
+                                    {pwErrors.newPassword}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Confirm */}
                         <div className="profile-field">
                             <label className="profile-label">
                                 Confirm new password
@@ -608,18 +697,33 @@ export default function ProfilePage() {
 
                             <div className="profile-input-wrap">
                                 <input
-                                    className="profile-input profile-input-hasIcon"
+                                    className={`profile-input profile-input-hasIcon ${
+                                        pwErrors.confirmNewPassword
+                                            ? "profile-input-error"
+                                            : ""
+                                    }`}
                                     type={
                                         pwVisible.confirm ? "text" : "password"
                                     }
                                     disabled={!editingPw}
                                     value={pwDraft.confirmNewPassword}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const value = e.target.value;
                                         setPwDraft((p) => ({
                                             ...p,
-                                            confirmNewPassword: e.target.value,
-                                        }))
-                                    }
+                                            confirmNewPassword: value,
+                                        }));
+
+                                        setPwErrors((prev) => ({
+                                            ...prev,
+                                            confirmNewPassword:
+                                                value &&
+                                                pwDraft.newPassword !== value
+                                                    ? "Confirm password does not match"
+                                                    : "",
+                                        }));
+                                        setPwSuccess("");
+                                    }}
                                     placeholder="Confirm new password"
                                     autoComplete="new-password"
                                 />
@@ -642,6 +746,18 @@ export default function ProfilePage() {
                                     )}
                                 </button>
                             </div>
+
+                            {pwErrors.confirmNewPassword && (
+                                <div className="profile-field-error">
+                                    {pwErrors.confirmNewPassword}
+                                </div>
+                            )}
+
+                            {!pwErrors.confirmNewPassword && pwSuccess && (
+                                <div className="profile-field-success">
+                                    {pwSuccess}
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -663,7 +779,7 @@ export default function ProfilePage() {
                             <button
                                 className="profile-primary-btn"
                                 onClick={onSavePassword}
-                                disabled={savingPw || !canSavePw}
+                                disabled={!canSavePw}
                                 type="button"
                             >
                                 {savingPw ? "Updating..." : "Save"}

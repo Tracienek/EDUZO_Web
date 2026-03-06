@@ -219,6 +219,19 @@ export default function SignUp() {
                             autoComplete="new-password"
                             disabled={isLoading}
                         />
+                        <button
+                            type="button"
+                            className="auth-eye-btn"
+                            onClick={() => setShowPassword((v) => !v)}
+                            aria-label="Toggle password visibility"
+                            disabled={isLoading}
+                        >
+                            {showPassword ? (
+                                <i className="fa-solid fa-eye-slash" />
+                            ) : (
+                                <i className="fa-solid fa-eye" />
+                            )}
+                        </button>
                     </div>
                     <p
                         className={`auth-error ${errors.confirmPassword ? "show" : ""}`}

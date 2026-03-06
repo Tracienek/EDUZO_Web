@@ -14,41 +14,29 @@ export default function FeedbackPage() {
     const { classId } = useParams();
     const cid = useMemo(() => String(classId || "").trim(), [classId]);
 
-    // from BE
     const [className, setClassName] = useState("");
     const [teachers, setTeachers] = useState([]);
 
-    // student name input (public)
     const [studentName, setStudentName] = useState("");
 
-    // section 1: rate
     const [rating, setRating] = useState(5);
-
-    // section 2: choose teacher
     const [teacherId, setTeacherId] = useState("");
-
-    // section 3: understand
     const [understand, setUnderstand] = useState(5);
-
-    // section 4: teaching way
     const [teachingWay, setTeachingWay] = useState(5);
-
-    // section 5: write feedback
     const [message, setMessage] = useState("");
 
     const [loading, setLoading] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
-    const [done, setDone] = useState(false);
 
-    // UX: inline error banner instead of alert()
     const [error, setError] = useState("");
+
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const selectedTeacher = useMemo(
         () => teachers.find((t) => String(t.id) === String(teacherId)),
         [teacherId, teachers],
     );
 
-    //  load meta
     useEffect(() => {
         if (!cid) return;
 
@@ -57,7 +45,7 @@ export default function FeedbackPage() {
         (async () => {
             try {
                 setError("");
-                setDone(false);
+                setShowSuccessModal(false);
                 setPageLoading(true);
 
                 const res = await apiUtils.get(`/feedback/public/${cid}`);
@@ -84,15 +72,27 @@ export default function FeedbackPage() {
         };
     }, [cid]);
 
+    useEffect(() => {
+        if (!showSuccessModal) return;
+
+        const onKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setShowSuccessModal(false);
+            }
+        };
+
+        document.addEventListener("keydown", onKeyDown);
+        return () => document.removeEventListener("keydown", onKeyDown);
+    }, [showSuccessModal]);
+
     const submit = async () => {
         const text = message.trim();
         const sname = studentName.trim();
 
         setError("");
-        setDone(false);
+        setShowSuccessModal(false);
 
         if (!cid) return setError("Missing classId.");
-        if (!teacherId) return setError("Please choose a teacher.");
         if (!text) return setError("Please write your feedback.");
 
         try {
@@ -102,7 +102,7 @@ export default function FeedbackPage() {
                 classId: cid,
                 className,
                 studentName: sname,
-                teacherId,
+                teacherId: teacherId || null,
                 teacherName: selectedTeacher?.name || "",
                 rating: clampRating(rating),
                 understand: clampRating(understand),
@@ -112,8 +112,20 @@ export default function FeedbackPage() {
 
             await apiUtils.post(`/feedback/public/${cid}`, payload);
 
-            setDone(true);
+            setStudentName("");
             setMessage("");
+            setRating(5);
+            setUnderstand(5);
+            setTeachingWay(5);
+
+            if (teachers.length > 0) {
+                const first = teachers[0]?.id;
+                setTeacherId(first ? String(first) : "");
+            } else {
+                setTeacherId("");
+            }
+
+            setShowSuccessModal(true);
         } catch (e) {
             setError(e?.response?.data?.message || "Submit failed.");
         } finally {
@@ -121,7 +133,6 @@ export default function FeedbackPage() {
         }
     };
 
-    // Accessible stars: supports click + keyboard (arrows/1-5/space/enter)
     const Stars = ({ value, onChange, label }) => {
         const groupId = useId();
         const v = clampRating(value);
@@ -202,150 +213,186 @@ export default function FeedbackPage() {
         );
     }
 
-    const disableSubmit = loading || !message.trim() || !teacherId;
+    const disableSubmit = loading || !message.trim();
 
     return (
-        <div className="fbp-wrap">
-            <div className="fbp-card">
-                <header className="fbp-header">
-                    <div>
-                        <h1 className="fbp-h1">Feedback</h1>
-                        <p className="fbp-sub">
-                            {className ? (
-                                <>
-                                    Class: <b>{className}</b>
-                                </>
+        <>
+            <div className="fbp-wrap">
+                <div className="fbp-card">
+                    <header className="fbp-header">
+                        <div>
+                            <h1 className="fbp-h1">Feedback</h1>
+                            <p className="fbp-sub">
+                                {className ? (
+                                    <>
+                                        Class: <b>{className}</b>
+                                    </>
+                                ) : (
+                                    "Class: —"
+                                )}
+                            </p>
+                        </div>
+
+                        <div className="fbp-chip" title="Class ID">
+                            <span className="fbp-chip-label">Class ID</span>
+                            <span className="fbp-chip-value">{cid || "—"}</span>
+                        </div>
+                    </header>
+
+                    {error && (
+                        <div className="fbp-alert fbp-alert-error" role="alert">
+                            <span className="fbp-alert-icon">⚠️</span>
+                            <div className="fbp-alert-body">{error}</div>
+                        </div>
+                    )}
+
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">
+                            Student (optional)
+                        </div>
+                        <div className="fbp-field">
+                            <input
+                                className="fbp-input"
+                                value={studentName}
+                                onChange={(e) => setStudentName(e.target.value)}
+                                placeholder="Your name"
+                                autoComplete="name"
+                            />
+                        </div>
+                    </section>
+
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">
+                            1) Overall rating
+                        </div>
+                        <Stars
+                            value={rating}
+                            onChange={setRating}
+                            label="Overall rating"
+                        />
+                    </section>
+
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">
+                            2) Choose teacher
+                        </div>
+
+                        <div className="fbp-teachers" role="list">
+                            {teachers.length === 0 ? (
+                                <div className="fbp-empty">
+                                    No teachers available. You can still submit
+                                    feedback for this class.
+                                </div>
                             ) : (
-                                "Class: —"
+                                teachers.map((t) => {
+                                    const active =
+                                        String(teacherId) === String(t.id);
+                                    return (
+                                        <button
+                                            key={t.id}
+                                            type="button"
+                                            className={`fbp-pill ${active ? "active" : ""}`}
+                                            onClick={() =>
+                                                setTeacherId(String(t.id))
+                                            }
+                                            aria-pressed={active}
+                                        >
+                                            {t.name}
+                                        </button>
+                                    );
+                                })
                             )}
-                        </p>
-                    </div>
-
-                    <div className="fbp-chip" title="Class ID">
-                        <span className="fbp-chip-label">Class ID</span>
-                        <span className="fbp-chip-value">{cid || "—"}</span>
-                    </div>
-                </header>
-
-                {error && (
-                    <div className="fbp-alert fbp-alert-error" role="alert">
-                        <span className="fbp-alert-icon">⚠️</span>
-                        <div className="fbp-alert-body">{error}</div>
-                    </div>
-                )}
-
-                {done && (
-                    <div className="fbp-alert fbp-alert-success" role="status">
-                        <span className="fbp-alert-icon"></span>
-                        <div className="fbp-alert-body">
-                            Thank you! Your feedback has been submitted.
                         </div>
-                    </div>
-                )}
 
-                <section className="fbp-section">
-                    <div className="fbp-section-title">Student (optional)</div>
-                    <div className="fbp-field">
-                        <input
-                            className="fbp-input"
-                            value={studentName}
-                            onChange={(e) => setStudentName(e.target.value)}
-                            placeholder="Your name"
-                            autoComplete="name"
+                        <div className="fbp-hint">
+                            Selected:{" "}
+                            <b>
+                                {selectedTeacher?.name || "No teacher selected"}
+                            </b>
+                        </div>
+                    </section>
+
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">3) Understand</div>
+                        <Stars
+                            value={understand}
+                            onChange={setUnderstand}
+                            label="Understand"
                         />
-                    </div>
-                </section>
+                    </section>
 
-                <section className="fbp-section">
-                    <div className="fbp-section-title">1) Overall rating</div>
-                    <Stars
-                        value={rating}
-                        onChange={setRating}
-                        label="Overall rating"
-                    />
-                </section>
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">4) Teaching way</div>
+                        <Stars
+                            value={teachingWay}
+                            onChange={setTeachingWay}
+                            label="Teaching way"
+                        />
+                    </section>
 
-                <section className="fbp-section">
-                    <div className="fbp-section-title">2) Choose teacher</div>
-
-                    <div className="fbp-teachers" role="list">
-                        {teachers.length === 0 ? (
-                            <div className="fbp-empty">
-                                No teachers available.
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">
+                            5) Write feedback
+                        </div>
+                        <div className="fbp-field">
+                            <textarea
+                                className="fbp-textarea"
+                                rows={6}
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                placeholder="Write your feedback here..."
+                            />
+                            <div className="fbp-counter" aria-live="polite">
+                                {message.trim().length === 0
+                                    ? "Feedback is required."
+                                    : `${message.trim().length} characters`}
                             </div>
-                        ) : (
-                            teachers.map((t) => {
-                                const active =
-                                    String(teacherId) === String(t.id);
-                                return (
-                                    <button
-                                        key={t.id}
-                                        type="button"
-                                        className={`fbp-pill ${active ? "active" : ""}`}
-                                        onClick={() =>
-                                            setTeacherId(String(t.id))
-                                        }
-                                        aria-pressed={active}
-                                    >
-                                        {t.name}
-                                    </button>
-                                );
-                            })
-                        )}
-                    </div>
-
-                    <div className="fbp-hint">
-                        Selected: <b>{selectedTeacher?.name || "—"}</b>
-                    </div>
-                </section>
-
-                <section className="fbp-section">
-                    <div className="fbp-section-title">3) Understand</div>
-                    <Stars
-                        value={understand}
-                        onChange={setUnderstand}
-                        label="Understand"
-                    />
-                </section>
-
-                <section className="fbp-section">
-                    <div className="fbp-section-title">4) Teaching way</div>
-                    <Stars
-                        value={teachingWay}
-                        onChange={setTeachingWay}
-                        label="Teaching way"
-                    />
-                </section>
-
-                <section className="fbp-section">
-                    <div className="fbp-section-title">5) Write feedback</div>
-                    <div className="fbp-field">
-                        <textarea
-                            className="fbp-textarea"
-                            rows={6}
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Write your feedback here..."
-                        />
-                        <div className="fbp-counter" aria-live="polite">
-                            {message.trim().length === 0
-                                ? "Feedback is required."
-                                : `${message.trim().length} characters`}
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <div className="fbp-actions">
-                    <button
-                        type="button"
-                        className="fbp-btn"
-                        onClick={submit}
-                        disabled={disableSubmit}
-                    >
-                        {loading ? "Sending..." : "Submit"}
-                    </button>
+                    <div className="fbp-actions">
+                        <button
+                            type="button"
+                            className="fbp-btn"
+                            onClick={submit}
+                            disabled={disableSubmit}
+                        >
+                            {loading ? "Sending..." : "Submit"}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {showSuccessModal && (
+                <div
+                    className="fbp-modalOverlay"
+                    onClick={() => setShowSuccessModal(false)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Feedback submitted successfully"
+                >
+                    <div
+                        className="fbp-modal"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="fbp-modalIcon">✅</div>
+                        <h2 className="fbp-modalTitle">Thank you!</h2>
+                        <p className="fbp-modalText">
+                            Your feedback has been submitted successfully.
+                        </p>
+
+                        <div className="fbp-modalActions">
+                            <button
+                                type="button"
+                                className="fbp-btn"
+                                onClick={() => setShowSuccessModal(false)}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }

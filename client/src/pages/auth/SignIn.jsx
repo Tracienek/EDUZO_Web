@@ -66,7 +66,6 @@ export default function SignIn() {
             const result = await login(email, password);
 
             if (!result?.success) {
-                // Show a popup near password field + highlight it
                 const errs = { password: "Invalid email or password" };
                 setErrors(errs);
                 focusFirstError(errs);
@@ -75,7 +74,6 @@ export default function SignIn() {
 
             navigate("/workspace");
         } catch (err) {
-            // If backend returns message, show it near password
             const msg =
                 err?.response?.data?.message ||
                 err?.message ||

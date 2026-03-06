@@ -357,6 +357,28 @@ input::-webkit-credentials-auto-fill-button {
     pointer-events: none;
 }
 
+.profile-field-error {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc2626;
+}
+
+.profile-field-error {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc2626;
+}
+
+.profile-field-success {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #16a34a;
+}
+
+.profile-input-error {
+    border: 1px solid #dc2626 !important;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
     .profile-page {
