@@ -14,6 +14,7 @@ router.get("/available", ctrl.getAvailable);
 router.post("/", ctrl.createClass);
 
 router.get("/:id", ctrl.getById);
+router.patch("/:id", ctrl.updateClass);
 router.patch("/:id/online", ctrl.setOnline);
 router.post("/:id/online/ping", ctrl.pingOnline);
 router.post("/:id/students", ctrl.addStudentToClass);

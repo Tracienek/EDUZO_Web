@@ -31,6 +31,7 @@ import NoteDetails from "./pages/workspace/classes/classDetail/NotesPanel/noteDe
 import FullFeedback from "./pages/workspace/teachers/teacherDetail/fullFeedback/FullFeedback.jsx";
 import FullClassFeedback from "./pages/workspace/classes/classDetail/FeedbackPanel/fullFeedback/FullClassFeedback.jsx";
 import StudentProfilePage from "./pages/workspace/classes/classDetail/StudentSection/students/StudentProfilePage.jsx";
+import CalendarPage from "./pages/workspace/classes/classDetail/calender/Calender.jsx";
 
 const router = createBrowserRouter([
     {
@@ -82,6 +83,8 @@ const router = createBrowserRouter([
                     { path: ":teacherId", element: <TeacherDetail /> },
                 ],
             },
+
+            { path: "calendar", element: <CalendarPage /> },
 
             { path: "profile", element: <ProfilePage /> },
             { path: "notifications", element: <NotificationsPage /> },

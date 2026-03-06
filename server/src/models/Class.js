@@ -1,11 +1,26 @@
-// server/src/models/Class.js
 const mongoose = require("mongoose");
+
+const ScheduleSlotSchema = new mongoose.Schema(
+    {
+        day: { type: String, trim: true, default: "" },
+        time: { type: String, trim: true, default: "" },
+    },
+    { _id: false },
+);
 
 const ClassSchema = new mongoose.Schema(
     {
         name: { type: String, trim: true, default: "" },
         subject: { type: String, trim: true, default: "" },
+
+        // legacy / display field
         scheduleText: { type: String, trim: true, default: "" },
+
+        // new structured field
+        scheduleSlots: {
+            type: [ScheduleSlotSchema],
+            default: [],
+        },
 
         students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
 
@@ -21,11 +36,10 @@ const ClassSchema = new mongoose.Schema(
         isOnline: { type: Boolean, default: false, index: true },
         onlineUntil: { type: Date, default: null, index: true },
 
-        totalSessions: { type: Number, default: 12, min: 1 },
-
         heldCount: { type: Number, default: 0, min: 0 },
 
-        durationMinutes: { type: Number, default: 90, min: 1 },
+        durationMinutes: parsedDuration,
+        totalSessions: Math.max(1, parsedTotalSessions),
 
         tuitionMilestoneNotifiedAt: { type: Date, default: null },
         tuitionEmailSentAt: { type: Date, default: null },

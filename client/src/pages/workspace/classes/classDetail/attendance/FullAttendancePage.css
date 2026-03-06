@@ -19,11 +19,11 @@
 
 /* ===== Top row ===== */
 .fa-top {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 12px;
-    flex-wrap: wrap;
     min-width: 0;
 }
 
@@ -79,8 +79,8 @@
     font-weight: 900;
     color: #000;
 
-    margin-right: auto;
     min-width: 0;
+    text-align: center;
 
     white-space: nowrap;
     overflow: hidden;
@@ -96,8 +96,9 @@
 .fa-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 12px;
-    flex-wrap: wrap;
+    min-width: 0;
 }
 
 /* Month filter */

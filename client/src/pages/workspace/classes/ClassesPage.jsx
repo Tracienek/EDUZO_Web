@@ -24,14 +24,20 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
         >
             {/* TOP */}
             <div className="class-card-top">
-                <div
-                    className="class-card-title"
-                    style={{ display: "flex", gap: 8, alignItems: "center" }}
-                >
+                <div className="class-card-title-wrap">
                     <span
                         className={`dot ${isOnline ? "dot-green" : "dot-gray"}`}
                     />
-                    {c?.name || c?.className || "Unnamed class"}
+
+                    <div className="class-card-title-text">
+                        <div className="class-card-title">
+                            {c?.name || c?.className || "Unnamed class"}
+                        </div>
+
+                        <div className="class-card-sub">
+                            {c?.subject || "—"}
+                        </div>
+                    </div>
                 </div>
 
                 {canDelete && (
@@ -48,8 +54,6 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
                     </button>
                 )}
             </div>
-
-            <div className="class-card-sub">{c?.subject || "—"}</div>
 
             <div className="class-card-meta">
                 <div className="class-card-row">

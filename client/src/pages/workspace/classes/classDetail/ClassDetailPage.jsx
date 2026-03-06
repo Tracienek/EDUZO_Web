@@ -1,4 +1,5 @@
 // src/pages/workspace/classes/classDetail/ClassDetailPage.jsx
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { apiUtils } from "../../../../utils/newRequest";
@@ -13,6 +14,16 @@ import StudentsSection from "./StudentSection/StudentSection";
 const pad2 = (n) => String(n).padStart(2, "0");
 const fmtDMY = (d) =>
     `${pad2(d.getDate())}/${pad2(d.getMonth() + 1)}/${d.getFullYear()}`;
+
+const DAY_NAME = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+];
 
 const WEEKDAY_MAP = {
     mon: 1,
@@ -34,15 +45,96 @@ const WEEKDAY_MAP = {
     sunday: 0,
 };
 
-function parseWeekdays(scheduleText = "") {
-    const left = scheduleText.split("-")[0] || "";
-    const tokens = left
+const DAY_ALIASES = {
+    mon: "Mon",
+    monday: "Mon",
+    tue: "Tue",
+    tues: "Tue",
+    tuesday: "Tue",
+    wed: "Wed",
+    wednesday: "Wed",
+    thu: "Thu",
+    thur: "Thu",
+    thurs: "Thu",
+    thursday: "Thu",
+    fri: "Fri",
+    friday: "Fri",
+    sat: "Sat",
+    saturday: "Sat",
+    sun: "Sun",
+    sunday: "Sun",
+};
+
+const TUITION_KEY = "__TUITION__";
+
+const normalizeDayLabel = (value = "") => {
+    return (
+        DAY_ALIASES[
+            String(value || "")
+                .trim()
+                .toLowerCase()
+        ] || ""
+    );
+};
+
+const normalizeScheduleSlots = (slots = []) => {
+    if (!Array.isArray(slots)) return [];
+
+    return slots
+        .map((slot) => ({
+            day: normalizeDayLabel(slot?.day),
+            time: String(slot?.time || "").trim(),
+        }))
+        .filter((slot) => slot.day && slot.time);
+};
+
+function parseScheduleTextToSlots(scheduleText = "") {
+    const text = String(scheduleText || "").trim();
+    if (!text) return [];
+
+    const directPattern = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*-\s*([^,]+)/gi;
+    const directSlots = [];
+    let match;
+
+    while ((match = directPattern.exec(text)) !== null) {
+        directSlots.push({
+            day: normalizeDayLabel(match[1]),
+            time: String(match[2] || "").trim(),
+        });
+    }
+
+    if (directSlots.length > 0) {
+        return normalizeScheduleSlots(directSlots);
+    }
+
+    const legacyMatch = text.match(
+        /^((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)(?:\s*,\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun))*)\s*-\s*(.+)$/i,
+    );
+
+    if (!legacyMatch) return [];
+
+    const days = String(legacyMatch[1] || "")
         .split(",")
-        .map((t) => t.trim().toLowerCase())
+        .map((x) => normalizeDayLabel(x))
         .filter(Boolean);
 
-    const days = tokens
-        .map((t) => WEEKDAY_MAP[t])
+    const time = String(legacyMatch[2] || "").trim();
+    if (!time) return [];
+
+    return normalizeScheduleSlots(days.map((day) => ({ day, time })));
+}
+
+function getScheduleSlots(cls) {
+    const fromSlots = normalizeScheduleSlots(cls?.scheduleSlots || []);
+    if (fromSlots.length > 0) return fromSlots;
+    return parseScheduleTextToSlots(cls?.scheduleText || "");
+}
+
+function parseWeekdaysFromClass(cls) {
+    const slots = getScheduleSlots(cls);
+
+    const days = slots
+        .map((slot) => WEEKDAY_MAP[String(slot.day || "").toLowerCase()])
         .filter((x) => typeof x === "number");
 
     return days.length ? Array.from(new Set(days)) : [1, 3, 5];
@@ -58,6 +150,34 @@ function getNextSessionDatesFromDate({ startDateISO, weekdays, count = 3 }) {
         cur.setDate(cur.getDate() + 1);
     }
     return results;
+}
+
+function getNextSessionSlot(cls, startDateISO) {
+    const slots = getScheduleSlots(cls);
+    if (!slots.length || !startDateISO) return null;
+
+    const [y, m, d] = startDateISO.split("-").map(Number);
+    const cur = new Date(y, m - 1, d);
+
+    for (let i = 0; i < 21; i += 1) {
+        const weekday = cur.getDay();
+
+        const matchedSlot = slots.find(
+            (slot) =>
+                WEEKDAY_MAP[String(slot.day || "").toLowerCase()] === weekday,
+        );
+
+        if (matchedSlot) {
+            return {
+                date: new Date(cur),
+                slot: matchedSlot,
+            };
+        }
+
+        cur.setDate(cur.getDate() + 1);
+    }
+
+    return null;
 }
 
 const isoToDMY = (iso) => {
@@ -81,23 +201,6 @@ const normalizeDMYTyping = (v) => {
     return s;
 };
 
-const DAY_NAME = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-];
-
-const TUITION_KEY = "__TUITION__";
-
-const extractTimeFromSchedule = (scheduleText = "") => {
-    const parts = scheduleText.split("-").map((s) => s.trim());
-    return parts.length >= 2 ? parts.slice(1).join("-").trim() : "";
-};
-
 const toLocalISODate = (d) => {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -105,7 +208,6 @@ const toLocalISODate = (d) => {
     return `${y}-${m}-${day}`;
 };
 
-//  Stable student id: only backend id
 const getStudentId = (s) => String(s?._id || s?.id || "");
 
 export default function ClassDetailPage() {
@@ -118,7 +220,6 @@ export default function ClassDetailPage() {
     const canUseNotes = role === "teacher" || role === "center";
     const canSendTuition = role === "center";
     const isCenter = role === "center";
-    const canManageStudents = isCenter;
 
     const [openStudent, setOpenStudent] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -148,7 +249,6 @@ export default function ClassDetailPage() {
     const [threshold, setThreshold] = useState(12);
     const [sendingTuition, setSendingTuition] = useState(false);
 
-    // scroll target for notification "?tab=tuition"
     const tuitionBtnRef = useRef(null);
 
     const ensureStudentState = (studentId, base) => {
@@ -210,10 +310,9 @@ export default function ClassDetailPage() {
         setDisplayDate(isoToDMY(startDate));
     }, [startDate]);
 
-    const weekdays = useMemo(
-        () => parseWeekdays(cls?.scheduleText || "Mon, Wed, Fri - 9:00 AM"),
-        [cls?.scheduleText],
-    );
+    const weekdays = useMemo(() => {
+        return parseWeekdaysFromClass(cls);
+    }, [cls]);
 
     const sessionDates = useMemo(() => {
         return getNextSessionDatesFromDate({
@@ -419,6 +518,9 @@ export default function ClassDetailPage() {
 
         const logDateKey = editedDateKeys.slice(-1)[0] || startDate;
 
+        const nextSessionInfo = getNextSessionSlot(cls, startDate);
+        const logTimeLabel = nextSessionInfo?.slot?.time || "";
+
         if (!changes.length && !tuitionChanges.length) {
             exitAttendanceEditMode();
             return;
@@ -434,9 +536,7 @@ export default function ClassDetailPage() {
                     tuitionChanges,
                     logMeta: {
                         dateKey: logDateKey,
-                        timeLabel: extractTimeFromSchedule(
-                            cls?.scheduleText || "",
-                        ),
+                        timeLabel: logTimeLabel,
                     },
                 },
             );
@@ -469,6 +569,7 @@ export default function ClassDetailPage() {
             setIsSavingAttendance(false);
         }
     };
+
     const cancelAttendance = () => {
         const snap = snapshotRef.current;
         if (snap) setCheckState(snap);
@@ -478,7 +579,6 @@ export default function ClassDetailPage() {
     const sendTuitionEmail = async () => {
         if (!canSendTuition) return;
 
-        //  hard guard: even if button somehow enabled, block request
         if (cycleHeld < threshold) {
             alert(`Not enough sessions held: ${cycleHeld}/${threshold}`);
             return;
@@ -508,21 +608,23 @@ export default function ClassDetailPage() {
     if (loading) return <div className="cd-muted">Loading...</div>;
     if (!cls) return <div className="cd-muted">Class not found</div>;
 
-    const nextSession = sessionDates?.[0] || null;
+    const nextSessionInfo = getNextSessionSlot(cls, startDate);
+    const nextSession = nextSessionInfo?.date || null;
+    const nextSessionSlot = nextSessionInfo?.slot || null;
+
     const nextSessionDayLabel = nextSession
         ? DAY_NAME[nextSession.getDay()]
         : "";
-    const nextSessionTimeLabel = extractTimeFromSchedule(
-        cls?.scheduleText || "",
-    );
+
     const nextSessionSubLabel = nextSession
-        ? `${fmtDMY(nextSession)}${nextSessionTimeLabel ? `, ${nextSessionTimeLabel}` : ""}`
+        ? `${fmtDMY(nextSession)}${
+              nextSessionSlot?.time ? `, ${nextSessionSlot.time}` : ""
+          }`
         : "—";
 
     const students = cls.students || [];
 
     const tuitionSent = !!cls?.tuitionEmailSentAt && cycleHeld === 0;
-
     const tuitionDue = cycleHeld >= threshold && !tuitionSent;
 
     const handleDeleteStudent = async (student) => {

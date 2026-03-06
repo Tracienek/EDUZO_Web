@@ -50,7 +50,6 @@ export default function StudentsSection({
 
     return (
         <div className="cd-section">
-            {/* ===== HEADER ===== */}
             <div className="cd-section-head">
                 <h2>Students</h2>
 
@@ -111,14 +110,32 @@ export default function StudentsSection({
                                 onClick={onOpenDatePicker}
                                 aria-label="Open date picker"
                             >
-                                📅
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    width="20"
+                                    height="20"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M8 2v3M16 2v3M3.5 9h17M6 6h12a2.5 2.5 0 0 1 2.5 2.5v11A2.5 2.5 0 0 1 18 22H6a2.5 2.5 0 0 1-2.5-2.5v-11A2.5 2.5 0 0 1 6 6Z"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinecap="round"
+                                    />
+                                    <path
+                                        d="M7.5 12.5h3v3h-3v-3Z"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* ===== TABLE (Desktop + Mobile via CSS) ===== */}
             <div className="cd-table-wrap">
                 <table className="cd-table cd-table-att">
                     <thead>
@@ -167,7 +184,6 @@ export default function StudentsSection({
                                             <Fragment
                                                 key={`${studentId}-${dk}`}
                                             >
-                                                {/* Attendance */}
                                                 <td
                                                     className="cd-center"
                                                     data-label={`${dLabel} (Attendance)`}
@@ -202,7 +218,6 @@ export default function StudentsSection({
                                                     />
                                                 </td>
 
-                                                {/* Homework */}
                                                 <td
                                                     className="cd-center"
                                                     data-label={`${dLabel} (Homework)`}
@@ -240,7 +255,6 @@ export default function StudentsSection({
                                         );
                                     })}
 
-                                    {/* Tuition */}
                                     <td
                                         className="cd-center"
                                         data-label="Tuition"
@@ -271,7 +285,6 @@ export default function StudentsSection({
                                         />
                                     </td>
 
-                                    {/* Delete */}
                                     {canDeleteStudent && (
                                         <td
                                             className="cd-center"
@@ -303,7 +316,6 @@ export default function StudentsSection({
                 </table>
             </div>
 
-            {/* ===== SAVE / CANCEL ===== */}
             {isEditingAttendance && (
                 <div className="cd-actions">
                     <button

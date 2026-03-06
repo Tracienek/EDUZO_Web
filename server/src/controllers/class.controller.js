@@ -59,6 +59,81 @@ const loadOwnedClass = async (req, classId) => {
     return { cls, centerId };
 };
 
+const DAY_ORDER = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAY_SET = new Set(DAY_ORDER);
+
+const normalizeScheduleSlots = (slots = []) => {
+    if (!Array.isArray(slots)) return [];
+
+    const cleaned = slots
+        .map((slot) => ({
+            day: String(slot?.day || "").trim(),
+            time: String(slot?.time || "").trim(),
+        }))
+        .filter((slot) => slot.day && slot.time && DAY_SET.has(slot.day));
+
+    cleaned.sort((a, b) => DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day));
+
+    return cleaned;
+};
+
+const buildScheduleTextFromSlots = (slots = []) => {
+    return normalizeScheduleSlots(slots)
+        .map((slot) => `${slot.day} - ${slot.time}`)
+        .join(", ");
+};
+
+const parseScheduleTextToSlots = (scheduleText = "") => {
+    const text = String(scheduleText || "").trim();
+    if (!text) return [];
+
+    const chunks = text
+        .split(",")
+        .map((x) => x.trim())
+        .filter(Boolean);
+
+    const slots = [];
+
+    for (const chunk of chunks) {
+        const match = chunk.match(
+            /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*-\s*(.+)$/i,
+        );
+
+        if (!match) continue;
+
+        const rawDay = match[1];
+        const rawTime = match[2];
+
+        const day =
+            rawDay.charAt(0).toUpperCase() + rawDay.slice(1).toLowerCase();
+        const time = String(rawTime || "").trim();
+
+        if (DAY_SET.has(day) && time) {
+            slots.push({ day, time });
+        }
+    }
+
+    return normalizeScheduleSlots(slots);
+};
+
+const ensureClassScheduleShape = (cls) => {
+    if (!cls) return cls;
+
+    const existingSlots = normalizeScheduleSlots(cls.scheduleSlots || []);
+    const fallbackSlots =
+        existingSlots.length > 0
+            ? existingSlots
+            : parseScheduleTextToSlots(cls.scheduleText || "");
+
+    return {
+        ...cls,
+        scheduleSlots: fallbackSlots,
+        scheduleText:
+            String(cls.scheduleText || "").trim() ||
+            buildScheduleTextFromSlots(fallbackSlots),
+    };
+};
+
 const notifyTuitionMilestone = async ({ cls, threshold }) => {
     const centerId = cls.centerId;
     if (!centerId) return;
@@ -114,6 +189,8 @@ exports.getAvailable = async (req, res) => {
             const until = c.onlineUntil ? new Date(c.onlineUntil).getTime() : 0;
             const isOnlineNow = !!c.isOnline && until > now;
 
+            const normalized = ensureClassScheduleShape(c);
+
             return {
                 ...c,
                 isOnline: isOnlineNow,
@@ -130,8 +207,14 @@ exports.getAvailable = async (req, res) => {
 
 exports.createClass = async (req, res) => {
     try {
-        const { name, subject, scheduleText, durationMinutes, totalSessions } =
-            req.body;
+        const {
+            name,
+            subject,
+            scheduleText,
+            scheduleSlots,
+            durationMinutes,
+            totalSessions,
+        } = req.body;
 
         if (!name?.trim() || !subject?.trim()) {
             return res
@@ -143,16 +226,38 @@ exports.createClass = async (req, res) => {
         if (error)
             return res.status(error.status).json({ message: error.message });
 
+        const normalizedSlots = normalizeScheduleSlots(scheduleSlots || []);
+        const finalScheduleText =
+            normalizedSlots.length > 0
+                ? buildScheduleTextFromSlots(normalizedSlots)
+                : String(scheduleText || "").trim();
+
+        const parsedDuration = Number(durationMinutes);
+        const parsedTotalSessions = Number(totalSessions);
+
+        if (!Number.isFinite(parsedDuration) || parsedDuration <= 0) {
+            return res.status(400).json({
+                message: "durationMinutes must be a number greater than 0",
+            });
+        }
+
+        if (!Number.isFinite(parsedTotalSessions) || parsedTotalSessions < 1) {
+            return res.status(400).json({
+                message: "totalSessions must be a number greater than 0",
+            });
+        }
+
         const created = await Class.create({
             name: name.trim(),
             subject: subject.trim(),
-            scheduleText: scheduleText?.trim() || "",
-            durationMinutes: Number(durationMinutes) || 90,
+            scheduleText: finalScheduleText,
+            scheduleSlots: normalizedSlots,
+            durationMinutes: parsedDuration,
             students: [],
             isActive: true,
             centerId,
 
-            totalSessions: Math.max(1, Number(totalSessions) || 12),
+            totalSessions: Math.max(1, parsedTotalSessions),
             heldCount: 0,
 
             tuitionCycleStartHeldCount: 0,
@@ -161,10 +266,12 @@ exports.createClass = async (req, res) => {
             tuitionEmailSentAt: null,
         });
 
+        const normalizedCreated = ensureClassScheduleShape(created.toObject());
+
         return res.status(201).json({
             metadata: {
                 class: {
-                    ...created.toObject(),
+                    ...normalizedCreated,
                     totalStudents: 0,
                     studentCount: 0,
                 },
@@ -196,10 +303,12 @@ exports.getById = async (req, res) => {
         const until = cls.onlineUntil ? new Date(cls.onlineUntil).getTime() : 0;
         const isOnlineNow = cls.isOnline && until > now;
 
+        const normalizedClass = ensureClassScheduleShape(cls);
+
         return res.json({
             metadata: {
                 class: {
-                    ...cls,
+                    ...normalizedClass,
                     totalStudents: cls.students?.length || 0,
                     studentCount: cls.students?.length || 0,
                     heldCount: Number(cls.heldCount || 0),
@@ -628,5 +737,94 @@ exports.removeStudentFromClass = async (req, res) => {
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Failed to remove student" });
+    }
+};
+
+exports.updateClass = async (req, res) => {
+    try {
+        const classId = req.params.id;
+        const { cls, error } = await loadOwnedClass(req, classId);
+        if (error)
+            return res.status(error.status).json({ message: error.message });
+
+        const {
+            name,
+            subject,
+            scheduleText,
+            scheduleSlots,
+            durationMinutes,
+            totalSessions,
+            isActive,
+        } = req.body || {};
+
+        if (typeof name !== "undefined") {
+            const nextName = String(name || "").trim();
+            if (!nextName) {
+                return res
+                    .status(400)
+                    .json({ message: "name cannot be empty" });
+            }
+            cls.name = nextName;
+        }
+
+        if (typeof subject !== "undefined") {
+            const nextSubject = String(subject || "").trim();
+            if (!nextSubject) {
+                return res
+                    .status(400)
+                    .json({ message: "subject cannot be empty" });
+            }
+            cls.subject = nextSubject;
+        }
+
+        if (typeof scheduleSlots !== "undefined") {
+            const normalizedSlots = normalizeScheduleSlots(scheduleSlots);
+            cls.scheduleSlots = normalizedSlots;
+            cls.scheduleText = buildScheduleTextFromSlots(normalizedSlots);
+        } else if (typeof scheduleText !== "undefined") {
+            const text = String(scheduleText || "").trim();
+            cls.scheduleText = text;
+            cls.scheduleSlots = parseScheduleTextToSlots(text);
+        }
+
+        if (typeof durationMinutes !== "undefined") {
+            const nextDuration = Number(durationMinutes);
+            if (!Number.isFinite(nextDuration) || nextDuration <= 0) {
+                return res.status(400).json({
+                    message: "durationMinutes must be a number greater than 0",
+                });
+            }
+            cls.durationMinutes = nextDuration;
+        }
+
+        if (typeof totalSessions !== "undefined") {
+            const nextTotal = Number(totalSessions);
+            if (!Number.isFinite(nextTotal) || nextTotal < 1) {
+                return res.status(400).json({
+                    message: "totalSessions must be a number greater than 0",
+                });
+            }
+            cls.totalSessions = Math.max(1, nextTotal);
+        }
+
+        if (typeof isActive !== "undefined") {
+            cls.isActive = !!isActive;
+        }
+
+        await cls.save();
+
+        const normalizedClass = ensureClassScheduleShape(cls.toObject());
+
+        return res.json({
+            metadata: {
+                class: {
+                    ...normalizedClass,
+                    totalStudents: cls.students?.length || 0,
+                    studentCount: cls.students?.length || 0,
+                },
+            },
+        });
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
     }
 };

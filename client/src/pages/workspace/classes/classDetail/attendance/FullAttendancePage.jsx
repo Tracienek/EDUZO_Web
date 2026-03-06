@@ -6,6 +6,7 @@ import "./FullAttendancePage.css";
 
 /** ===== helpers ===== */
 const pad2 = (n) => String(n).padStart(2, "0");
+
 const toISODate = (d) =>
     `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 
@@ -26,9 +27,13 @@ const dmyToISO = (dmy) => {
 };
 
 const normalizeDMYTyping = (v) => {
-    let s = v.replace(/[^\d/]/g, "").slice(0, 10);
+    let s = String(v || "")
+        .replace(/[^\d/]/g, "")
+        .slice(0, 10);
+
     s = s.replace(/^(\d{2})(\d)/, "$1/$2");
     s = s.replace(/^(\d{2}\/\d{2})(\d)/, "$1/$2");
+
     return s;
 };
 
@@ -54,44 +59,114 @@ const WEEKDAY_MAP = {
     sunday: 0,
 };
 
-function parseWeekdays(scheduleText = "") {
-    const left = scheduleText.split("-")[0] || "";
-    const tokens = left
+function normalizeScheduleSlots(slots = []) {
+    if (!Array.isArray(slots)) return [];
+
+    return slots
+        .map((slot) => ({
+            day: String(slot?.day || "").trim(),
+            time: String(slot?.time || "").trim(),
+        }))
+        .filter((slot) => slot.day && slot.time);
+}
+
+function parseScheduleTextToSlots(scheduleText = "") {
+    const text = String(scheduleText || "").trim();
+    if (!text) return [];
+
+    // format mới: "Wed - 19:00 AM, Thu - 9:00 PM, Sat - 9:00 AM"
+    const directPattern = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*-\s*([^,]+)/gi;
+    const directSlots = [];
+    let match;
+
+    while ((match = directPattern.exec(text)) !== null) {
+        directSlots.push({
+            day: String(match[1] || "").trim(),
+            time: String(match[2] || "").trim(),
+        });
+    }
+
+    if (directSlots.length > 0) {
+        return normalizeScheduleSlots(directSlots);
+    }
+
+    // format cũ: "Mon, Wed, Fri - 9:00 AM"
+    const legacyMatch = text.match(
+        /^((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)(?:\s*,\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun))*)\s*-\s*(.+)$/i,
+    );
+
+    if (!legacyMatch) return [];
+
+    const days = String(legacyMatch[1] || "")
         .split(",")
-        .map((t) => t.trim().toLowerCase())
+        .map((x) => String(x || "").trim())
         .filter(Boolean);
 
-    const days = tokens
-        .map((t) => WEEKDAY_MAP[t])
+    const time = String(legacyMatch[2] || "").trim();
+    if (!time) return [];
+
+    return normalizeScheduleSlots(days.map((day) => ({ day, time })));
+}
+
+function getWeekdaysFromClass(cls) {
+    const fromSlots = normalizeScheduleSlots(cls?.scheduleSlots || []);
+    const sourceSlots =
+        fromSlots.length > 0
+            ? fromSlots
+            : parseScheduleTextToSlots(cls?.scheduleText || "");
+
+    const days = sourceSlots
+        .map(
+            (slot) =>
+                WEEKDAY_MAP[
+                    String(slot.day || "")
+                        .trim()
+                        .toLowerCase()
+                ],
+        )
         .filter((x) => typeof x === "number");
 
     return days.length ? Array.from(new Set(days)) : [1, 3, 5];
 }
 
 function getMonthRangeFromISO(iso) {
-    const [y, m] = iso.split("-").map(Number);
-    const start = new Date(y, m - 1, 1);
-    const end = new Date(y, m, 0);
+    const [y, m] = String(iso || "")
+        .split("-")
+        .map(Number);
+
+    const year = Number.isFinite(y) ? y : new Date().getFullYear();
+    const month =
+        Number.isFinite(m) && m >= 1 && m <= 12 ? m : new Date().getMonth() + 1;
+
+    const start = new Date(year, month - 1, 1);
+    const end = new Date(year, month, 0);
+
     return { start, end };
 }
 
 function buildSessionDatesInRange({ start, end, weekdays }) {
     const cur = new Date(start);
     const res = [];
+
     while (cur <= end) {
-        if (weekdays.includes(cur.getDay())) res.push(new Date(cur));
+        if (weekdays.includes(cur.getDay())) {
+            res.push(new Date(cur));
+        }
         cur.setDate(cur.getDate() + 1);
     }
+
     return res;
 }
 
 function splitByMidMonth(dates) {
     const a = [];
     const b = [];
+
     for (const d of dates) {
         if (d.getDate() <= 15) a.push(d);
         else b.push(d);
     }
+
     return [a, b];
 }
 
@@ -108,7 +183,9 @@ export default function FullAttendancePage() {
     const [error, setError] = useState("");
 
     const [monthISO, setMonthISO] = useState(() => toISODate(new Date()));
-    const [displayMonth, setDisplayMonth] = useState(() => isoToDMY(monthISO));
+    const [displayMonth, setDisplayMonth] = useState(() =>
+        isoToDMY(toISODate(new Date())),
+    );
 
     const [records, setRecords] = useState({});
 
@@ -144,10 +221,7 @@ export default function FullAttendancePage() {
         setDisplayMonth(isoToDMY(monthISO));
     }, [monthISO]);
 
-    const weekdays = useMemo(
-        () => parseWeekdays(cls?.scheduleText || "Mon, Wed, Fri - 9:00 AM"),
-        [cls?.scheduleText],
-    );
+    const weekdays = useMemo(() => getWeekdaysFromClass(cls), [cls]);
 
     const monthRange = useMemo(
         () => getMonthRangeFromISO(monthISO),
@@ -160,7 +234,7 @@ export default function FullAttendancePage() {
             end: monthRange.end,
             weekdays,
         });
-    }, [monthRange.start, monthRange.end, weekdays]);
+    }, [monthRange, weekdays]);
 
     const [datesA, datesB] = useMemo(
         () => splitByMidMonth(sessionDates),
@@ -173,39 +247,43 @@ export default function FullAttendancePage() {
     );
 
     const allDateKeys = useMemo(() => {
-        const a = datesA.map(toISODate);
-        const b = datesB.map(toISODate);
-        return [...a, ...b];
+        return [...datesA, ...datesB].map(toISODate);
     }, [datesA, datesB]);
 
     useEffect(() => {
         if (!classId) return;
+
         let alive = true;
 
         (async () => {
             try {
                 if (!allDateKeys.length) {
-                    setRecords({});
+                    if (alive) setRecords({});
                     return;
                 }
 
                 const res = await apiUtils.get(
                     `/classes/${classId}/attendance?dates=${allDateKeys.join(",")}`,
                 );
-                const list = res?.data?.metadata?.records || [];
 
+                const list = res?.data?.metadata?.records || [];
                 if (!alive) return;
 
                 const next = {};
+
                 for (const r of list) {
                     const sid = String(r.studentId);
-                    if (!next[sid])
+                    if (!next[sid]) {
                         next[sid] = { attendance: {}, homework: {} };
+                    }
 
-                    if (typeof r.attendance === "boolean")
+                    if (typeof r.attendance === "boolean") {
                         next[sid].attendance[r.dateKey] = r.attendance;
-                    if (typeof r.homework === "boolean")
+                    }
+
+                    if (typeof r.homework === "boolean") {
                         next[sid].homework[r.dateKey] = r.homework;
+                    }
                 }
 
                 setRecords(next);
@@ -230,8 +308,9 @@ export default function FullAttendancePage() {
         const Cell = as;
         const cells = [];
 
-        for (let i = 0; i < maxCols; i++) {
+        for (let i = 0; i < maxCols; i += 1) {
             const d = datesArr[i];
+
             if (d) {
                 cells.push(
                     <Cell key={`d-${i}`} className="fa-th-date">
@@ -245,6 +324,7 @@ export default function FullAttendancePage() {
                         </div>
                     </Cell>,
                 );
+
                 cells.push(
                     <Cell key={`h-${i}`} className="fa-th-hw">
                         HW
@@ -254,6 +334,7 @@ export default function FullAttendancePage() {
                 cells.push(
                     <Cell key={`d-${i}`} className="fa-th-date fa-th-empty" />,
                 );
+
                 cells.push(
                     <Cell key={`h-${i}`} className="fa-th-hw fa-th-empty" />,
                 );
@@ -266,7 +347,7 @@ export default function FullAttendancePage() {
     const renderBodyCells = (sid, datesArr) => {
         const cells = [];
 
-        for (let i = 0; i < maxCols; i++) {
+        for (let i = 0; i < maxCols; i += 1) {
             const d = datesArr[i];
             const dk = d ? toISODate(d) : null;
 
@@ -277,6 +358,7 @@ export default function FullAttendancePage() {
                             type="checkbox"
                             disabled
                             checked={!!records?.[sid]?.attendance?.[dk]}
+                            readOnly
                         />
                     ) : (
                         <span className="fa-dash">—</span>
@@ -291,6 +373,7 @@ export default function FullAttendancePage() {
                             type="checkbox"
                             disabled
                             checked={!!records?.[sid]?.homework?.[dk]}
+                            readOnly
                         />
                     ) : (
                         <span className="fa-dash">—</span>
@@ -340,8 +423,9 @@ export default function FullAttendancePage() {
                                 }}
                                 onBlur={() => {
                                     const iso = dmyToISO(displayMonth);
-                                    if (!iso)
+                                    if (!iso) {
                                         setDisplayMonth(isoToDMY(monthISO));
+                                    }
                                 }}
                             />
 
