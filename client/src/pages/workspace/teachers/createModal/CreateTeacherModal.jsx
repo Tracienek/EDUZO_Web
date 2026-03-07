@@ -120,8 +120,12 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
             >
                 <div className="ctm-header">
                     <div>
-                        <h3 id="ctm-title">Create Teacher</h3>
-                        <p>Please set an initial password</p>
+                        <h3 id="ctm-title" className="ctm-title">
+                            Create Teacher
+                        </h3>
+                        <p className="ctm-subtitle">
+                            Please set an initial password
+                        </p>
                     </div>
 
                     <button
@@ -178,7 +182,9 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                     </div>
 
                     {errors.serverError && (
-                        <p className="ctm-error">{errors.serverError}</p>
+                        <p className="ctm-error ctm-error--server">
+                            {errors.serverError}
+                        </p>
                     )}
 
                     <div className="ctm-actions">
@@ -186,10 +192,15 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                             type="button"
                             onClick={onClose}
                             disabled={isSubmitting}
+                            className="ctm-btn ctm-btn--ghost"
                         >
                             Cancel
                         </button>
-                        <button type="submit" disabled={!canSubmit}>
+                        <button
+                            type="submit"
+                            disabled={!canSubmit}
+                            className="ctm-btn"
+                        >
                             {isSubmitting ? "Creating..." : "Create"}
                         </button>
                     </div>
