@@ -15,13 +15,15 @@ const DAYS = [
 ];
 
 const DEFAULT_DAYS = ["Mon", "Wed", "Fri"];
-const DEFAULT_TIME = "9:00 AM";
+const DEFAULT_TIME = "9:00";
+const DEFAULT_PERIOD = "AM";
 
 const DEFAULT_FORM = {
     name: "",
     subject: "",
     selectedDays: DEFAULT_DAYS,
     commonTime: DEFAULT_TIME,
+    commonPeriod: DEFAULT_PERIOD,
     scheduleSlots: [],
     useCustomSchedule: false,
     durationMinutes: "90",
@@ -46,74 +48,156 @@ const parsePositiveInt = (value) => {
     return Math.floor(n);
 };
 
-const parseTimeToMinutes = (timeText) => {
+const formatHour12 = (hour24) => {
+    const h = hour24 % 12;
+    return h === 0 ? 12 : h;
+};
+
+const formatTimeOnly = (hour12, minute) => {
+    return `${hour12}:${String(minute).padStart(2, "0")}`;
+};
+
+const parseTimeParts = (timeText, selectedPeriod = "AM") => {
     if (!timeText) return null;
 
     const raw = String(timeText).trim().toLowerCase();
+    if (!raw) return null;
 
+    // 9am / 9:30 pm
     const ampmMatch = raw.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
     if (ampmMatch) {
-        let hour = Number(ampmMatch[1]);
+        const hour = Number(ampmMatch[1]);
         const minute = Number(ampmMatch[2] || 0);
-        const period = ampmMatch[3].toLowerCase();
+        const period = ampmMatch[3].toUpperCase();
 
         if (hour < 1 || hour > 12 || minute < 0 || minute > 59) return null;
 
-        if (period === "pm" && hour !== 12) hour += 12;
-        if (period === "am" && hour === 12) hour = 0;
-
-        return hour * 60 + minute;
+        return {
+            hour12: hour,
+            minute,
+            period,
+        };
     }
 
+    // 13g / 13g30 / 13g 30
+    const gMatch = raw.match(/^(\d{1,2})\s*g\s*(\d{1,2})?$/i);
+    if (gMatch) {
+        const hour24 = Number(gMatch[1]);
+        const minute = Number(gMatch[2] || 0);
+
+        if (hour24 < 0 || hour24 > 23 || minute < 0 || minute > 59) return null;
+
+        return {
+            hour12: formatHour12(hour24),
+            minute,
+            period: hour24 >= 12 ? "PM" : "AM",
+        };
+    }
+
+    // 21:00 / 9:30
     const hmMatch = raw.match(/^(\d{1,2}):(\d{2})$/);
     if (hmMatch) {
         const hour = Number(hmMatch[1]);
         const minute = Number(hmMatch[2]);
 
         if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
-        return hour * 60 + minute;
+
+        if (hour > 12 || hour === 0) {
+            return {
+                hour12: formatHour12(hour),
+                minute,
+                period: hour >= 12 ? "PM" : "AM",
+            };
+        }
+
+        return {
+            hour12: hour,
+            minute,
+            period: selectedPeriod === "PM" ? "PM" : "AM",
+        };
+    }
+
+    // 21 / 9
+    const hourOnlyMatch = raw.match(/^(\d{1,2})$/);
+    if (hourOnlyMatch) {
+        const hour = Number(hourOnlyMatch[1]);
+
+        if (hour < 0 || hour > 23) return null;
+
+        if (hour > 12 || hour === 0) {
+            return {
+                hour12: formatHour12(hour),
+                minute: 0,
+                period: hour >= 12 ? "PM" : "AM",
+            };
+        }
+
+        return {
+            hour12: hour,
+            minute: 0,
+            period: selectedPeriod === "PM" ? "PM" : "AM",
+        };
     }
 
     return null;
 };
 
-const formatMinutesTo12h = (mins) => {
-    const total = Number(mins);
-    if (!Number.isFinite(total)) return "";
+const normalizeTimeFields = (timeText = "", period = "AM") => {
+    const parsed = parseTimeParts(timeText, period);
+    if (!parsed) {
+        return {
+            time: String(timeText || "").trim(),
+            period: period === "PM" ? "PM" : "AM",
+        };
+    }
 
-    const hour24 = Math.floor(total / 60);
-    const minute = total % 60;
-    const period = hour24 >= 12 ? "PM" : "AM";
-    const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
-
-    return `${hour12}:${String(minute).padStart(2, "0")} ${period}`;
+    return {
+        time: formatTimeOnly(parsed.hour12, parsed.minute),
+        period: parsed.period,
+    };
 };
 
-const normalizeTimeInput = (value = "") => {
-    const text = String(value || "").trim();
-    if (!text) return "";
+const parseTimeToMinutes = (timeText, period = "AM") => {
+    const parsed = parseTimeParts(timeText, period);
+    if (!parsed) return null;
 
-    const mins = parseTimeToMinutes(text);
-    if (mins === null) return text;
+    let hour24 = parsed.hour12 % 12;
+    if (parsed.period === "PM") hour24 += 12;
 
-    return formatMinutesTo12h(mins);
+    return hour24 * 60 + parsed.minute;
 };
 
 const normalizeScheduleSlots = (slots = []) => {
     if (!Array.isArray(slots)) return [];
 
     return slots
-        .map((slot) => ({
-            day: String(slot?.day || "").trim(),
-            time: normalizeTimeInput(slot?.time),
-        }))
-        .filter((slot) => slot.day && slot.time);
+        .map((slot) => {
+            const normalized = normalizeTimeFields(slot?.time, slot?.period);
+            return {
+                day: String(slot?.day || "").trim(),
+                time: normalized.time,
+                period: normalized.period,
+            };
+        })
+        .filter(
+            (slot) =>
+                slot.day &&
+                slot.time &&
+                parseTimeToMinutes(slot.time, slot.period) !== null,
+        );
 };
 
 const buildScheduleText = (slots = []) => {
     return normalizeScheduleSlots(slots)
-        .map((s) => `${s.day} - ${s.time}`)
+        .map((s) => `${s.day} - ${s.time} ${s.period}`)
         .join(", ");
+};
+
+const toPayloadScheduleSlots = (slots = []) => {
+    return normalizeScheduleSlots(slots).map((slot) => ({
+        day: slot.day,
+        time: `${slot.time} ${slot.period}`,
+    }));
 };
 
 export default function CreateClass({ open, onClose, onCreated }) {
@@ -147,15 +231,22 @@ export default function CreateClass({ open, onClose, onCreated }) {
             return normalizeScheduleSlots(form.scheduleSlots || []);
         }
 
+        const normalizedCommon = normalizeTimeFields(
+            form.commonTime,
+            form.commonPeriod,
+        );
+
         return orderDays(form.selectedDays).map((day) => ({
             day,
-            time: normalizeTimeInput(form.commonTime),
+            time: normalizedCommon.time,
+            period: normalizedCommon.period,
         }));
     }, [
         form.useCustomSchedule,
         form.scheduleSlots,
         form.selectedDays,
         form.commonTime,
+        form.commonPeriod,
     ]);
 
     const scheduleTextPreview = useMemo(() => {
@@ -173,7 +264,8 @@ export default function CreateClass({ open, onClose, onCreated }) {
                 (slot) =>
                     slot.day &&
                     slot.time &&
-                    parseTimeToMinutes(slot.time) !== null,
+                    (slot.period === "AM" || slot.period === "PM") &&
+                    parseTimeToMinutes(slot.time, slot.period) !== null,
             );
 
         const durationValue = parsePositiveInt(form.durationMinutes);
@@ -214,16 +306,22 @@ export default function CreateClass({ open, onClose, onCreated }) {
 
     const enableCustomSchedule = () => {
         setScheduleTouched(true);
-        setForm((prev) => ({
-            ...prev,
-            useCustomSchedule: true,
-            scheduleSlots: orderDays(prev.selectedDays).map((day) => ({
-                day,
-                time:
-                    normalizeTimeInput(prev.commonTime) ||
-                    normalizeTimeInput(DEFAULT_TIME),
-            })),
-        }));
+        setForm((prev) => {
+            const normalizedCommon = normalizeTimeFields(
+                prev.commonTime,
+                prev.commonPeriod,
+            );
+
+            return {
+                ...prev,
+                useCustomSchedule: true,
+                scheduleSlots: orderDays(prev.selectedDays).map((day) => ({
+                    day,
+                    time: normalizedCommon.time || DEFAULT_TIME,
+                    period: normalizedCommon.period || DEFAULT_PERIOD,
+                })),
+            };
+        });
     };
 
     const disableCustomSchedule = () => {
@@ -231,16 +329,16 @@ export default function CreateClass({ open, onClose, onCreated }) {
         setForm((prev) => {
             const normalizedSlots = normalizeScheduleSlots(prev.scheduleSlots);
             const days = orderDays(normalizedSlots.map((slot) => slot.day));
-            const fallbackTime =
-                normalizedSlots.find((slot) => slot.time)?.time ||
-                normalizeTimeInput(prev.commonTime) ||
-                normalizeTimeInput(DEFAULT_TIME);
+            const fallbackSlot = normalizedSlots.find(
+                (slot) => slot.time && slot.period,
+            );
 
             return {
                 ...prev,
                 useCustomSchedule: false,
                 selectedDays: days.length ? days : DEFAULT_DAYS,
-                commonTime: fallbackTime,
+                commonTime: fallbackSlot?.time || DEFAULT_TIME,
+                commonPeriod: fallbackSlot?.period || DEFAULT_PERIOD,
             };
         });
     };
@@ -279,15 +377,19 @@ export default function CreateClass({ open, onClose, onCreated }) {
             const firstUnusedDay =
                 DAYS.find((d) => !usedDays.has(d.value))?.value || "Mon";
 
+            const normalizedCommon = normalizeTimeFields(
+                prev.commonTime,
+                prev.commonPeriod,
+            );
+
             return {
                 ...prev,
                 scheduleSlots: [
                     ...(prev.scheduleSlots || []),
                     {
                         day: firstUnusedDay,
-                        time:
-                            normalizeTimeInput(prev.commonTime) ||
-                            normalizeTimeInput(DEFAULT_TIME),
+                        time: normalizedCommon.time || DEFAULT_TIME,
+                        period: normalizedCommon.period || DEFAULT_PERIOD,
                     },
                 ],
             };
@@ -299,20 +401,31 @@ export default function CreateClass({ open, onClose, onCreated }) {
     };
 
     const handleBlurCommonTime = () => {
-        setForm((prev) => ({
-            ...prev,
-            commonTime: normalizeTimeInput(prev.commonTime),
-        }));
+        setForm((prev) => {
+            const normalized = normalizeTimeFields(
+                prev.commonTime,
+                prev.commonPeriod,
+            );
+            return {
+                ...prev,
+                commonTime: normalized.time,
+                commonPeriod: normalized.period,
+            };
+        });
     };
 
     const handleBlurSlotTime = (index) => {
         setForm((prev) => ({
             ...prev,
-            scheduleSlots: prev.scheduleSlots.map((slot, i) =>
-                i === index
-                    ? { ...slot, time: normalizeTimeInput(slot.time) }
-                    : slot,
-            ),
+            scheduleSlots: prev.scheduleSlots.map((slot, i) => {
+                if (i !== index) return slot;
+                const normalized = normalizeTimeFields(slot.time, slot.period);
+                return {
+                    ...slot,
+                    time: normalized.time,
+                    period: normalized.period,
+                };
+            }),
         }));
     };
 
@@ -324,7 +437,8 @@ export default function CreateClass({ open, onClose, onCreated }) {
             setSubmitting(true);
             setError("");
 
-            const normalizedSlots = normalizeScheduleSlots(derivedSlots);
+            const normalizedStateSlots = normalizeScheduleSlots(derivedSlots);
+            const payloadSlots = toPayloadScheduleSlots(normalizedStateSlots);
 
             const durationValue = parsePositiveInt(form.durationMinutes);
             const totalSessionsValue = parsePositiveInt(form.totalSessions);
@@ -332,8 +446,8 @@ export default function CreateClass({ open, onClose, onCreated }) {
             const payload = {
                 name: form.name.trim(),
                 subject: form.subject.trim(),
-                scheduleSlots: normalizedSlots,
-                scheduleText: buildScheduleText(normalizedSlots),
+                scheduleSlots: payloadSlots,
+                scheduleText: buildScheduleText(normalizedStateSlots),
                 durationMinutes: durationValue ?? 90,
                 totalSessions: Math.max(1, totalSessionsValue ?? 12),
             };
@@ -446,19 +560,42 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                 </div>
 
                                 <div
-                                    className="cm-input cm-input-with-icon"
-                                    style={{ marginTop: 8 }}
+                                    style={{
+                                        display: "flex",
+                                        gap: 8,
+                                        marginTop: 8,
+                                    }}
                                 >
                                     <input
-                                        className="cm-input-inner"
+                                        className="cm-input"
+                                        style={{ flex: 1 }}
                                         value={form.commonTime}
                                         onChange={(e) => {
                                             setScheduleTouched(true);
-                                            update("commonTime")(e);
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                commonTime: e.target.value,
+                                            }));
                                         }}
                                         onBlur={handleBlurCommonTime}
-                                        placeholder="e.g: 9:00 AM or 21:00"
+                                        placeholder="e.g: 9:00, 21:00, 21g"
                                     />
+
+                                    <select
+                                        className="cm-input"
+                                        style={{ width: 90 }}
+                                        value={form.commonPeriod}
+                                        onChange={(e) => {
+                                            setScheduleTouched(true);
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                commonPeriod: e.target.value,
+                                            }));
+                                        }}
+                                    >
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
                                 </div>
 
                                 <div className="cm-helper">
@@ -493,19 +630,50 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                                 ))}
                                             </select>
 
-                                            <input
-                                                className="cm-input cm-slot-time"
-                                                value={slot.time}
-                                                onChange={(e) =>
-                                                    updateSlot(index, {
-                                                        time: e.target.value,
-                                                    })
-                                                }
-                                                onBlur={() =>
-                                                    handleBlurSlotTime(index)
-                                                }
-                                                placeholder="e.g: 9:00 AM or 21:00"
-                                            />
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    gap: 8,
+                                                    flex: 1,
+                                                }}
+                                            >
+                                                <input
+                                                    className="cm-input cm-slot-time"
+                                                    style={{ flex: 1 }}
+                                                    value={slot.time}
+                                                    onChange={(e) =>
+                                                        updateSlot(index, {
+                                                            time: e.target
+                                                                .value,
+                                                        })
+                                                    }
+                                                    onBlur={() =>
+                                                        handleBlurSlotTime(
+                                                            index,
+                                                        )
+                                                    }
+                                                    placeholder="e.g: 9:00, 21:00, 21g"
+                                                />
+
+                                                <select
+                                                    className="cm-input cm-period-select"
+                                                    // style={{ width: 90 }}
+                                                    value={slot.period || "AM"}
+                                                    onChange={(e) =>
+                                                        updateSlot(index, {
+                                                            period: e.target
+                                                                .value,
+                                                        })
+                                                    }
+                                                >
+                                                    <option value="AM">
+                                                        AM
+                                                    </option>
+                                                    <option value="PM">
+                                                        PM
+                                                    </option>
+                                                </select>
+                                            </div>
 
                                             <button
                                                 type="button"
@@ -518,8 +686,9 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                                     1
                                                 }
                                                 title="Remove schedule row"
+                                                aria-label="Remove schedule row"
                                             >
-                                                Remove
+                                                ×
                                             </button>
                                         </div>
                                     ),
@@ -547,10 +716,11 @@ export default function CreateClass({ open, onClose, onCreated }) {
                             (form.commonTime || form.useCustomSchedule) && (
                                 <div
                                     className="cm-helper"
-                                    style={{ color: "#b91c1c" }}
+                                    style={{ color: "var(--primary-color)" }}
                                 >
-                                    Time format must be like <b>9:00 AM</b> or{" "}
-                                    <b>21:00</b>.
+                                    Time format must be like <b>9:00</b> or{" "}
+                                    <b>21:00</b>. AM/PM can be adjusted in the
+                                    dropdown.
                                 </div>
                             )}
                     </div>
