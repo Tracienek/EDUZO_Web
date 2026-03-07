@@ -21,6 +21,7 @@
 .fa-top {
     display: grid;
     grid-template-columns: auto 1fr auto;
+    grid-template-areas: "back title actions";
     align-items: center;
     gap: 16px;
     margin-bottom: 12px;
@@ -47,6 +48,8 @@
         transform 0.16s ease,
         background 0.16s ease,
         box-shadow 0.16s ease;
+
+    grid-area: back;
 }
 
 .fa-back:hover {
@@ -75,13 +78,13 @@
 
 /* Title */
 .fa-title {
+    grid-area: title;
     font-size: 18px;
     font-weight: 900;
     color: #000;
 
     min-width: 0;
     text-align: center;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -94,6 +97,7 @@
 
 /* Actions */
 .fa-actions {
+    grid-area: actions;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -375,6 +379,11 @@
     }
 
     .fa-top {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+            "back title"
+            "actions actions";
+        align-items: center;
         gap: 10px;
     }
 
@@ -382,16 +391,31 @@
         height: 38px;
         padding: 0 10px;
         font-size: 12px;
+        white-space: nowrap;
     }
 
-    .fa-actions,
+    .fa-title {
+        text-align: left;
+        font-size: 16px;
+        min-width: 0;
+    }
+
+    .fa-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
     .fa-filter {
         width: 100%;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 10px;
     }
 
     .fa-date-input {
         min-width: 0;
-        width: 100%;
+        width: 60%;
     }
 }
 

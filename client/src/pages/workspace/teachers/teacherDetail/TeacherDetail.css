@@ -21,6 +21,7 @@
 .td-topbar {
     display: grid;
     grid-template-columns: auto 1fr auto;
+    grid-template-areas: "back title delete";
     align-items: center;
     gap: 12px;
     margin-bottom: 14px;
@@ -28,6 +29,7 @@
 }
 
 .td-title {
+    grid-area: title;
     font-size: 18px;
     font-weight: 900;
     color: var(--text-color-dark);
@@ -91,6 +93,10 @@
     line-height: 1;
 }
 
+.td-back {
+    grid-area: back;
+}
+
 /* Delete button */
 .td-delete {
     margin-left: auto;
@@ -117,6 +123,7 @@
         box-shadow 0.16s ease,
         background 0.16s ease,
         color 0.16s ease;
+    grid-area: delete;
 }
 
 .td-delete:hover {
@@ -153,6 +160,7 @@
     gap: 10px;
     margin-bottom: 12px;
     min-width: 0;
+    flex-wrap: wrap;
 }
 
 .td-card-head h3 {
@@ -162,9 +170,26 @@
     color: var(--text-color-dark);
 
     min-width: 0;
+    flex: 1 1 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.td-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.td-chip,
+.td-btn,
+.td-delete,
+.td-back {
+    min-width: 0;
 }
 
 /* Profile card */
@@ -239,6 +264,7 @@
     color: #000;
     font-weight: 900;
     flex: 0 0 auto;
+    white-space: nowrap;
 }
 
 .td-chip--soon {
@@ -362,15 +388,19 @@
         border-radius: 12px;
     }
 
-    /* Topbar xếp dọc cho dễ nhìn */
     .td-topbar {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "title title"
+            "back delete";
         gap: 8px;
         align-items: stretch;
     }
 
     .td-title {
         white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
     }
 
     .td-back,
@@ -380,9 +410,9 @@
         height: 38px;
         padding: 0 12px;
         font-size: 12px;
+        min-width: 0;
     }
 
-    /* Row meta: wrap đẹp hơn */
     .td-row {
         flex-direction: column;
         align-items: flex-start;
@@ -396,8 +426,35 @@
         text-overflow: unset;
         overflow-wrap: anywhere;
     }
-}
 
+    .td-card-head {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .td-card-head h3 {
+        flex: none;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    .td-card-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .td-card-actions .td-chip,
+    .td-card-actions .td-btn {
+        flex: 1 1 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .td-chip {
+        white-space: normal;
+    }
+}
 /* reduce motion */
 @media (prefers-reduced-motion: reduce) {
     .td-back,

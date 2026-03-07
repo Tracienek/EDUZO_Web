@@ -203,11 +203,10 @@
 }
 
 .cd-section-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
     gap: 12px;
-    flex-wrap: wrap;
 }
 
 .cd-section-head h2,
@@ -221,7 +220,7 @@
 .cd-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
@@ -364,7 +363,7 @@
 }
 
 /* =========================
-   MOBILE CARDS (consistent UX)
+   MOBILE CARDS 
 ========================= */
 .cd-cards {
     display: none; /* only mobile */
@@ -585,6 +584,49 @@
     .cd-btn-cancel {
         flex: 1;
         min-width: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .cd-section-head {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "title tuition"
+            "date date";
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cd-section-head h2 {
+        grid-area: title;
+        min-width: 0;
+    }
+
+    .cd-controls {
+        display: contents;
+    }
+
+    .cd-controls > .cd-btn {
+        grid-area: tuition;
+        justify-self: end;
+        white-space: nowrap;
+        height: 36px;
+        font-size: 12px;
+        padding: 0 10px;
+    }
+
+    .cd-controls > .cd-date {
+        grid-area: date;
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cd-date-input {
+        min-width: 0;
+        width: 100%;
     }
 }
 

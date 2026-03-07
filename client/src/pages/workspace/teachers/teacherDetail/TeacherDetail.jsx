@@ -304,9 +304,9 @@ export default function TeacherDetail() {
                     Back
                 </button>
 
-                <div className="td-title" title={teacherName}>
+                {/* <div className="td-title" title={teacherName}>
                     {teacherName}
-                </div>
+                </div> */}
 
                 {canDeleteTeacher && (
                     <button
