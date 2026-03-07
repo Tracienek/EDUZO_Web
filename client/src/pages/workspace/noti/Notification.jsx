@@ -98,13 +98,12 @@ export default function NotificationsPage() {
             try {
                 await apiUtils.get(`/classes/${n.classId}`);
 
-                //  optional: jump to tuition area if it's a tuition due notification
                 const q = n.title === "Tuition due" ? "?tab=tuition" : "";
                 navigate(`/workspace/classes/${n.classId}${q}`);
             } catch (err) {
                 alert(
                     err?.response?.data?.message ||
-                        "Lớp đã bị xóa hoặc không tồn tại.",
+                        "The class is not found or has been deleted.",
                 );
             }
         }

@@ -18,7 +18,7 @@
     display: flex;
     gap: 14px;
     align-items: flex-start;
-    margin-bottom: 18px;
+    /* margin-bottom: 18px; */
 }
 
 .sp-back {
@@ -79,6 +79,7 @@
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     gap: 16px;
+    margin-top: 14px;
 }
 
 .sp-col {
@@ -349,12 +350,26 @@
     }
 
     .sp-header {
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
         gap: 10px;
     }
 
     .sp-back {
-        width: 100%;
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .sp-titleBlock {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sp-title {
+        font-size: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .sp-row {

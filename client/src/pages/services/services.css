@@ -1,17 +1,17 @@
 /* Services page only */
-.sp-page {
+.srp-page {
     background: var(--bg);
     color: var(--text-color-dark);
 }
 
 /* ---------- Container ---------- */
-.sp-container {
+.srp-container {
     width: min(1100px, 92%);
     margin: 0 auto;
 }
 
 /* ---------- Hero ---------- */
-.sp-hero {
+.srp-hero {
     background: linear-gradient(
         180deg,
         var(--light-purple),
@@ -23,12 +23,12 @@
     overflow: hidden;
 }
 
-.sp-hero-inner {
+.srp-hero-inner {
     text-align: center;
     padding-top: 38px;
 }
 
-.sp-kicker {
+.srp-kicker {
     font-family: cursive;
     font-size: 36px;
     font-weight: 700;
@@ -37,20 +37,20 @@
     color: var(--primary-color);
 }
 
-.sp-kicker-center {
+.srp-kicker-center {
     text-align: center;
     margin-bottom: 10px;
 }
 
-.sp-hero-title {
+.srp-hero-title {
     font-size: clamp(30px, 4vw, 44px);
     font-weight: 900;
-    letter-spacing: -0.02em;
+    letter-srpacing: -0.02em;
     line-height: 1.12;
     margin: 0 0 24px;
 }
 
-.sp-hero-desc {
+.srp-hero-desc {
     width: min(820px, 92%);
     margin: 0 auto;
     font-size: 13px;
@@ -58,16 +58,16 @@
     color: #000;
 }
 
-.sp-hero-actions {
+.srp-hero-actions {
     margin-top: 24px;
-    display: flex;
+    disrplay: flex;
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.sp-btn {
-    display: inline-flex;
+.srp-btn {
+    disrplay: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 12px 18px;
@@ -82,7 +82,7 @@
         box-shadow 180ms ease;
 }
 
-.sp-btn-primary {
+.srp-btn-primary {
     color: #000;
     background: linear-gradient(
         90deg,
@@ -91,13 +91,13 @@
     );
 }
 
-.sp-btn-ghost {
+.srp-btn-ghost {
     background: rgba(255, 255, 255, 0.25);
     color: #000;
     border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
-.sp-btn:hover {
+.srp-btn:hover {
     transform: translateY(-3px) scale(1);
     background: linear-gradient(
         90deg,
@@ -106,29 +106,29 @@
     );
 }
 
-.sp-btn-ghost:hover {
+.srp-btn-ghost:hover {
     background: var(--purple-bg);
     border: 1px solid var(--primary-color);
 }
 
 /* ---------- Section ---------- */
-.sp-section {
+.srp-section {
     padding: 64px 0;
 }
 
-.sp-section-title {
+.srp-section-title {
     text-align: center;
     font-size: clamp(22px, 3vw, 34px);
     font-weight: 900;
-    letter-spacing: -0.02em;
+    letter-srpacing: -0.02em;
     margin: 0;
 }
 
-.sp-accent {
+.srp-accent {
     color: var(--primary-color);
 }
 
-.sp-section-subtitle {
+.srp-section-subtitle {
     margin: 14px auto 0;
     width: min(820px, 92%);
     text-align: center;
@@ -138,14 +138,14 @@
 }
 
 /* ---------- Grid cards ---------- */
-.sp-grid {
+.srp-grid {
     margin-top: 28px;
-    display: grid;
+    disrplay: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
 
-.sp-card {
+.srp-card {
     border-radius: 10px;
     border: 1px solid var(--border-color);
     background: linear-gradient(
@@ -155,7 +155,7 @@
     );
     padding: 18px 14px;
     min-height: 110px;
-    display: grid;
+    disrplay: grid;
     place-items: center;
     text-align: center;
     transition:
@@ -163,16 +163,16 @@
         box-shadow 180ms ease;
 }
 
-.sp-card-icon {
+.srp-card-icon {
     width: 36px;
     height: 36px;
-    display: grid;
+    disrplay: grid;
     place-items: center;
     margin: 0 auto 10px;
     font-size: 18px;
 }
 
-.sp-card-title {
+.srp-card-title {
     margin: 0;
     font-weight: 800;
     font-size: 13px;
@@ -180,15 +180,15 @@
     line-height: 1.4;
 }
 
-.sp-grid-student {
+.srp-grid-student {
     margin-top: 28px;
-    display: grid;
+    disrplay: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
 /* ---------- Mocks ---------- */
-.sp-mock {
+.srp-mock {
     margin-top: 28px;
     border-radius: 10px;
     border: 2px solid var(--border);
@@ -196,27 +196,27 @@
     overflow: hidden;
 }
 
-.sp-mock-dashboard {
+.srp-mock-dashboard {
     border-radius: 10px;
 }
 
 /* ---------- Rating row ---------- */
-.sp-rating-row {
+.srp-rating-row {
     margin-top: 28px;
-    display: grid;
+    disrplay: grid;
     grid-template-columns: 2fr 1fr;
     gap: 18px;
     align-items: start;
 }
 
-.sp-mock {
+.srp-mock {
     margin-top: 40px;
-    display: flex;
+    disrplay: flex;
     justify-content: center;
     align-items: center;
 }
 
-.sp-mock-img {
+.srp-mock-img {
     width: 100%;
     max-width: 900px;
     border-radius: 16px;
@@ -224,34 +224,34 @@
     object-fit: cover;
 }
 
-.sp-rating-row {
+.srp-rating-row {
     margin-top: 40px;
-    display: flex;
+    disrplay: flex;
     justify-content: center;
 }
 
-.sp-rating-row img {
+.srp-rating-row img {
     width: 100%;
     max-width: 700px;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- Resrponsive ---------- */
 @media (max-width: 900px) {
-    .sp-grid {
+    .srp-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    .sp-rating-row {
+    .srp-rating-row {
         grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 640px) {
-    .sp-grid {
+    .srp-grid {
         grid-template-columns: 1fr;
     }
-    .sp-hero {
+    .srp-hero {
         border-bottom-left-radius: 44px;
         border-bottom-right-radius: 44px;
         padding: 26px 0 34px;

@@ -53,28 +53,28 @@ const STUDENT_FEATURES = [
 
 export default function ServicesPage() {
     return (
-        <div className="sp-page">
+        <div className="srp-page">
             {/* HERO */}
-            <section className="sp-hero">
-                <div className="sp-container">
-                    <div className="sp-hero-inner">
-                        <p className="sp-kicker">For Teachers</p>
+            <section className="srp-hero">
+                <div className="srp-container">
+                    <div className="srp-hero-inner">
+                        <p className="srp-kicker">For Teachers</p>
 
-                        <h1 className="sp-hero-title">
+                        <h1 className="srp-hero-title">
                             Manage Your Classes with <br />
                             Confidence
                         </h1>
 
-                        <p className="sp-hero-desc">
+                        <p className="srp-hero-desc">
                             EDUZO helps teachers manage classes efficiently
                             while giving students a simple, friendly way to
                             share feedback and stay connected with their
                             learning journey.
                         </p>
 
-                        <div className="sp-hero-actions">
+                        <div className="srp-hero-actions">
                             <Link
-                                className="sp-btn sp-btn-primary"
+                                className="srp-btn srp-btn-primary"
                                 to="/auth/signIp"
                             >
                                 Start free trial
@@ -85,80 +85,82 @@ export default function ServicesPage() {
             </section>
 
             {/* TEACHER FEATURES */}
-            <section className="sp-section">
-                <div className="sp-container">
-                    <h2 className="sp-section-title">
+            <section className="srp-section">
+                <div className="srp-container">
+                    <h2 className="srp-section-title">
                         Everything You Need in One Platform
                     </h2>
-                    <p className="sp-section-subtitle">
+                    <p className="srp-section-subtitle">
                         Built for simplicity and efficiency, EDUZO reduces
                         administrative complexity while improving communication.
                     </p>
 
-                    <div className="sp-grid">
+                    <div className="srp-grid">
                         {TEACHER_FEATURES.map((f) => (
-                            <div className="sp-card" key={f.title}>
+                            <div className="srp-card" key={f.title}>
                                 <div
-                                    className="sp-card-icon"
+                                    className="srp-card-icon"
                                     aria-hidden="true"
                                 >
                                     <i className={f.icon}></i>
                                 </div>
-                                <p className="sp-card-title">{f.title}</p>
+                                <p className="srp-card-title">{f.title}</p>
                             </div>
                         ))}
                     </div>
 
                     {/* dashboard mock */}
                     <div
-                        className="sp-mock sp-mock-dashboard"
+                        className="srp-mock srp-mock-dashboard"
                         aria-label="Dashboard preview"
                     >
                         <img
                             src={img3}
                             alt="Dashboard preview"
-                            className="sp-mock-img"
+                            className="srp-mock-img"
                         />
                     </div>
                 </div>
             </section>
 
             {/* STUDENTS */}
-            <section className="sp-section">
-                <div className="sp-container">
-                    <p className="sp-kicker sp-kicker-center">For Students</p>
+            <section className="srp-section">
+                <div className="srp-container">
+                    <p className="srp-kicker srp-kicker-center">For Students</p>
 
-                    <h2 className="sp-section-title">
+                    <h2 className="srp-section-title">
                         Share Your Voice,{" "}
-                        <span className="sp-accent">Shape Your Education</span>
+                        <srpan className="srp-accent">
+                            Shape Your Education
+                        </srpan>
                     </h2>
 
-                    <p className="sp-section-subtitle">
+                    <p className="srp-section-subtitle">
                         EDUZO makes it easy and comfortable for students to
                         provide meaningful feedback that helps improve their
                         learning experience.
                     </p>
 
-                    <div className="sp-grid-student">
+                    <div className="srp-grid-student">
                         {STUDENT_FEATURES.map((f) => (
-                            <div className="sp-card" key={f.title}>
+                            <div className="srp-card" key={f.title}>
                                 <div
-                                    className="sp-card-icon"
+                                    className="srp-card-icon"
                                     aria-hidden="true"
                                 >
                                     <i className={f.icon}></i>
                                 </div>
-                                <p className="sp-card-title">{f.title}</p>
+                                <p className="srp-card-title">{f.title}</p>
                             </div>
                         ))}
                     </div>
 
                     {/* rating mocks */}
-                    <div className="sp-rating-row">
+                    <div className="srp-rating-row">
                         <img
                             src={img5}
                             alt="Student rating preview"
-                            className="sp-mock-img"
+                            className="srp-mock-img"
                         />
                     </div>
                 </div>
