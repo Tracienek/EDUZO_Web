@@ -13,7 +13,7 @@
 /* Modal card */
 .cm-modal {
     width: min(400px, 92vw);
-    max-height: calc(100vh - 36px);
+    max-height: calc(100dvh - 36px);
     overflow-y: auto;
     background: #ffffff;
     border-radius: 14px;
