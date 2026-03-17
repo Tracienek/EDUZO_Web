@@ -1,3 +1,5 @@
+// src/models/Class.js
+
 const mongoose = require("mongoose");
 
 const ScheduleSlotSchema = new mongoose.Schema(
@@ -38,8 +40,8 @@ const ClassSchema = new mongoose.Schema(
 
         heldCount: { type: Number, default: 0, min: 0 },
 
-        durationMinutes: parsedDuration,
-        totalSessions: Math.max(1, parsedTotalSessions),
+        durationMinutes: { type: Number, default: 0, min: 0 },
+        totalSessions: { type: Number, default: 1, min: 1 },
 
         tuitionMilestoneNotifiedAt: { type: Date, default: null },
         tuitionEmailSentAt: { type: Date, default: null },

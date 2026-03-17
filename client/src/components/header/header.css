@@ -10,7 +10,7 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -18,7 +18,7 @@
 
 /* ---------- Nav Layout ---------- */
 .lp-nav {
-    height: 64px;
+    min-height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,17 +39,18 @@
     width: 50px;
     height: 50px;
     border-radius: 10px;
-    display: grid;
-    place-items: center;
+    display: block;
+    object-fit: cover;
 }
 
 .lp-brand-text {
     font-size: 22px;
     letter-spacing: 2.5px;
     color: var(--text-color-dark);
+    transition: color 0.25s ease;
 }
 
-.lp-brand-text:hover {
+.lp-brand:hover .lp-brand-text {
     color: var(--tertiary-color);
 }
 
@@ -60,12 +61,12 @@
     gap: 6px;
     flex: 1 1 auto;
     justify-content: center;
-    min-width: 0; /* REQUIRED for scroll */
+    min-width: 0;
 }
 
 .lp-links {
     position: relative;
-    padding: 6px 30px;
+    padding: 6px 18px;
     font-size: 16px;
     text-decoration: none;
     color: var(--text-color-dark);
@@ -73,7 +74,8 @@
     white-space: nowrap;
     transition:
         color 0.25s ease,
-        transform 0.25s ease;
+        transform 0.25s ease,
+        background-color 0.25s ease;
 }
 
 .lp-links::after {
@@ -99,8 +101,14 @@
     transform: translateY(-2px);
 }
 
-.lp-links:hover::after {
+.lp-links:hover::after,
+.lp-links.active::after {
     opacity: 1;
+}
+
+.lp-links.active {
+    color: var(--hover-btn);
+    font-weight: 700;
 }
 
 /* ---------- Right Actions ---------- */
@@ -126,6 +134,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 .lp-action-btn:hover {
@@ -138,10 +151,18 @@
     color: #ffffff;
 }
 
+/* ---------- Focus Accessibility ---------- */
+.lp-links:focus-visible,
+.lp-action-btn:focus-visible,
+.lp-brand:focus-visible {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 3px;
+}
+
 /* ---------- Tablet / iPad ---------- */
 @media (max-width: 1024px) {
     .lp-nav {
-        height: 60px;
+        min-height: 60px;
     }
 
     .lp-brand-text {
@@ -154,7 +175,6 @@
         height: 44px;
     }
 
-    /* Scroll middle nav instead of wrapping */
     .lp-links-wrap {
         justify-content: flex-start;
         overflow-x: auto;
@@ -168,7 +188,7 @@
     }
 
     .lp-links {
-        padding: 6px 14px;
+        padding: 6px 12px;
         font-size: 14px;
     }
 
@@ -181,7 +201,7 @@
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
     .lp-nav {
-        height: 56px;
+        min-height: 56px;
         gap: 10px;
     }
 
@@ -213,8 +233,11 @@
 
 /* ---------- Very Small Phones ---------- */
 @media (max-width: 420px) {
-    /* Hide "Sign in" to keep CTA clean */
     .lp-actions .lp-links {
+        display: none;
+    }
+
+    .lp-brand-text {
         display: none;
     }
 }

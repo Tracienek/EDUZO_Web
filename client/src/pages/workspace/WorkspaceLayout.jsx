@@ -85,27 +85,29 @@ export default function WorkspaceLayout() {
                 </NavLink>
             </li>
 
-            <li>
-                <NavLink
-                    to="/workspace/calendar"
-                    className={navClass}
-                    onClick={onItemClick}
-                >
-                    <span className="workspace-nav-icon">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="20"
-                            viewBox="0 -960 960 960"
-                            width="20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h80v-80h80v80h240v-80h80v80h80q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Z" />
-                        </svg>
-                    </span>
-                    <span className="workspace-nav-text">Calendar</span>
-                </NavLink>
-            </li>
+            {!isTeacher && (
+                <li>
+                    <NavLink
+                        to="/workspace/calendar"
+                        className={navClass}
+                        onClick={onItemClick}
+                    >
+                        <span className="workspace-nav-icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="20"
+                                viewBox="0 -960 960 960"
+                                width="20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                            >
+                                <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h80v-80h80v80h240v-80h80v80h80q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Z" />
+                            </svg>
+                        </span>
+                        <span className="workspace-nav-text">Calendar</span>
+                    </NavLink>
+                </li>
+            )}
 
             {!isTeacher && (
                 <li>
