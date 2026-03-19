@@ -274,7 +274,7 @@ export default function WorkspaceTopBar() {
             </div>
 
             {canShowClassesButton && (
-                <>
+                <div className="workspace-topbar-mid">
                     <button
                         className="workspace-topbar-primary"
                         type="button"
@@ -291,7 +291,7 @@ export default function WorkspaceTopBar() {
                             navigate(`/workspace/classes/${newClass._id}`);
                         }}
                     />
-                </>
+                </div>
             )}
 
             <div className="workspace-topbar-actions">

@@ -238,21 +238,21 @@
   },
 
   "fullAttendance": {
-    "loading": "Đang tải...",
-    "classNotFound": "Không tìm thấy lớp học",
-    "hw": "BT",
+    "loading": "Loading...",
+    "classNotFound": "Class not found",
+    "hw": "HW",
     "dash": "—",
-    "back": "Quay lại",
-    "title": "Điểm danh đầy đủ —",
-    "class": "Lớp học",
-    "month": "Tháng",
+    "back": "Back",
+    "title": "Full Attendance —",
+    "class": "Class",
+    "month": "Month",
     "datePlaceholder": "dd/mm/yyyy",
-    "pickDateTitle": "Chọn ngày bất kỳ trong tháng",
-    "openDatePicker": "Mở bộ chọn ngày",
-    "tip": "Mẹo: Chế độ xem này chỉ hiển thị các ngày học trong tháng đã chọn (dựa trên lịch học). Chỉ đọc.",
-    "no": "STT",
-    "name": "Tên",
-    "noStudents": "Không có học sinh"
+    "pickDateTitle": "Select any date in the month",
+    "openDatePicker": "Open date picker",
+    "tip": "Tip: This view only shows school days in the selected month (based on the school calendar). Read-only.",
+    "no": "No",
+    "name": "Name",
+    "noStudents": "No students"
   },
 
   "calendar": {
