@@ -12,6 +12,10 @@ function getBrevoEnv() {
 async function sendMail({ to, subject, html, text }) {
     const { apiKey, fromEmail, fromName } = getBrevoEnv();
 
+    console.log("API KEY", apiKey);
+    console.log("FROM EMAIL", fromEmail);
+    console.log("NAME", fromName);
+
     const payload = {
         sender: { name: fromName, email: fromEmail },
         to: Array.isArray(to) ? to.map((e) => ({ email: e })) : [{ email: to }],

@@ -1,15 +1,7 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
-import SibApiV3Sdk from "sib-api-v3-sdk";
-
-import {
-    otpTemplate,
-    announcementTemplate,
-    announcementTemplateType2,
-    commissionTemplate,
-    reportTemplate,
-} from "../utils/templateEmail.util.js";
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 /* =========================
    ENV VALIDATION
@@ -43,6 +35,7 @@ const formatDate = (d = new Date()) =>
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
+        day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
     }).format(d);
@@ -72,7 +65,7 @@ async function sendEmail({ to, subject, html }) {
         logOk("Email sent via Brevo API", {
             to,
             subject,
-            messageId: res?.messageId,
+            messageId: res && res.messageId,
         });
 
         return res;
@@ -80,19 +73,18 @@ async function sendEmail({ to, subject, html }) {
         logErr("Brevo API email error", {
             to,
             subject,
-            message: error?.message,
-            body: error?.response?.body,
+            message: error && error.message,
+            body: error && error.response && error.response.body,
         });
         throw error;
     }
 }
 
 /* =========================
-   PUBLIC API (UNCHANGED)
+   PUBLIC API
 ========================= */
 
-export async function sendOtpEmail(to, subject, message, verificationCode) {
-    const html = otpTemplate(localPart(to), message, verificationCode);
+async function sendHtml(to, subject, html) {
     return sendEmail({
         to,
         subject: withTimestamp(subject),
@@ -100,79 +92,6 @@ export async function sendOtpEmail(to, subject, message, verificationCode) {
     });
 }
 
-export async function sendAnnouncementEmail(
-    to,
-    subject,
-    subSubject,
-    message,
-    orderId,
-) {
-    const html = announcementTemplate(subSubject, message, orderId);
-    return sendEmail({
-        to,
-        subject: withTimestamp(subject),
-        html,
-    });
-}
-
-export async function sendAnnouncementEmailType2(
-    to,
-    subject,
-    subSubject,
-    message,
-    url,
-) {
-    const html = announcementTemplateType2(subSubject, message, url);
-    return sendEmail({
-        to,
-        subject: withTimestamp(subject),
-        html,
-    });
-}
-
-export async function sendReportEmail(
-    to,
-    subject,
-    fullName,
-    subSubject,
-    reason,
-) {
-    const html = reportTemplate(fullName, subSubject, reason);
-    return sendEmail({
-        to,
-        subject: withTimestamp(subject),
-        html,
-    });
-}
-
-export async function sendCommissionEmail(
-    to,
-    user,
-    subject,
-    subSubject,
-    message,
-    orderCode,
-    price,
-) {
-    const html = commissionTemplate(
-        user,
-        message,
-        subSubject,
-        orderCode,
-        price,
-    );
-
-    return sendEmail({
-        to,
-        subject: withTimestamp(subject),
-        html,
-    });
-}
-
-export async function sendHtml(to, subject, html) {
-    return sendEmail({
-        to,
-        subject: withTimestamp(subject),
-        html,
-    });
-}
+module.exports = {
+    sendHtml,
+};

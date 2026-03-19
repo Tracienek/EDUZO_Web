@@ -7,6 +7,7 @@ const ClassSession = require("../models/ClassSession");
 const Notification = require("../models/Notification");
 const { sendMail } = require("../utils/mailer");
 const User = require("../models/User");
+const { sendHtml } = require("../config/brevo.config.js");
 
 const getMyId = (req) => req.user?.userId || req.user?._id;
 
@@ -632,7 +633,17 @@ exports.sendTuitionEmails = async (req, res) => {
         let sent = 0;
         for (const to of studentEmails) {
             try {
-                await sendMail({ to, subject, text });
+                await sendHtml(
+                    to,
+                    subject,
+                    `
+                        <p>Hello,</p>
+                        <p>Your class "<b>${cls.name || "Class"}</b>" has completed ${threshold} sessions.</p>
+                        <p>Please complete the tuition payment.</p>
+                        <br/>
+                        <p>Thank you.</p>
+                    `,
+                );
                 sent += 1;
             } catch (e) {
                 console.error("Send tuition mail failed:", to, e.message);
