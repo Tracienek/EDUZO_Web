@@ -2,33 +2,44 @@ import "./header.css";
 import { Link, NavLink } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import logo from "../../assets/images/logo.png";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
+    const { t } = useTranslation();
+    const i18n = useTranslation().i18n;
+
     return (
         <header className="lp-header">
             <div className="lp-container">
                 <div className="lp-nav">
-                    <Link to="/" className="lp-brand" aria-label="Eduzo home">
+                    <Link
+                        to="/"
+                        className="lp-brand"
+                        aria-label={t("header.homeAria")}
+                    >
                         <img
                             src={logo}
-                            alt="Eduzo logo"
+                            alt={t("header.logoAlt")}
                             className="lp-brand-badge"
                         />
                         <span className="lp-brand-text">EDUZO</span>
                     </Link>
 
-                    <nav className="lp-links-wrap" aria-label="Main navigation">
+                    <nav
+                        className="lp-links-wrap"
+                        aria-label={t("header.navAria")}
+                    >
                         <NavLink
                             to="/"
                             className={({ isActive }) =>
                                 `lp-links ${isActive ? "active" : ""}`
                             }
                         >
-                            Home
+                            {t("header.home")}
                         </NavLink>
 
                         <HashLink smooth to="/#about" className="lp-links">
-                            About us
+                            {t("header.about")}
                         </HashLink>
 
                         <NavLink
@@ -37,7 +48,7 @@ const Header = () => {
                                 `lp-links ${isActive ? "active" : ""}`
                             }
                         >
-                            Services
+                            {t("header.services")}
                         </NavLink>
                     </nav>
 
@@ -48,12 +59,41 @@ const Header = () => {
                                 `lp-links ${isActive ? "active" : ""}`
                             }
                         >
-                            Sign in
+                            {t("header.signIn")}
                         </NavLink>
 
                         <Link className="lp-action-btn" to="/auth/signUp">
-                            Start free trial
+                            {t("header.startTrial")}
                         </Link>
+                    </div>
+
+                    <div
+                        className="lp-lang-switch"
+                        aria-label="Language switcher"
+                    >
+                        <button
+                            type="button"
+                            className={`lp-lang-btn ${i18n.language === "vi" ? "active" : ""}`}
+                            onClick={() => i18n.changeLanguage("vi")}
+                        >
+                            VI
+                        </button>
+
+                        <button
+                            type="button"
+                            className={`lp-lang-btn ${i18n.language === "en" ? "active" : ""}`}
+                            onClick={() => i18n.changeLanguage("en")}
+                        >
+                            EN
+                        </button>
+
+                        <button
+                            type="button"
+                            className={`lp-lang-btn ${i18n.language === "zh" ? "active" : ""}`}
+                            onClick={() => i18n.changeLanguage("zh")}
+                        >
+                            中文
+                        </button>
                     </div>
                 </div>
             </div>

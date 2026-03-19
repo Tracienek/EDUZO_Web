@@ -1,8 +1,11 @@
 import "./footer.css";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+    const { t } = useTranslation();
+
     return (
         <footer className="lp-footer">
             <div className="lp-container">
@@ -11,7 +14,7 @@ const Footer = () => {
                     <div className="lp-footer-brand">
                         <img
                             src={logo}
-                            alt="Eduzo logo"
+                            alt={t("footer.logoAlt")}
                             className="lp-footer-logo"
                         />
                         <div className="lp-footer-socials">
@@ -29,29 +32,28 @@ const Footer = () => {
 
                     <div className="lp-footer-cols">
                         <div className="lp-footer-col">
-                            <h4>Legal</h4>
-                            <p>Lorem ipsum</p>
+                            <h4>{t("footer.legal")}</h4>
+                            <p>{t("footer.legalDesc")}</p>
                         </div>
                         <div className="lp-footer-col">
-                            <h4>Developers</h4>
-                            <p>Pham Tran Bao Tran</p>
+                            <h4>{t("footer.developers")}</h4>
+                            <p>{t("footer.devName")}</p>
                         </div>
                         <div className="lp-footer-col">
-                            <h4>Help & support</h4>
-                            <p>Lorem ipsum</p>
+                            <h4>{t("footer.help")}</h4>
+                            <p>{t("footer.helpDesc")}</p>
                         </div>
                         <div className="lp-footer-col">
-                            <h4>Our address:</h4>
-                            <p>Lorem ipsum</p>
+                            <h4>{t("footer.address")}</h4>
+                            <p>{t("footer.addressDesc")}</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="lp-copyright">
-                    Copyright © 2025 EDUZO – All rights reserved.
-                </div>
+                <div className="lp-copyright">{t("footer.copyright")}</div>
             </div>
         </footer>
     );
 };
+
 export default Footer;

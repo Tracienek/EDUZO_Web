@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../../utils/newRequest";
 import "./StudentProfilePage.css";
 
@@ -12,6 +13,7 @@ const fmtDateTime = (iso) => {
 export default function StudentProfilePage() {
     const { studentId } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [loading, setLoading] = useState(true);
     const [student, setStudent] = useState(null);
@@ -50,9 +52,8 @@ export default function StudentProfilePage() {
         const text = content.trim();
         if (!text) return;
 
-        // BE của bạn require classId (required true ở ClassNote)
         if (!klass?._id) {
-            alert("Student is not in a class yet. Cannot create note.");
+            alert(t("studentProfile.notInClassCannotNote"));
             return;
         }
 
@@ -66,7 +67,10 @@ export default function StudentProfilePage() {
             setContent("");
             await loadAll();
         } catch (err) {
-            alert(err?.response?.data?.message || "Failed to add note");
+            alert(
+                err?.response?.data?.message ||
+                    t("studentProfile.failedToAddNote"),
+            );
         } finally {
             setSubmitting(false);
         }
@@ -89,33 +93,35 @@ export default function StudentProfilePage() {
         return (
             <div className="sp-wrap">
                 <div className="sp-empty">
-                    <div className="sp-empty-title">Student not found</div>
+                    <div className="sp-empty-title">
+                        {t("studentProfile.notFound")}
+                    </div>
                     <button
                         className="sp-btn"
                         onClick={() => navigate(-1)}
                         type="button"
                     >
-                        Go back
+                        {t("studentProfile.goBack")}
                     </button>
                 </div>
             </div>
         );
     }
 
-    const name = student.fullName || student.name || "Student";
+    const name =
+        student.fullName || student.name || t("studentProfile.defaultName");
     const createdAt = fmtDateTime(student.createdAt);
-    const className = klass?.name || "—";
+    const className = klass?.name || t("studentProfile.emptyValue");
 
     return (
         <div className="sp-wrap">
-            {/* Header */}
             <div className="sp-header">
                 <button
                     className="sp-back"
                     type="button"
                     onClick={() => navigate(-1)}
                 >
-                    Back
+                    {t("studentProfile.back")}
                 </button>
 
                 <div className="sp-titleBlock">
@@ -124,18 +130,23 @@ export default function StudentProfilePage() {
             </div>
 
             <div className="sp-grid">
-                {/* Left: profile + take note */}
                 <div className="sp-col">
                     <div className="sp-card">
-                        <div className="sp-cardTitle">Profile</div>
+                        <div className="sp-cardTitle">
+                            {t("studentProfile.profile")}
+                        </div>
 
                         <div className="sp-row">
-                            <div className="sp-label">Created</div>
+                            <div className="sp-label">
+                                {t("studentProfile.created")}
+                            </div>
                             <div className="sp-value">{createdAt}</div>
                         </div>
 
                         <div className="sp-row">
-                            <div className="sp-label">Current class</div>
+                            <div className="sp-label">
+                                {t("studentProfile.currentClass")}
+                            </div>
                             <div className="sp-value">
                                 {className}
                                 {klass?._id && (
@@ -147,9 +158,9 @@ export default function StudentProfilePage() {
                                                 `/workspace/classes/${klass._id}`,
                                             )
                                         }
-                                        title="Open class"
+                                        title={t("studentProfile.openClass")}
                                     >
-                                        View
+                                        {t("studentProfile.view")}
                                     </button>
                                 )}
                             </div>
@@ -157,23 +168,23 @@ export default function StudentProfilePage() {
 
                         {!klass?._id && (
                             <div className="sp-hint">
-                                This student is not assigned to any class yet.
-                                Notes require a class.
+                                {t("studentProfile.noClassHint")}
                             </div>
                         )}
                     </div>
 
                     <div className="sp-card">
-                        <div className="sp-cardTitle">Take note</div>
+                        <div className="sp-cardTitle">
+                            {t("studentProfile.takeNote")}
+                        </div>
 
                         <textarea
                             className="sp-textarea"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            placeholder="Write a short note about this student..."
+                            placeholder={t("studentProfile.notePlaceholder")}
                             rows={4}
                             onKeyDown={(e) => {
-                                // Ctrl/Cmd + Enter to submit
                                 if (
                                     (e.ctrlKey || e.metaKey) &&
                                     e.key === "Enter"
@@ -191,28 +202,28 @@ export default function StudentProfilePage() {
                                 onClick={createNote}
                                 disabled={!canAddNote}
                             >
-                                {submitting ? "Adding..." : "Add note"}
+                                {submitting
+                                    ? t("studentProfile.adding")
+                                    : t("studentProfile.addNote")}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Right: notes list */}
                 <div className="sp-col">
                     <div className="sp-card">
                         <div className="sp-cardTitle">
-                            Notes{" "}
+                            {t("studentProfile.notes")}{" "}
                             <span className="sp-pill">{notes.length}</span>
                         </div>
 
                         {notes.length === 0 ? (
                             <div className="sp-emptyNotes">
                                 <div className="sp-emptyNotes-title">
-                                    No notes yet
+                                    {t("studentProfile.noNotes")}
                                 </div>
                                 <div className="sp-emptyNotes-sub">
-                                    Add the first note to keep track of
-                                    progress, behaviour, or reminders.
+                                    {t("studentProfile.noNotesDesc")}
                                 </div>
                             </div>
                         ) : (

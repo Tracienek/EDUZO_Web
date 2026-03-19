@@ -1,5 +1,6 @@
 // src/pages/workspace/classes/createStudent
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../utils/newRequest";
 import "./CreateModal.css";
 
@@ -12,6 +13,8 @@ const unwrap = (res) => {
 };
 
 export default function CreateStudent({ open, onClose, classId, onCreated }) {
+    const { t } = useTranslation();
+
     const [form, setForm] = useState(DEFAULT_FORM);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -74,7 +77,6 @@ export default function CreateStudent({ open, onClose, classId, onCreated }) {
                     ? await createViaClassEndpoint(payload)
                     : await createViaStudentsEndpoint(payload);
             } catch (err1) {
-                // fallback route
                 if (classId) res = await createViaStudentsEndpoint(payload);
                 else throw err1;
             }
@@ -86,7 +88,7 @@ export default function CreateStudent({ open, onClose, classId, onCreated }) {
             setError(
                 err?.response?.data?.message ||
                     err?.message ||
-                    "Create student failed. Please try again.",
+                    t("createStudent.createFailed"),
             );
         } finally {
             setSubmitting(false);
@@ -107,19 +109,19 @@ export default function CreateStudent({ open, onClose, classId, onCreated }) {
                     className="cm-close"
                     type="button"
                     onClick={onClose}
-                    aria-label="Close"
+                    aria-label={t("createStudent.close")}
                 >
                     ×
                 </button>
 
-                <h3 className="cm-title">Create student</h3>
+                <h3 className="cm-title">{t("createStudent.title")}</h3>
 
                 <form className="cm-form" onSubmit={handleSubmit}>
                     <label className="cm-label">
-                        <span>Full Name</span>
+                        <span>{t("createStudent.fullName")}</span>
                         <input
                             className="cm-input"
-                            placeholder="e.g: John Doe"
+                            placeholder={t("createStudent.fullNamePlaceholder")}
                             value={form.fullName}
                             onChange={update("fullName")}
                             autoFocus
@@ -127,11 +129,11 @@ export default function CreateStudent({ open, onClose, classId, onCreated }) {
                     </label>
 
                     <label className="cm-label">
-                        <span>Email</span>
+                        <span>{t("createStudent.email")}</span>
                         <input
                             className="cm-input"
                             type="email"
-                            placeholder="e.g: john@email.com"
+                            placeholder={t("createStudent.emailPlaceholder")}
                             value={form.email}
                             onChange={update("email")}
                         />
@@ -146,7 +148,9 @@ export default function CreateStudent({ open, onClose, classId, onCreated }) {
                         type="submit"
                         disabled={!canSubmit || submitting}
                     >
-                        {submitting ? "Creating..." : "Create"}
+                        {submitting
+                            ? t("createStudent.creating")
+                            : t("createStudent.create")}
                     </button>
                 </form>
             </div>

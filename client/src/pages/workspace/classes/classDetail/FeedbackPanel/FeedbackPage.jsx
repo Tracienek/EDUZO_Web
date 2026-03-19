@@ -1,6 +1,7 @@
 // src/pages/feedback/FeedbackPage.jsx
 import { useEffect, useMemo, useState, useId } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../utils/newRequest";
 import "./FeedbackPage.css";
 
@@ -11,6 +12,7 @@ function clampRating(n) {
 }
 
 export default function FeedbackPage() {
+    const { t } = useTranslation();
     const { classId } = useParams();
     const cid = useMemo(() => String(classId || "").trim(), [classId]);
 
@@ -60,7 +62,8 @@ export default function FeedbackPage() {
                 setTeacherId(first ? String(first) : "");
             } catch (e) {
                 setError(
-                    e?.response?.data?.message || "Cannot load feedback page",
+                    e?.response?.data?.message ||
+                        t("feedbackPage.cannotLoadPage"),
                 );
             } finally {
                 if (alive) setPageLoading(false);
@@ -70,7 +73,7 @@ export default function FeedbackPage() {
         return () => {
             alive = false;
         };
-    }, [cid]);
+    }, [cid, t]);
 
     useEffect(() => {
         if (!showSuccessModal) return;
@@ -92,8 +95,8 @@ export default function FeedbackPage() {
         setError("");
         setShowSuccessModal(false);
 
-        if (!cid) return setError("Missing classId.");
-        if (!text) return setError("Please write your feedback.");
+        if (!cid) return setError(t("feedbackPage.missingClassId"));
+        if (!text) return setError(t("feedbackPage.writeFeedbackError"));
 
         try {
             setLoading(true);
@@ -127,7 +130,9 @@ export default function FeedbackPage() {
 
             setShowSuccessModal(true);
         } catch (e) {
-            setError(e?.response?.data?.message || "Submit failed.");
+            setError(
+                e?.response?.data?.message || t("feedbackPage.submitFailed"),
+            );
         } finally {
             setLoading(false);
         }
@@ -159,7 +164,7 @@ export default function FeedbackPage() {
                 <div className="fbp-stars-head">
                     <div className="fbp-stars-label">{label}</div>
                     <div className="fbp-stars-value" aria-live="polite">
-                        {v}/5
+                        {t("feedbackPage.outOfFive", { value: v })}
                     </div>
                 </div>
 
@@ -182,7 +187,10 @@ export default function FeedbackPage() {
                                 onClick={() => set(n)}
                                 role="radio"
                                 aria-checked={selected}
-                                aria-label={`${label} ${n}`}
+                                aria-label={t("feedbackPage.starAria", {
+                                    label,
+                                    value: n,
+                                })}
                             >
                                 ★
                             </button>
@@ -191,7 +199,7 @@ export default function FeedbackPage() {
                 </div>
 
                 <div id={`${groupId}-hint`} className="fbp-hint">
-                    Use arrow keys or press 1–5.
+                    {t("feedbackPage.starsHint")}
                 </div>
             </div>
         );
@@ -221,20 +229,28 @@ export default function FeedbackPage() {
                 <div className="fbp-card">
                     <header className="fbp-header">
                         <div>
-                            <h1 className="fbp-h1">Feedback</h1>
+                            <h1 className="fbp-h1">
+                                {t("feedbackPage.title")}
+                            </h1>
                             <p className="fbp-sub">
                                 {className ? (
                                     <>
-                                        Class: <b>{className}</b>
+                                        {t("feedbackPage.class")}:{" "}
+                                        <b>{className}</b>
                                     </>
                                 ) : (
-                                    "Class: —"
+                                    `${t("feedbackPage.class")}: —`
                                 )}
                             </p>
                         </div>
 
-                        <div className="fbp-chip" title="Class ID">
-                            <span className="fbp-chip-label">Class ID</span>
+                        <div
+                            className="fbp-chip"
+                            title={t("feedbackPage.classId")}
+                        >
+                            <span className="fbp-chip-label">
+                                {t("feedbackPage.classId")}
+                            </span>
                             <span className="fbp-chip-value">{cid || "—"}</span>
                         </div>
                     </header>
@@ -248,14 +264,14 @@ export default function FeedbackPage() {
 
                     <section className="fbp-section">
                         <div className="fbp-section-title">
-                            Student (optional)
+                            {t("feedbackPage.studentOptional")}
                         </div>
                         <div className="fbp-field">
                             <input
                                 className="fbp-input"
                                 value={studentName}
                                 onChange={(e) => setStudentName(e.target.value)}
-                                placeholder="Your name"
+                                placeholder={t("feedbackPage.yourName")}
                                 autoComplete="name"
                             />
                         </div>
@@ -263,41 +279,40 @@ export default function FeedbackPage() {
 
                     <section className="fbp-section">
                         <div className="fbp-section-title">
-                            1) Overall rating
+                            {t("feedbackPage.overallRatingTitle")}
                         </div>
                         <Stars
                             value={rating}
                             onChange={setRating}
-                            label="Overall rating"
+                            label={t("feedbackPage.overallRating")}
                         />
                     </section>
 
                     <section className="fbp-section">
                         <div className="fbp-section-title">
-                            2) Choose teacher
+                            {t("feedbackPage.chooseTeacherTitle")}
                         </div>
 
                         <div className="fbp-teachers" role="list">
                             {teachers.length === 0 ? (
                                 <div className="fbp-empty">
-                                    No teachers available. You can still submit
-                                    feedback for this class.
+                                    {t("feedbackPage.noTeachers")}
                                 </div>
                             ) : (
-                                teachers.map((t) => {
+                                teachers.map((tch) => {
                                     const active =
-                                        String(teacherId) === String(t.id);
+                                        String(teacherId) === String(tch.id);
                                     return (
                                         <button
-                                            key={t.id}
+                                            key={tch.id}
                                             type="button"
                                             className={`fbp-pill ${active ? "active" : ""}`}
                                             onClick={() =>
-                                                setTeacherId(String(t.id))
+                                                setTeacherId(String(tch.id))
                                             }
                                             aria-pressed={active}
                                         >
-                                            {t.name}
+                                            {tch.name}
                                         </button>
                                     );
                                 })
@@ -305,34 +320,39 @@ export default function FeedbackPage() {
                         </div>
 
                         <div className="fbp-hint">
-                            Selected:{" "}
+                            {t("feedbackPage.selected")}:{" "}
                             <b>
-                                {selectedTeacher?.name || "No teacher selected"}
+                                {selectedTeacher?.name ||
+                                    t("feedbackPage.noTeacherSelected")}
                             </b>
                         </div>
                     </section>
 
                     <section className="fbp-section">
-                        <div className="fbp-section-title">3) Understand</div>
+                        <div className="fbp-section-title">
+                            {t("feedbackPage.understandTitle")}
+                        </div>
                         <Stars
                             value={understand}
                             onChange={setUnderstand}
-                            label="Understand"
-                        />
-                    </section>
-
-                    <section className="fbp-section">
-                        <div className="fbp-section-title">4) Teaching way</div>
-                        <Stars
-                            value={teachingWay}
-                            onChange={setTeachingWay}
-                            label="Teaching way"
+                            label={t("feedbackPage.understand")}
                         />
                     </section>
 
                     <section className="fbp-section">
                         <div className="fbp-section-title">
-                            5) Write feedback
+                            {t("feedbackPage.teachingWayTitle")}
+                        </div>
+                        <Stars
+                            value={teachingWay}
+                            onChange={setTeachingWay}
+                            label={t("feedbackPage.teachingWay")}
+                        />
+                    </section>
+
+                    <section className="fbp-section">
+                        <div className="fbp-section-title">
+                            {t("feedbackPage.writeFeedbackTitle")}
                         </div>
                         <div className="fbp-field">
                             <textarea
@@ -340,12 +360,14 @@ export default function FeedbackPage() {
                                 rows={6}
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
-                                placeholder="Write your feedback here..."
+                                placeholder={t("feedbackPage.writePlaceholder")}
                             />
                             <div className="fbp-counter" aria-live="polite">
                                 {message.trim().length === 0
-                                    ? "Feedback is required."
-                                    : `${message.trim().length} characters`}
+                                    ? t("feedbackPage.feedbackRequired")
+                                    : t("feedbackPage.characters", {
+                                          count: message.trim().length,
+                                      })}
                             </div>
                         </div>
                     </section>
@@ -357,7 +379,9 @@ export default function FeedbackPage() {
                             onClick={submit}
                             disabled={disableSubmit}
                         >
-                            {loading ? "Sending..." : "Submit"}
+                            {loading
+                                ? t("feedbackPage.sending")
+                                : t("feedbackPage.submit")}
                         </button>
                     </div>
                 </div>
@@ -369,16 +393,18 @@ export default function FeedbackPage() {
                     onClick={() => setShowSuccessModal(false)}
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Feedback submitted successfully"
+                    aria-label={t("feedbackPage.successAria")}
                 >
                     <div
                         className="fbp-modal"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="fbp-modalIcon">✅</div>
-                        <h2 className="fbp-modalTitle">Thank you!</h2>
+                        <h2 className="fbp-modalTitle">
+                            {t("feedbackPage.thankYou")}
+                        </h2>
                         <p className="fbp-modalText">
-                            Your feedback has been submitted successfully.
+                            {t("feedbackPage.successMessage")}
                         </p>
 
                         <div className="fbp-modalActions">
@@ -387,7 +413,7 @@ export default function FeedbackPage() {
                                 className="fbp-btn"
                                 onClick={() => setShowSuccessModal(false)}
                             >
-                                Close
+                                {t("feedbackPage.close")}
                             </button>
                         </div>
                     </div>

@@ -1,9 +1,9 @@
-// src/pages/auth/SignUp.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiUtils, tokenStore } from "../../utils/newRequest";
 import { useAuth } from "../../context/auth/AuthContext";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { useTranslation } from "react-i18next";
 
 const unwrap = (res) => {
     const root = res?.data ?? res;
@@ -13,6 +13,7 @@ const unwrap = (res) => {
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function SignUp() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { loadUserMe } = useAuth();
 
@@ -49,20 +50,28 @@ export default function SignUp() {
         const errs = {};
         const email = inputs.email.trim().toLowerCase();
 
-        if (!inputs.fullName.trim())
-            errs.fullName = "Please enter your full name";
+        if (!inputs.fullName.trim()) {
+            errs.fullName = t("auth.signUp.errorFullNameRequired");
+        }
 
-        if (!email) errs.email = "Please enter your email";
-        else if (!isValidEmail(email)) errs.email = "Invalid email format";
+        if (!email) errs.email = t("auth.signUp.errorEmailRequired");
+        else if (!isValidEmail(email)) {
+            errs.email = t("auth.signUp.errorEmailInvalid");
+        }
 
-        if (!inputs.password) errs.password = "Please enter a password";
-        else if (inputs.password.length < 8)
-            errs.password = "Password must be at least 8 characters";
+        if (!inputs.password) {
+            errs.password = t("auth.signUp.errorPasswordRequired");
+        } else if (inputs.password.length < 8) {
+            errs.password = t("auth.signUp.errorPasswordMin");
+        }
 
-        if (!inputs.confirmPassword)
-            errs.confirmPassword = "Please confirm your password";
-        else if (inputs.confirmPassword !== inputs.password)
-            errs.confirmPassword = "Passwords do not match";
+        if (!inputs.confirmPassword) {
+            errs.confirmPassword = t(
+                "auth.signUp.errorConfirmPasswordRequired",
+            );
+        } else if (inputs.confirmPassword !== inputs.password) {
+            errs.confirmPassword = t("auth.signUp.errorPasswordMismatch");
+        }
 
         return errs;
     };
@@ -98,7 +107,7 @@ export default function SignUp() {
             const msg =
                 err?.response?.data?.message ||
                 err?.message ||
-                "Registration failed. Try again.";
+                t("auth.signUp.errorRegisterFailed");
 
             const errs = { email: msg };
             setErrors(errs);
@@ -110,13 +119,14 @@ export default function SignUp() {
 
     return (
         <>
-            <h2 className="auth-title">Sign Up</h2>
-            <p className="auth-subtitle">Create your center account</p>
+            <h2 className="auth-title">{t("auth.signUp.title")}</h2>
+            <p className="auth-subtitle">{t("auth.signUp.subtitle")}</p>
 
             <form className="auth-form" onSubmit={onSubmit}>
-                {/* FULL NAME */}
                 <div className="auth-field">
-                    <label className="auth-label">Full Name</label>
+                    <label className="auth-label">
+                        {t("auth.signUp.fullName")}
+                    </label>
                     <div className="auth-input-wrap">
                         <span className="auth-input-icon">
                             <i className="fa-solid fa-user" />
@@ -124,7 +134,7 @@ export default function SignUp() {
                         <input
                             type="text"
                             name="fullName"
-                            placeholder="Enter your full name"
+                            placeholder={t("auth.signUp.fullNamePlaceholder")}
                             value={inputs.fullName}
                             onChange={onChange}
                             className={`auth-input ${errors.fullName ? "error" : ""}`}
@@ -139,9 +149,10 @@ export default function SignUp() {
                     </p>
                 </div>
 
-                {/* EMAIL */}
                 <div className="auth-field">
-                    <label className="auth-label">Email</label>
+                    <label className="auth-label">
+                        {t("auth.signUp.email")}
+                    </label>
                     <div className="auth-input-wrap">
                         <span className="auth-input-icon">
                             <i className="fa-solid fa-envelope" />
@@ -149,7 +160,7 @@ export default function SignUp() {
                         <input
                             type="email"
                             name="email"
-                            placeholder="Enter your email"
+                            placeholder={t("auth.signUp.emailPlaceholder")}
                             value={inputs.email}
                             onChange={onChange}
                             className={`auth-input ${errors.email ? "error" : ""}`}
@@ -162,9 +173,10 @@ export default function SignUp() {
                     </p>
                 </div>
 
-                {/* PASSWORD */}
                 <div className="auth-field">
-                    <label className="auth-label">Password</label>
+                    <label className="auth-label">
+                        {t("auth.signUp.password")}
+                    </label>
                     <div className="auth-input-wrap">
                         <span className="auth-input-icon">
                             <i className="fa-solid fa-lock" />
@@ -172,7 +184,7 @@ export default function SignUp() {
                         <input
                             type={showPassword ? "text" : "password"}
                             name="password"
-                            placeholder="Enter your password"
+                            placeholder={t("auth.signUp.passwordPlaceholder")}
                             value={inputs.password}
                             onChange={onChange}
                             className={`auth-input ${errors.password ? "error" : ""}`}
@@ -183,7 +195,7 @@ export default function SignUp() {
                             type="button"
                             className="auth-eye-btn"
                             onClick={() => setShowPassword((v) => !v)}
-                            aria-label="Toggle password visibility"
+                            aria-label={t("auth.signUp.togglePassword")}
                             disabled={isLoading}
                         >
                             {showPassword ? (
@@ -200,9 +212,10 @@ export default function SignUp() {
                     </p>
                 </div>
 
-                {/* CONFIRM PASSWORD */}
                 <div className="auth-field">
-                    <label className="auth-label">Confirm Password</label>
+                    <label className="auth-label">
+                        {t("auth.signUp.confirmPassword")}
+                    </label>
                     <div className="auth-input-wrap">
                         <span className="auth-input-icon">
                             <i className="fa-solid fa-lock" />
@@ -210,7 +223,9 @@ export default function SignUp() {
                         <input
                             type={showPassword ? "text" : "password"}
                             name="confirmPassword"
-                            placeholder="Confirm your password"
+                            placeholder={t(
+                                "auth.signUp.confirmPasswordPlaceholder",
+                            )}
                             value={inputs.confirmPassword}
                             onChange={onChange}
                             className={`auth-input ${
@@ -223,7 +238,7 @@ export default function SignUp() {
                             type="button"
                             className="auth-eye-btn"
                             onClick={() => setShowPassword((v) => !v)}
-                            aria-label="Toggle password visibility"
+                            aria-label={t("auth.signUp.togglePassword")}
                             disabled={isLoading}
                         >
                             {showPassword ? (
@@ -234,20 +249,24 @@ export default function SignUp() {
                         </button>
                     </div>
                     <p
-                        className={`auth-error ${errors.confirmPassword ? "show" : ""}`}
+                        className={`auth-error ${
+                            errors.confirmPassword ? "show" : ""
+                        }`}
                     >
                         {errors.confirmPassword}
                     </p>
                 </div>
 
                 <button className="auth-btn" type="submit" disabled={isLoading}>
-                    {isLoading ? "Signing Up..." : "Sign Up"}
+                    {isLoading
+                        ? t("auth.signUp.signingUp")
+                        : t("auth.signUp.signUpBtn")}
                 </button>
 
                 <div className="auth-footer">
-                    <span>Already have an account? </span>
+                    <span>{t("auth.signUp.haveAccount")}</span>
                     <Link className="auth-link" to="/auth/signIn">
-                        Sign in
+                        {t("auth.signUp.signIn")}
                     </Link>
                 </div>
             </form>

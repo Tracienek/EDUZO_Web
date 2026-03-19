@@ -2,8 +2,11 @@ import "./auth.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPassword() {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -17,7 +20,7 @@ export default function ForgotPassword() {
 
         const trimmed = email.trim();
         if (!trimmed) {
-            setError("Please enter your email.");
+            setError(t("auth.forgot.errorEmpty"));
             return;
         }
 
@@ -25,15 +28,10 @@ export default function ForgotPassword() {
             setLoading(true);
             await sendPasswordResetEmail(auth, trimmed);
 
-            setSuccess(
-                "If an account exists for this email, a reset link has been sent. Please check your inbox.",
-            );
+            setSuccess(t("auth.forgot.success"));
             setEmail("");
         } catch (err) {
-            // không leak email tồn tại hay không
-            setSuccess(
-                "If an account exists for this email, a reset link has been sent. Please check your inbox.",
-            );
+            setSuccess(t("auth.forgot.success"));
         } finally {
             setLoading(false);
         }
@@ -41,10 +39,9 @@ export default function ForgotPassword() {
 
     return (
         <>
-            <h1 className="auth-title">Forgot Password</h1>
-            <p className="auth-subtitle">
-                Enter your email and we’ll send you a reset link.
-            </p>
+            <h1 className="auth-title">{t("auth.forgot.title")}</h1>
+
+            <p className="auth-subtitle">{t("auth.forgot.subtitle")}</p>
 
             {error ? (
                 <div className="auth-alert auth-alert--error" role="alert">
@@ -65,7 +62,9 @@ export default function ForgotPassword() {
             ) : null}
 
             <form className="auth-form" onSubmit={handleSubmit}>
-                <label className="auth-label">Email</label>
+                <label className="auth-label">
+                    {t("auth.forgot.emailLabel")}
+                </label>
 
                 <div className="auth-input-wrap">
                     <span className="auth-input-icon">
@@ -75,7 +74,7 @@ export default function ForgotPassword() {
                     <input
                         className="auth-input"
                         type="email"
-                        placeholder="name@example.com"
+                        placeholder={t("auth.forgot.emailPlaceholder")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         autoComplete="email"
@@ -84,14 +83,16 @@ export default function ForgotPassword() {
                 </div>
 
                 <button className="auth-btn" type="submit" disabled={loading}>
-                    {loading ? "Sending..." : "Send reset link"}
+                    {loading
+                        ? t("auth.forgot.sending")
+                        : t("auth.forgot.sendBtn")}
                 </button>
             </form>
 
             <div className="auth-footer">
-                <span>Remember your password?</span>{" "}
+                <span>{t("auth.forgot.remember")}</span>{" "}
                 <Link to="/auth/signIn" className="auth-link">
-                    Back to Sign in
+                    {t("auth.forgot.backToSignIn")}
                 </Link>
             </div>
         </>

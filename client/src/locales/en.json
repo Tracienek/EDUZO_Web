@@ -1,0 +1,767 @@
+{
+  "footer": {
+    "logoAlt": "Eduzo logo",
+    "legal": "Legal",
+    "legalDesc": "Lorem ipsum",
+    "developers": "Developers",
+    "devName": "Pham Tran Bao Tran",
+    "help": "Help & support",
+    "helpDesc": "Lorem ipsum",
+    "address": "Our address:",
+    "addressDesc": "Lorem ipsum",
+    "copyright": "Copyright © 2025 EDUZO – All rights reserved."
+  },
+
+    "workspaceTopBar": {
+    "create": "Create",
+    "createStaff": "Create Staff",
+    "searchPlaceholder": "Search students or classes...",
+    "searching": "Searching...",
+    "noResults": "No results",
+    "students": "Students",
+    "classes": "Classes",
+    "classLabel": "Class: {{name}}",
+    "classEmpty": "Class: —",
+    "folderLabel": "Folder: {{name}}",
+    "folderEmpty": "Folder: —",
+    "open": "Open",
+    "unnamedClass": "Unnamed class",
+    "classesButton": "+ Classes",
+    "user": "User",
+    "account": "Account",
+    "logout": "Logout"
+  },
+
+  "header": {
+    "homeAria": "Eduzo home",
+    "logoAlt": "Eduzo logo",
+    "navAria": "Main navigation",
+    "home": "Home",
+    "about": "About us",
+    "services": "Services",
+    "signIn": "Sign in",
+    "startTrial": "Start free trial"
+  },
+
+  "auth": {
+    "forgot": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email and we’ll send you a reset link.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@example.com",
+      "sendBtn": "Send reset link",
+      "sending": "Sending...",
+      "remember": "Remember your password?",
+      "backToSignIn": "Back to Sign in",
+      "errorEmpty": "Please enter your email.",
+      "success": "If an account exists for this email, a reset link has been sent. Please check your inbox."
+    },
+
+    "signIn": {
+      "title": "Sign In",
+      "subtitle": "Great to see you again",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "togglePassword": "Toggle password visibility",
+      "forgot": "Forgot your password?",
+      "signInBtn": "Sign In",
+      "signing": "Signing In...",
+      "newUser": "Are you new here?",
+      "createAccount": "Create a free account",
+
+      "errorEmailRequired": "Email is required",
+      "errorEmailInvalid": "Invalid email format",
+      "errorPasswordRequired": "Password is required",
+      "errorInvalidCredentials": "Invalid email or password"
+    },
+
+    "signUp": {
+      "title": "Sign Up",
+      "subtitle": "Create your center account",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "togglePassword": "Toggle password visibility",
+      "signUpBtn": "Sign Up",
+      "signingUp": "Signing Up...",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+
+      "errorFullNameRequired": "Please enter your full name",
+      "errorEmailRequired": "Please enter your email",
+      "errorEmailInvalid": "Invalid email format",
+      "errorPasswordRequired": "Please enter a password",
+      "errorPasswordMin": "Password must be at least 8 characters",
+      "errorConfirmPasswordRequired": "Please confirm your password",
+      "errorPasswordMismatch": "Passwords do not match",
+      "errorRegisterFailed": "Registration failed. Try again."
+    }
+  },
+
+  "landing": {
+    "hero": {
+      "title1": "Simplify Classroom Management",
+      "title2": "Student Feedback",
+      "desc": "EDUZO helps teachers manage classes efficiently while giving students a simple, friendly way to share feedback and stay connected with their learning journey.",
+      "cta": "Get Started"
+    },
+
+    "featuresTitle": "Everything You Need in One Platform",
+    "featuresSubtitle": "Built for simplicity and efficiency, EDUZO reduces administrative complexity while improving communication.",
+
+    "features": [
+      {
+        "id": "class-management",
+        "icon": "fa-solid fa-school",
+        "title": "Class Management",
+        "desc": "Create and organize classes with ease. Track students, schedules, and materials all in one place."
+      },
+      {
+        "id": "student-feedback",
+        "icon": "fa-solid fa-comment",
+        "title": "Student Feedback",
+        "desc": "Collect meaningful feedback from students in a simple, student-friendly interface."
+      },
+      {
+        "id": "student-tracking",
+        "icon": "fa-solid fa-user-group",
+        "title": "Student Tracking",
+        "desc": "Monitor student enrollment and engagement across all classes."
+      },
+      {
+        "id": "rating-system",
+        "icon": "fa-solid fa-star",
+        "title": "Rating System",
+        "desc": "Quick star ratings help measure satisfaction easily."
+      },
+      {
+        "id": "feedback-analytics",
+        "icon": "fa-solid fa-chart-line",
+        "title": "Feedback Analytics",
+        "desc": "Track feedback trends and improve teaching."
+      },
+      {
+        "id": "simple-interface",
+        "icon": "fa-solid fa-chalkboard",
+        "title": "Simple Interface",
+        "desc": "Clean and easy-to-use interface for everyone."
+      }
+    ],
+
+    "about": {
+      "title": "About EDUZO",
+      "p1": "EDUZO is a student-developed platform to simplify classroom management.",
+      "p2": "We believe in clear organization and communication.",
+      "p3": "Designed for simplicity and usability."
+    },
+
+    "cta": {
+      "title": "Ready to Transform Your Classroom?",
+      "desc": "Join EDUZO today and experience a better way to manage classes.",
+      "button": "Get Started"
+    }
+  },
+
+  
+  "services": {
+    "hero": {
+      "kicker": "For Teachers",
+      "title1": "Manage Your Classes with",
+      "title2": "Confidence",
+      "desc": "EDUZO helps teachers manage classes efficiently while giving students a simple, friendly way to share feedback and stay connected with their learning journey.",
+      "cta": "Start free trial"
+    },
+    "teacher": {
+      "title": "Everything You Need in One Platform",
+      "subtitle": "Built for simplicity and efficiency, EDUZO reduces administrative complexity while improving communication.",
+      "dashboardAria": "Dashboard preview",
+      "dashboardAlt": "Dashboard preview"
+    },
+    "teacherFeatures": [
+      {
+        "icon": "fa-solid fa-check-to-slot",
+        "title": "Create and manage multiple classes"
+      },
+      {
+        "icon": "fa-solid fa-user-tie",
+        "title": "Create and manage teachers"
+      },
+      {
+        "icon": "fa-solid fa-comment-dots",
+        "title": "Collect and review student feedbacks"
+      },
+      {
+        "icon": "fa-solid fa-chart-simple",
+        "title": "Checking attendance and participation"
+      },
+      {
+        "icon": "fa-solid fa-arrow-trend-up",
+        "title": "Tracking teacher performance"
+      },
+      {
+        "icon": "fa-solid fa-clock-rotate-left",
+        "title": "Reduce administrative workload"
+      }
+    ],
+    "student": {
+      "kicker": "For Students",
+      "title1": "Share Your Voice,",
+      "title2": "Shape Your Education",
+      "subtitle": "EDUZO makes it easy and comfortable for students to provide meaningful feedback that helps improve their learning experience.",
+      "ratingAlt": "Student rating preview"
+    },
+    "studentFeatures": [
+      {
+        "icon": "fa-solid fa-thumbs-up",
+        "title": "Simple, student-friendly interface"
+      },
+      {
+        "icon": "fa-solid fa-star-half-stroke",
+        "title": "Quick feedback submission with ratings"
+      },
+      {
+        "icon": "fa-solid fa-user-ninja",
+        "title": "Anonymous and honest feedback options"
+      },
+      {
+        "icon": "fa-solid fa-arrow-trend-up",
+        "title": "Help teachers improve your classes"
+      }
+    ]
+  },
+
+  "fullAttendance": {
+    "loading": "Đang tải...",
+    "classNotFound": "Không tìm thấy lớp học",
+    "hw": "BT",
+    "dash": "—",
+    "back": "Quay lại",
+    "title": "Điểm danh đầy đủ —",
+    "class": "Lớp học",
+    "month": "Tháng",
+    "datePlaceholder": "dd/mm/yyyy",
+    "pickDateTitle": "Chọn ngày bất kỳ trong tháng",
+    "openDatePicker": "Mở bộ chọn ngày",
+    "tip": "Mẹo: Chế độ xem này chỉ hiển thị các ngày học trong tháng đã chọn (dựa trên lịch học). Chỉ đọc.",
+    "no": "STT",
+    "name": "Tên",
+    "noStudents": "Không có học sinh"
+  },
+
+  "calendar": {
+    "loading": "Loading calendar...",
+    "back": "Back",
+    "title": "Calendar",
+    "online": "Online",
+    "noClasses": "No classes scheduled for this day.",
+
+    "classCount": "{{count}} class",
+    "classCount_plural": "{{count}} classes",
+
+    "students": "{{count}} student",
+    "students_plural": "{{count}} students"
+  },
+
+  "fullClassFeedback": {
+    "back": "Back",
+    "title": "Full Class Feedback",
+    "reload": "Reload",
+    "total": "Total",
+    "avg": "Avg",
+    "loading": "Loading feedback...",
+    "noFeedback": "No feedback yet.",
+    "teacher": "Teacher",
+    "failedToLoad": "Failed to load feedback",
+    "ratingAria": "Rating {{value}} out of 5"
+    },
+
+    "feedbackPage": {
+  "title": "Feedback",
+  "class": "Class",
+  "classId": "Class ID",
+  "studentOptional": "Student (optional)",
+  "yourName": "Your name",
+  "overallRatingTitle": "1) Overall rating",
+  "overallRating": "Overall rating",
+  "chooseTeacherTitle": "2) Choose teacher",
+  "noTeachers": "No teachers available. You can still submit feedback for this class.",
+  "selected": "Selected",
+  "noTeacherSelected": "No teacher selected",
+  "understandTitle": "3) Understand",
+  "understand": "Understand",
+  "teachingWayTitle": "4) Teaching way",
+  "teachingWay": "Teaching way",
+  "writeFeedbackTitle": "5) Write feedback",
+  "writePlaceholder": "Write your feedback here...",
+  "feedbackRequired": "Feedback is required.",
+  "characters": "{{count}} characters",
+  "submit": "Submit",
+  "sending": "Sending...",
+  "close": "Close",
+  "thankYou": "Thank you!",
+  "successMessage": "Your feedback has been submitted successfully.",
+  "successAria": "Feedback submitted successfully",
+  "cannotLoadPage": "Cannot load feedback page",
+  "missingClassId": "Missing classId.",
+  "writeFeedbackError": "Please write your feedback.",
+  "submitFailed": "Submit failed.",
+  "starsHint": "Use arrow keys or press 1–5.",
+  "outOfFive": "{{value}}/5",
+  "starAria": "{{label}} {{value}}"
+},
+
+"feedbackPanel": {
+  "panelAria": "Feedback panel",
+  "title": "Feedback",
+  "teacher": "Teacher",
+  "center": "Center",
+  "teacherLabel": "Teacher",
+  "avg": "Avg",
+  "feedbackCount_one": "feedback",
+  "feedbackCount_other": "feedbacks",
+  "shareQrTitle": "Share QR for students",
+  "shareQrDesc": "Students scan the QR → open the form → submit feedback.",
+  "publicFeedbackLink": "Public feedback link",
+  "copy": "Copy",
+  "openLargeQr": "Open large QR code",
+  "clickToEnlarge": "Click to enlarge",
+  "classFeedbackQr": "Class feedback QR",
+  "qrUnavailable": "QR unavailable",
+  "studentName": "Student’s name",
+  "enterStudentNamePlaceholder": "Enter student name",
+  "studentClass": "Student’s class",
+  "chooseStudentOptional": "Choose student (optional)",
+  "loadingStudents": "Loading students...",
+  "selectFromRoster": "Select from roster",
+  "noRosterAvailable": "No roster available",
+  "rateTeachingQuality": "Rate teaching quality",
+  "teachingQualityRating": "Teaching quality rating",
+  "rateOutOfFive": "Rate {{value}} out of 5",
+  "outOfFive": "{{value}}/5",
+  "shortParagraph": "Short paragraph",
+  "writeYourFeedback": "Write your feedback...",
+  "submitFeedback": "Submit feedback",
+  "recentFeedback": "Recent feedback",
+  "viewFullFeedbacks": "View full feedbacks",
+  "loadingFeedback": "Loading feedback...",
+  "noFeedbackYet": "No feedback yet.",
+  "showingLatestTen": "Showing latest 10. Click “View full feedbacks” to see all.",
+  "largeQrAria": "Large QR code",
+  "qrFeedbackLink": "QR feedback link",
+  "closeQrPopup": "Close QR popup",
+  "largeClassFeedbackQr": "Large class feedback QR",
+  "failedToLoad": "Failed to load feedback",
+  "enterStudentName": "Please enter student's name",
+  "chooseRating": "Please choose a rating from 1 to 5",
+  "thanksSubmitted": "Thanks! Your feedback was submitted.",
+  "submitFailed": "Submit failed. Please try again.",
+  "linkCopied": "Link copied",
+  "copyThisLink": "Copy this link:",
+  "ratingAria": "Rating {{value}} out of 5"
+},
+
+"noteDetails": {
+  "title": "Notes",
+  "back": "Back",
+  "refresh": "Refresh",
+  "loading": "Loading...",
+  "noNotes": "No notes yet",
+  "failedToLoad": "Failed to load notes",
+  "count_one": "{{count}} note",
+  "count_other": "{{count}} notes",
+  "from": "From: {{role}}",
+  "to": "To: {{role}}"
+},
+
+"notesPanel": {
+  "title": "Notes",
+  "viewAll": "View all notes",
+  "placeholderTeacher": "Write a note for Center (shows in Center notifications)...",
+  "placeholderCenter": "Write a note for Teacher (shows in Teachers notifications)...",
+  "sendNote": "Send note",
+  "sending": "Sending...",
+  "loading": "Loading...",
+  "noNotes": "No notes yet",
+  "contentRequired": "Content is required",
+  "centerIdMissing": "centerId is missing on this account",
+  "sendNoteFailed": "Send note failed",
+  "classLabel": "Class: {{name}}"
+},
+
+"studentProfile": {
+  "back": "Back",
+  "goBack": "Go back",
+  "notFound": "Student not found",
+  "defaultName": "Student",
+  "emptyValue": "—",
+  "profile": "Profile",
+  "created": "Created",
+  "currentClass": "Current class",
+  "openClass": "Open class",
+  "view": "View",
+  "noClassHint": "This student is not assigned to any class yet. Notes require a class.",
+  "takeNote": "Take note",
+  "notePlaceholder": "Write a short note about this student...",
+  "addNote": "Add note",
+  "adding": "Adding...",
+  "notes": "Notes",
+  "noNotes": "No notes yet",
+  "noNotesDesc": "Add the first note to keep track of progress, behaviour, or reminders.",
+  "notInClassCannotNote": "Student is not in a class yet. Cannot create note.",
+  "failedToAddNote": "Failed to add note"
+},
+
+"studentSection": {
+  "title": "Students",
+  "sendTuition": "Send tuition email",
+  "tuitionSent": "Tuition email sent",
+  "tuitionAlreadySent": "Tuition email already sent",
+  "sending": "Sending...",
+  "needMoreSessions": "Need {{count}} more session(s) ({{held}}/{{threshold}})",
+  "date": "Date",
+  "datePlaceholder": "dd/mm/yyyy",
+  "openDatePicker": "Open date picker",
+  "no": "No",
+  "name": "Name",
+  "homework": "Homework",
+  "tuition": "Tuition",
+  "action": "Action",
+  "attendanceDataLabel": "{{date}} (Attendance)",
+  "homeworkDataLabel": "{{date}} (Homework)",
+  "attendanceAria": "{{name}} attendance {{date}}",
+  "homeworkAria": "{{name}} homework {{date}}",
+  "tuitionAria": "{{name}} tuition paid",
+  "delete": "Delete",
+  "noStudents": "No students",
+  "cancel": "Cancel",
+  "save": "Save",
+  "saving": "Saving..."
+},
+
+"classDetail": {
+  "loading": "Loading...",
+  "classNotFound": "Class not found",
+  "saveFailed": "Save failed. Please try again.",
+  "notEnoughSessions": "Not enough sessions held: {{held}}/{{threshold}}",
+  "tuitionEmailsSent": "Tuition emails sent: {{sent}}/{{total}}",
+  "sendTuitionFailed": "Failed to send tuition emails.",
+  "thisStudent": "this student",
+  "confirmDeleteStudent": "Remove {{name}} from this class?",
+  "deleteStudentFailed": "Failed to delete student",
+  "unnamedClass": "Unnamed class",
+  "tuitionDue": "Tuition Due",
+  "tuitionSent": "Tuition Sent",
+  "viewFullAttendance": "View full attendance",
+  "addStudent": "+ Student",
+  "defaultSchedule": "Mon, Wed, Fri - 9:00 AM",
+  "totalStudents": "Total Students",
+  "enrolled": "Enrolled",
+  "nextSession": "Next Session",
+  "duration": "Duration",
+  "durationMinutes": "{{count}} min",
+  "perSession": "Per session",
+  "sessionsHeld": "Sessions held",
+  "dueTuition": "Due tuition",
+  "notReady": "Not ready",
+  "emptyValue": "—"
+},
+"weekdays": {
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday"
+},
+
+"createClass": {
+  "close": "Close",
+  "title": "Create class",
+  "className": "Class Name",
+  "classNamePlaceholder": "e.g: IELTS 1",
+  "subject": "Subject",
+  "subjectPlaceholder": "e.g: English",
+  "schedule": "Schedule",
+  "customizePerDay": "Customize per day",
+  "useCommonTime": "Use common time",
+  "timePlaceholder": "e.g: 9:00, 21:00, 21g",
+  "sameTimeHelper": "Same time will be applied to all selected days.",
+  "addScheduleRow": "+ Add schedule row",
+  "removeScheduleRow": "Remove schedule row",
+  "preview": "Preview:",
+  "noSchedule": "No schedule",
+  "durationMinutes": "Duration (minutes)",
+  "durationPlaceholder": "e.g: 90",
+  "totalSessions": "Total sessions",
+  "totalSessionsPlaceholder": "e.g: 10",
+  "totalSessionsHelper": "Tuition email unlocks after completing these sessions.",
+  "create": "Create",
+  "creating": "Creating...",
+  "createFailed": "Create class failed. Please try again.",
+  "timeFormatHelper": {
+    "before": "Time format must be like",
+    "or": "or",
+    "after": "AM/PM can be adjusted in the dropdown."
+  }
+},
+"shortWeekdays": {
+  "mon": "Mon",
+  "tue": "Tue",
+  "wed": "Wed",
+  "thu": "Thu",
+  "fri": "Fri",
+  "sat": "Sat",
+  "sun": "Sun"
+},
+
+"createStudent": {
+  "close": "Close",
+  "title": "Create student",
+  "fullName": "Full Name",
+  "fullNamePlaceholder": "e.g: John Doe",
+  "email": "Email",
+  "emailPlaceholder": "e.g: john@email.com",
+  "create": "Create",
+  "creating": "Creating...",
+  "createFailed": "Create student failed. Please try again."
+},
+
+"classesPage": {
+  "onlineClass": "Online Class",
+  "loading": "Loading...",
+  "noActiveClass": "No class is active right now",
+  "noAvailableClasses": "No available classes",
+  "students": "Students",
+  "schedule": "Schedule",
+  "duration": "Duration",
+  "durationMinutes": "{{count}} min",
+  "viewDetails": "View Details",
+  "deleteClass": "Delete class",
+  "unnamedClass": "Unnamed class",
+  "unnamedShort": "Unnamed",
+  "emptyValue": "—",
+  "defaultSchedule": "Mon, Wed, Fri - 9:00 AM",
+  "myClasses": "My Classes",
+  "centerClasses": "{{name}}’s Classes",
+  "centerFallback": "Center",
+  "notAllowedDelete": "You are not allowed to delete classes.",
+  "confirmDelete": "Delete class \"{{name}}\"?\nThis action cannot be undone.",
+  "deleteFailed": "Failed to delete class"
+},
+
+"notifications": {
+  "title": "Notifications",
+  "refresh": "Refresh",
+  "markAll": "Mark all as read",
+  "deleteAll": "Delete all",
+  "loading": "Loading...",
+  "empty": "No notifications yet",
+  "open": "Open",
+  "openClassDetail": "Open class detail",
+  "delete": "Delete notification",
+  "classLabel": "Class: {{name}}",
+  "confirmDeleteOne": "Delete this notification?\nThis action cannot be undone.",
+  "confirmDeleteAll": "Delete ALL notifications?\nThis action cannot be undone.",
+  "deleteOneFailed": "Failed to delete notification",
+  "deleteAllFailed": "Failed to delete all notifications",
+  "markAllFailed": "Failed to mark all notifications as read",
+  "classNotFound": "The class is not found or has been deleted.",
+  "tuitionDueTitle": "Tuition due"
+},
+
+"profile": {
+  "account": "Account",
+  "manageSettings": "Manage your profile settings",
+  "role": "Role",
+  "unknown": "unknown",
+  "errorPrefix": "Error: ",
+  "successPrefix": "Success: ",
+
+  "basicInformation": "Basic Information",
+  "edit": "Edit",
+  "avatarAlt": "avatar",
+  "uploading": "Uploading...",
+  "changeAvatar": "Change avatar",
+  "avatarHint": "JPG/PNG/WEBP recommended • Max 3MB",
+
+  "name": "Name",
+  "namePlaceholder": "Your name",
+  "email": "Email",
+  "gender": "Gender",
+  "select": "Select",
+  "male": "Male",
+  "female": "Female",
+  "other": "Other",
+  "dateOfBirth": "Date of Birth",
+  "dobPlaceholder": "DD/MM/YYYY",
+  "languageOrSpeciality": "Language / Speciality",
+  "languageOrSpecialityPlaceholder": "e.g., English, IELTS, Math...",
+
+  "cancel": "Cancel",
+  "save": "Save",
+  "saving": "Saving...",
+
+  "changePassword": "Change Password",
+  "change": "Change",
+  "currentPassword": "Current password",
+  "currentPasswordPlaceholder": "Current password",
+  "newPassword": "New password",
+  "newPasswordPlaceholder": "New password",
+  "confirmNewPassword": "Confirm new password",
+  "confirmNewPasswordPlaceholder": "Confirm new password",
+  "togglePassword": "Toggle password visibility",
+  "passwordHint": "Password should be at least 8 characters.",
+  "updating": "Updating...",
+
+  "nameRequired": "Name is required",
+  "profileUpdated": "Profile updated successfully",
+  "unauthorized": "Unauthorized. Please sign in again.",
+  "updateProfileFailed": "Update profile failed",
+
+  "avatarMaxSize": "Avatar must be <= {{size}}MB",
+  "avatarTypeInvalid": "Only JPG/PNG/WEBP are allowed",
+  "avatarUpdated": "Avatar updated",
+  "avatarEndpointNotFound": "Avatar endpoint not found (PATCH /user/me/avatar). Add it on backend or change FE endpoint.",
+  "updateAvatarFailed": "Update avatar failed",
+
+  "currentPasswordRequired": "Please enter current password",
+  "newPasswordRequired": "Please enter new password",
+  "passwordMin": "Password should be at least 8 characters.",
+  "confirmPasswordRequired": "Please confirm new password",
+  "confirmPasswordMismatch": "Confirm password does not match",
+  "passwordChanged": "Password changed successfully",
+  "currentPasswordIncorrect": "Current password is incorrect",
+  "changePasswordFailed": "Change password failed",
+
+  "roles": {
+    "center": "Center",
+    "teacher": "Teacher",
+    "student": "Student"
+  }
+},
+
+"createTeacherModal": {
+  "title": "Create Teacher",
+  "subtitle": "Please set an initial password",
+  "close": "Close",
+  "name": "Name",
+  "email": "Email",
+  "password": "Password",
+  "cancel": "Cancel",
+  "create": "Create",
+  "creating": "Creating...",
+
+  "errorNameRequired": "Name is required",
+  "errorEmailRequired": "Email is required",
+  "errorEmailInvalid": "Invalid email format",
+  "errorPasswordRequired": "Password is required",
+  "errorPasswordMin": "Password must be at least 8 characters",
+  "errorEmailExists": "Email already exists",
+  "errorCreateFailed": "Create teacher failed. Try again."
+},
+
+"fullFeedback": {
+  "back": "Back",
+  "title": "Full Feedback",
+  "reload": "Reload",
+  "total": "Total",
+  "avg": "Avg",
+  "loading": "Loading feedback...",
+  "noFeedback": "No feedback yet.",
+  "failedToLoad": "Failed to load feedbacks",
+  "emptyValue": "—",
+  "ratingAria": "Rating {{value}} out of 5"
+},
+
+"teacherDetail": {
+  "loading": "Loading...",
+  "notFound": "Teacher not found",
+  "failedToLoadTeacher": "Failed to load teacher",
+  "failedToLoadLogs": "Failed to load logs",
+  "failedToLoadFeedback": "Failed to load feedback",
+  "failedToClearLogs": "Failed to clear logs",
+  "failedToDeleteTeacher": "Failed to delete teacher",
+
+  "back": "Back",
+  "delete": "Delete",
+  "reload": "Reload",
+  "clear": "Clear",
+  "open": "Open",
+  "hidden": "Hidden",
+  "loadingShort": "Loading...",
+  "avg": "Avg",
+
+  "avatarAlt": "teacher avatar",
+  "unnamedTeacher": "Unnamed",
+  "emptyValue": "—",
+
+  "email": "Email",
+  "dob": "DOB",
+  "gender": "Gender",
+  "language": "Language",
+  "male": "Male",
+  "female": "Female",
+
+  "studentFeedback": "Student Feedback",
+  "classesTaught": "Classes Taught",
+  "viewFullFeedbacks": "View full feedbacks",
+
+  "noPermissionFeedback": "You don't have permission to view this teacher's feedback.",
+  "noPermissionLogs": "You don't have permission to view this teacher's attendance logs.",
+  "noFeedback": "No feedback yet.",
+  "noAttendance": "No attendance activity yet.",
+
+  "confirmClearLogs": "This will delete all attendance logs for this teacher. Continue?",
+  "confirmDeleteTeacher": "Delete teacher \"{{name}}\"?\nThis action cannot be undone.",
+
+  "feedbackCount_one": "{{count}} feedback",
+  "feedbackCount_other": "{{count}} feedbacks",
+  "attendanceCount_one": "{{count}} attendance",
+  "attendanceCount_other": "{{count}} attendance",
+
+  "showingLatestThree": "Showing latest 3. Click “View full feedbacks” to see all.",
+  "attendanceLogLine": "{{date}} - {{time}} attendance",
+  "ratingAria": "Rating {{value}} out of 5"
+},
+
+"teacherPage": {
+  "loading": "Loading...",
+  "failedToLoad": "Failed to load teachers",
+  "failedToDelete": "Failed to delete teacher",
+  "missingTeacherId": "Missing teacher id",
+
+  "myTeachers": "My Teachers",
+  "centerTeachers": "{{name}}’s Teachers",
+  "centerFallback": "Center",
+  "addTeachers": "＋ Teachers",
+  "noTeachers": "No teachers yet. Click “＋ Teachers”.",
+
+  "deleteTeacher": "Delete teacher",
+  "unnamedTeacher": "Unnamed",
+  "openTeacherAria": "Open {{name}}",
+  "confirmDelete": "Delete teacher \"{{name}}\"?\nThis action cannot be undone."
+},
+
+"workspaceLayout": {
+  "classes": "Classes",
+  "calendar": "Calendar",
+  "teachers": "Teachers",
+  "notifications": "Notifications",
+  "logoAlt": "EDUZO logo",
+  "logoSmallAlt": "EDUZO small logo",
+  "openMenu": "Open menu",
+  "menu": "Menu",
+  "expandSidebar": "Expand sidebar",
+  "collapseSidebar": "Collapse sidebar",
+  "copyright": "Copyright © 2025 EDUZO."
+}
+
+}

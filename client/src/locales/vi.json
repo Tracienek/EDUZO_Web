@@ -1,0 +1,733 @@
+{
+  "footer": {
+    "logoAlt": "Logo Eduzo",
+    "legal": "Pháp lý",
+    "legalDesc": "Lorem ipsum",
+    "developers": "Nhà phát triển",
+    "devName": "Pham Tran Bao Tran",
+    "help": "Hỗ trợ",
+    "helpDesc": "Lorem ipsum",
+    "address": "Địa chỉ:",
+    "addressDesc": "Lorem ipsum",
+    "copyright": "Bản quyền © 2025 EDUZO – Đã đăng ký."
+  },
+
+    "workspaceTopBar": {
+    "create": "Tạo mới",
+    "createStaff": "Tạo nhân viên",
+    "searchPlaceholder": "Tìm kiếm học sinh hoặc lớp học...",
+    "searching": "Đang tìm kiếm...",
+    "noResults": "Không có kết quả",
+    "students": "Học sinh",
+    "classes": "Lớp học",
+    "classLabel": "Lớp: {{name}}",
+    "classEmpty": "Lớp: —",
+    "folderLabel": "Thư mục: {{name}}",
+    "folderEmpty": "Thư mục: —",
+    "open": "Mở",
+    "unnamedClass": "Lớp chưa có tên",
+    "classesButton": "+ Lớp học",
+    "user": "Người dùng",
+    "account": "Tài khoản",
+    "logout": "Đăng xuất"
+  },
+
+  "header": {
+    "homeAria": "Trang chủ Eduzo",
+    "logoAlt": "Logo Eduzo",
+    "navAria": "Điều hướng chính",
+    "home": "Trang chủ",
+    "about": "Về chúng tôi",
+    "services": "Dịch vụ",
+    "signIn": "Đăng nhập",
+    "startTrial": "Dùng thử miễn phí"
+  },
+
+  "auth": {
+    "forgot": {
+      "title": "Quên mật khẩu",
+      "subtitle": "Nhập email và chúng tôi sẽ gửi liên kết đặt lại.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@example.com",
+      "sendBtn": "Gửi link đặt lại",
+      "sending": "Đang gửi...",
+      "remember": "Bạn nhớ mật khẩu rồi?",
+      "backToSignIn": "Quay lại đăng nhập",
+      "errorEmpty": "Vui lòng nhập email.",
+      "success": "Nếu tài khoản tồn tại, link đặt lại đã được gửi. Vui lòng kiểm tra email."
+    },
+
+    "signIn": {
+      "title": "Đăng nhập",
+      "subtitle": "Rất vui được gặp lại bạn",
+      "email": "Email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu",
+      "togglePassword": "Hiển thị mật khẩu",
+      "forgot": "Quên mật khẩu?",
+      "signInBtn": "Đăng nhập",
+      "signing": "Đang đăng nhập...",
+      "newUser": "Bạn mới?",
+      "createAccount": "Tạo tài khoản miễn phí",
+
+      "errorEmailRequired": "Email là bắt buộc",
+      "errorEmailInvalid": "Email không hợp lệ",
+      "errorPasswordRequired": "Mật khẩu là bắt buộc",
+      "errorInvalidCredentials": "Email hoặc mật khẩu không đúng"
+    },
+
+    "signUp": {
+      "title": "Đăng ký",
+      "subtitle": "Tạo tài khoản trung tâm của bạn",
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nhập họ và tên",
+      "email": "Email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "togglePassword": "Hiển thị mật khẩu",
+      "signUpBtn": "Đăng ký",
+      "signingUp": "Đang đăng ký...",
+      "haveAccount": "Đã có tài khoản?",
+      "signIn": "Đăng nhập",
+
+      "errorFullNameRequired": "Vui lòng nhập họ và tên",
+      "errorEmailRequired": "Vui lòng nhập email",
+      "errorEmailInvalid": "Email không hợp lệ",
+      "errorPasswordRequired": "Vui lòng nhập mật khẩu",
+      "errorPasswordMin": "Mật khẩu phải có ít nhất 8 ký tự",
+      "errorConfirmPasswordRequired": "Vui lòng xác nhận mật khẩu",
+      "errorPasswordMismatch": "Mật khẩu không khớp",
+      "errorRegisterFailed": "Đăng ký thất bại. Vui lòng thử lại."
+    }
+  },
+
+  "landing": {
+    "hero": {
+      "title1": "Đơn giản hóa quản lý lớp học",
+      "title2": "Phản hồi học sinh",
+      "desc": "EDUZO giúp giáo viên quản lý lớp hiệu quả và học sinh dễ dàng gửi phản hồi.",
+      "cta": "Bắt đầu"
+    },
+
+    "featuresTitle": "Tất cả trong một nền tảng",
+    "featuresSubtitle": "Đơn giản và hiệu quả, giảm công việc hành chính.",
+
+    "features": [
+      {
+        "id": "class-management",
+        "icon": "fa-solid fa-school",
+        "title": "Quản lý lớp học",
+        "desc": "Tạo và quản lý lớp học dễ dàng."
+      }
+    ],
+
+    "about": {
+      "title": "Về EDUZO",
+      "p1": "EDUZO giúp đơn giản hóa quản lý lớp học.",
+      "p2": "Chúng tôi tin vào giao tiếp rõ ràng.",
+      "p3": "Thiết kế đơn giản, dễ sử dụng."
+    },
+
+    "cta": {
+      "title": "Sẵn sàng thay đổi lớp học?",
+      "desc": "Tham gia EDUZO ngay hôm nay.",
+      "button": "Bắt đầu"
+    }
+  },
+
+  "services": {
+    "hero": {
+      "kicker": "Dành cho giáo viên",
+      "title1": "Quản lý lớp học của bạn với",
+      "title2": "Sự tự tin",
+      "desc": "EDUZO giúp giáo viên quản lý lớp học hiệu quả, đồng thời mang đến cho học sinh một cách đơn giản và thân thiện để chia sẻ phản hồi và gắn kết hơn với hành trình học tập của mình.",
+      "cta": "Bắt đầu dùng thử"
+    },
+    "teacher": {
+      "title": "Mọi thứ bạn cần trên một nền tảng",
+      "subtitle": "Được xây dựng hướng đến sự đơn giản và hiệu quả, EDUZO giảm bớt sự phức tạp trong quản lý và cải thiện giao tiếp.",
+      "dashboardAria": "Xem trước bảng điều khiển",
+      "dashboardAlt": "Xem trước bảng điều khiển"
+    },
+    "teacherFeatures": [
+      {
+        "icon": "fa-solid fa-check-to-slot",
+        "title": "Tạo và quản lý nhiều lớp học"
+      },
+      {
+        "icon": "fa-solid fa-user-tie",
+        "title": "Tạo và quản lý giáo viên"
+      },
+      {
+        "icon": "fa-solid fa-comment-dots",
+        "title": "Thu thập và xem phản hồi của học sinh"
+      },
+      {
+        "icon": "fa-solid fa-chart-simple",
+        "title": "Kiểm tra điểm danh và mức độ tham gia"
+      },
+      {
+        "icon": "fa-solid fa-arrow-trend-up",
+        "title": "Theo dõi hiệu suất giáo viên"
+      },
+      {
+        "icon": "fa-solid fa-clock-rotate-left",
+        "title": "Giảm khối lượng công việc hành chính"
+      }
+    ],
+    "student": {
+      "kicker": "Dành cho học sinh",
+      "title1": "Chia sẻ tiếng nói của bạn,",
+      "title2": "Định hình việc học của bạn",
+      "subtitle": "EDUZO giúp học sinh dễ dàng và thoải mái gửi những phản hồi có ý nghĩa để cải thiện trải nghiệm học tập của mình.",
+      "ratingAlt": "Xem trước đánh giá của học sinh"
+    },
+    "studentFeatures": [
+      {
+        "icon": "fa-solid fa-thumbs-up",
+        "title": "Giao diện đơn giản, thân thiện với học sinh"
+      },
+      {
+        "icon": "fa-solid fa-star-half-stroke",
+        "title": "Gửi phản hồi nhanh với hệ thống đánh giá"
+      },
+      {
+        "icon": "fa-solid fa-user-ninja",
+        "title": "Tùy chọn phản hồi ẩn danh và trung thực"
+      },
+      {
+        "icon": "fa-solid fa-arrow-trend-up",
+        "title": "Giúp giáo viên cải thiện lớp học của bạn"
+      }
+    ]
+  },
+
+  "fullAttendance": {
+    "loading": "Đang tải...",
+    "classNotFound": "Không tìm thấy lớp học",
+    "hw": "BT",
+    "dash": "—",
+    "back": "Quay lại",
+    "title": "Điểm danh đầy đủ —",
+    "class": "Lớp học",
+    "month": "Tháng",
+    "datePlaceholder": "dd/mm/yyyy",
+    "pickDateTitle": "Chọn ngày bất kỳ trong tháng",
+    "openDatePicker": "Mở bộ chọn ngày",
+    "tip": "Mẹo: Chế độ xem này chỉ hiển thị các ngày học trong tháng đã chọn (dựa trên lịch học). Chỉ đọc.",
+    "no": "STT",
+    "name": "Tên",
+    "noStudents": "Không có học sinh"
+  },
+
+  "calendar": {
+    "loading": "Đang tải lịch...",
+    "back": "Quay lại",
+    "title": "Lịch học",
+    "online": "Trực tuyến",
+    "noClasses": "Không có lớp học trong ngày này.",
+
+    "classCount": "{{count}} lớp học",
+
+    "students": "{{count}} học sinh"
+  },
+
+  "fullClassFeedback": {
+  "back": "Quay lại",
+  "title": "Phản hồi đầy đủ của lớp",
+  "reload": "Tải lại",
+  "total": "Tổng",
+  "avg": "Trung bình",
+  "loading": "Đang tải phản hồi...",
+  "noFeedback": "Chưa có phản hồi nào.",
+  "teacher": "Giáo viên",
+  "failedToLoad": "Không thể tải phản hồi",
+  "ratingAria": "Đánh giá {{value}} trên 5"
+},
+
+"feedbackPage": {
+  "title": "Phản hồi",
+  "class": "Lớp",
+  "classId": "Mã lớp",
+  "studentOptional": "Học sinh (không bắt buộc)",
+  "yourName": "Tên của bạn",
+  "overallRatingTitle": "1) Đánh giá tổng thể",
+  "overallRating": "Đánh giá tổng thể",
+  "chooseTeacherTitle": "2) Chọn giáo viên",
+  "noTeachers": "Không có giáo viên nào. Bạn vẫn có thể gửi phản hồi cho lớp này.",
+  "selected": "Đã chọn",
+  "noTeacherSelected": "Chưa chọn giáo viên",
+  "understandTitle": "3) Mức độ hiểu bài",
+  "understand": "Mức độ hiểu bài",
+  "teachingWayTitle": "4) Cách giảng dạy",
+  "teachingWay": "Cách giảng dạy",
+  "writeFeedbackTitle": "5) Viết phản hồi",
+  "writePlaceholder": "Viết phản hồi của bạn tại đây...",
+  "feedbackRequired": "Phản hồi là bắt buộc.",
+  "characters": "{{count}} ký tự",
+  "submit": "Gửi",
+  "sending": "Đang gửi...",
+  "close": "Đóng",
+  "thankYou": "Cảm ơn bạn!",
+  "successMessage": "Phản hồi của bạn đã được gửi thành công.",
+  "successAria": "Gửi phản hồi thành công",
+  "cannotLoadPage": "Không thể tải trang phản hồi",
+  "missingClassId": "Thiếu classId.",
+  "writeFeedbackError": "Vui lòng nhập phản hồi.",
+  "submitFailed": "Gửi phản hồi thất bại.",
+  "starsHint": "Dùng phím mũi tên hoặc nhấn 1–5.",
+  "outOfFive": "{{value}}/5",
+  "starAria": "{{label}} {{value}}"
+},
+
+"feedbackPanel": {
+  "panelAria": "Bảng phản hồi",
+  "title": "Phản hồi",
+  "teacher": "Giáo viên",
+  "center": "Trung tâm",
+  "teacherLabel": "Giáo viên",
+  "avg": "Trung bình",
+  "feedbackCount_one": "phản hồi",
+  "feedbackCount_other": "phản hồi",
+  "shareQrTitle": "Chia sẻ mã QR cho học sinh",
+  "shareQrDesc": "Học sinh quét mã QR → mở biểu mẫu → gửi phản hồi.",
+  "publicFeedbackLink": "Liên kết phản hồi công khai",
+  "copy": "Sao chép",
+  "openLargeQr": "Mở mã QR lớn",
+  "clickToEnlarge": "Nhấn để phóng to",
+  "classFeedbackQr": "Mã QR phản hồi lớp học",
+  "qrUnavailable": "Không có mã QR",
+  "studentName": "Tên học sinh",
+  "enterStudentNamePlaceholder": "Nhập tên học sinh",
+  "studentClass": "Lớp của học sinh",
+  "chooseStudentOptional": "Chọn học sinh (không bắt buộc)",
+  "loadingStudents": "Đang tải danh sách học sinh...",
+  "selectFromRoster": "Chọn từ danh sách lớp",
+  "noRosterAvailable": "Không có danh sách lớp",
+  "rateTeachingQuality": "Đánh giá chất lượng giảng dạy",
+  "teachingQualityRating": "Đánh giá chất lượng giảng dạy",
+  "rateOutOfFive": "Đánh giá {{value}} trên 5",
+  "outOfFive": "{{value}}/5",
+  "shortParagraph": "Đoạn nhận xét ngắn",
+  "writeYourFeedback": "Viết phản hồi của bạn...",
+  "submitFeedback": "Gửi phản hồi",
+  "recentFeedback": "Phản hồi gần đây",
+  "viewFullFeedbacks": "Xem toàn bộ phản hồi",
+  "loadingFeedback": "Đang tải phản hồi...",
+  "noFeedbackYet": "Chưa có phản hồi nào.",
+  "showingLatestTen": "Đang hiển thị 10 phản hồi mới nhất. Nhấn “Xem toàn bộ phản hồi” để xem tất cả.",
+  "largeQrAria": "Mã QR lớn",
+  "qrFeedbackLink": "Liên kết phản hồi QR",
+  "closeQrPopup": "Đóng cửa sổ QR",
+  "largeClassFeedbackQr": "Mã QR phản hồi lớp học cỡ lớn",
+  "failedToLoad": "Không thể tải phản hồi",
+  "enterStudentName": "Vui lòng nhập tên học sinh",
+  "chooseRating": "Vui lòng chọn mức đánh giá từ 1 đến 5",
+  "thanksSubmitted": "Cảm ơn! Phản hồi của bạn đã được gửi.",
+  "submitFailed": "Gửi thất bại. Vui lòng thử lại.",
+  "linkCopied": "Đã sao chép liên kết",
+  "copyThisLink": "Sao chép liên kết này:",
+  "ratingAria": "Đánh giá {{value}} trên 5"
+},
+
+"noteDetails": {
+  "title": "Ghi chú",
+  "back": "Quay lại",
+  "refresh": "Tải lại",
+  "loading": "Đang tải...",
+  "noNotes": "Chưa có ghi chú",
+  "failedToLoad": "Không thể tải ghi chú",
+  "count": "{{count}} ghi chú",
+  "from": "Từ: {{role}}",
+  "to": "Đến: {{role}}"
+},
+
+"notesPanel": {
+  "title": "Ghi chú",
+  "viewAll": "Xem tất cả ghi chú",
+  "placeholderTeacher": "Viết ghi chú cho trung tâm (hiển thị trong thông báo của trung tâm)...",
+  "placeholderCenter": "Viết ghi chú cho giáo viên (hiển thị trong thông báo của giáo viên)...",
+  "sendNote": "Gửi ghi chú",
+  "sending": "Đang gửi...",
+  "loading": "Đang tải...",
+  "noNotes": "Chưa có ghi chú",
+  "contentRequired": "Nội dung là bắt buộc",
+  "centerIdMissing": "Tài khoản này thiếu centerId",
+  "sendNoteFailed": "Gửi ghi chú thất bại",
+  "classLabel": "Lớp: {{name}}"
+},
+
+"studentProfile": {
+  "back": "Quay lại",
+  "goBack": "Quay lại",
+  "notFound": "Không tìm thấy học sinh",
+  "defaultName": "Học sinh",
+  "emptyValue": "—",
+  "profile": "Hồ sơ",
+  "created": "Ngày tạo",
+  "currentClass": "Lớp hiện tại",
+  "openClass": "Mở lớp",
+  "view": "Xem",
+  "noClassHint": "Học sinh này chưa được xếp vào lớp nào. Ghi chú cần có lớp.",
+  "takeNote": "Ghi chú",
+  "notePlaceholder": "Viết một ghi chú ngắn về học sinh này...",
+  "addNote": "Thêm ghi chú",
+  "adding": "Đang thêm...",
+  "notes": "Ghi chú",
+  "noNotes": "Chưa có ghi chú",
+  "noNotesDesc": "Hãy thêm ghi chú đầu tiên để theo dõi tiến độ, hành vi hoặc lời nhắc.",
+  "notInClassCannotNote": "Học sinh chưa thuộc lớp nào. Không thể tạo ghi chú.",
+  "failedToAddNote": "Không thể thêm ghi chú"
+},
+
+"studentSection": {
+  "title": "Học sinh",
+  "sendTuition": "Gửi email học phí",
+  "tuitionSent": "Đã gửi email học phí",
+  "tuitionAlreadySent": "Email học phí đã được gửi",
+  "sending": "Đang gửi...",
+  "needMoreSessions": "Cần thêm {{count}} buổi nữa ({{held}}/{{threshold}})",
+  "date": "Ngày",
+  "datePlaceholder": "dd/mm/yyyy",
+  "openDatePicker": "Mở bộ chọn ngày",
+  "no": "STT",
+  "name": "Tên",
+  "homework": "Bài tập",
+  "tuition": "Học phí",
+  "action": "Hành động",
+  "attendanceDataLabel": "{{date}} (Điểm danh)",
+  "homeworkDataLabel": "{{date}} (Bài tập)",
+  "attendanceAria": "Điểm danh của {{name}} ngày {{date}}",
+  "homeworkAria": "Bài tập của {{name}} ngày {{date}}",
+  "tuitionAria": "{{name}} đã đóng học phí",
+  "delete": "Xóa",
+  "noStudents": "Không có học sinh",
+  "cancel": "Hủy",
+  "save": "Lưu",
+  "saving": "Đang lưu..."
+},
+
+"classDetail": {
+  "loading": "Đang tải...",
+  "classNotFound": "Không tìm thấy lớp học",
+  "saveFailed": "Lưu thất bại. Vui lòng thử lại.",
+  "notEnoughSessions": "Chưa đủ số buổi đã học: {{held}}/{{threshold}}",
+  "tuitionEmailsSent": "Đã gửi email học phí: {{sent}}/{{total}}",
+  "sendTuitionFailed": "Không thể gửi email học phí.",
+  "thisStudent": "học sinh này",
+  "confirmDeleteStudent": "Xóa {{name}} khỏi lớp này?",
+  "deleteStudentFailed": "Không thể xóa học sinh",
+  "unnamedClass": "Lớp chưa đặt tên",
+  "tuitionDue": "Đến hạn học phí",
+  "tuitionSent": "Đã gửi học phí",
+  "viewFullAttendance": "Xem điểm danh đầy đủ",
+  "addStudent": "+ Học sinh",
+  "defaultSchedule": "Thứ 2, Thứ 4, Thứ 6 - 9:00 SA",
+  "totalStudents": "Tổng học sinh",
+  "enrolled": "Đã ghi danh",
+  "nextSession": "Buổi học tiếp theo",
+  "duration": "Thời lượng",
+  "durationMinutes": "{{count}} phút",
+  "perSession": "Mỗi buổi",
+  "sessionsHeld": "Số buổi đã học",
+  "dueTuition": "Đến hạn học phí",
+  "notReady": "Chưa sẵn sàng",
+  "emptyValue": "—"
+},
+"weekdays": {
+  "sunday": "Chủ nhật",
+  "monday": "Thứ hai",
+  "tuesday": "Thứ ba",
+  "wednesday": "Thứ tư",
+  "thursday": "Thứ năm",
+  "friday": "Thứ sáu",
+  "saturday": "Thứ bảy"
+},
+
+"createClass": {
+  "close": "Đóng",
+  "title": "Tạo lớp học",
+  "className": "Tên lớp",
+  "classNamePlaceholder": "vd: IELTS 1",
+  "subject": "Môn học",
+  "subjectPlaceholder": "vd: English",
+  "schedule": "Lịch học",
+  "customizePerDay": "Tùy chỉnh theo từng ngày",
+  "useCommonTime": "Dùng cùng một giờ",
+  "timePlaceholder": "vd: 9:00, 21:00, 21g",
+  "sameTimeHelper": "Cùng một giờ sẽ được áp dụng cho tất cả các ngày đã chọn.",
+  "addScheduleRow": "+ Thêm dòng lịch học",
+  "removeScheduleRow": "Xóa dòng lịch học",
+  "preview": "Xem trước:",
+  "noSchedule": "Chưa có lịch học",
+  "durationMinutes": "Thời lượng (phút)",
+  "durationPlaceholder": "vd: 90",
+  "totalSessions": "Tổng số buổi",
+  "totalSessionsPlaceholder": "vd: 10",
+  "totalSessionsHelper": "Email học phí sẽ được mở sau khi hoàn thành số buổi này.",
+  "create": "Tạo",
+  "creating": "Đang tạo...",
+  "createFailed": "Tạo lớp thất bại. Vui lòng thử lại.",
+  "timeFormatHelper": {
+    "before": "Định dạng giờ phải như",
+    "or": "hoặc",
+    "after": "AM/PM có thể chỉnh trong danh sách chọn."
+  }
+},
+"shortWeekdays": {
+  "mon": "T2",
+  "tue": "T3",
+  "wed": "T4",
+  "thu": "T5",
+  "fri": "T6",
+  "sat": "T7",
+  "sun": "CN"
+},
+
+"createStudent": {
+  "close": "Đóng",
+  "title": "Tạo học sinh",
+  "fullName": "Họ và tên",
+  "fullNamePlaceholder": "vd: Nguyễn Văn A",
+  "email": "Email",
+  "emailPlaceholder": "vd: name@email.com",
+  "create": "Tạo",
+  "creating": "Đang tạo...",
+  "createFailed": "Tạo học sinh thất bại. Vui lòng thử lại."
+},
+
+"classesPage": {
+  "onlineClass": "Lớp đang học",
+  "loading": "Đang tải...",
+  "noActiveClass": "Hiện không có lớp nào đang hoạt động",
+  "noAvailableClasses": "Không có lớp học khả dụng",
+  "students": "Học sinh",
+  "schedule": "Lịch học",
+  "duration": "Thời lượng",
+  "durationMinutes": "{{count}} phút",
+  "viewDetails": "Xem chi tiết",
+  "deleteClass": "Xóa lớp",
+  "unnamedClass": "Lớp chưa đặt tên",
+  "unnamedShort": "Chưa đặt tên",
+  "emptyValue": "—",
+  "defaultSchedule": "Thứ 2, Thứ 4, Thứ 6 - 9:00 SA",
+  "myClasses": "Lớp của tôi",
+  "centerClasses": "Các lớp của {{name}}",
+  "centerFallback": "Trung tâm",
+  "notAllowedDelete": "Bạn không được phép xóa lớp học.",
+  "confirmDelete": "Xóa lớp \"{{name}}\"?\nHành động này không thể hoàn tác.",
+  "deleteFailed": "Không thể xóa lớp"
+},
+
+"notifications": {
+  "title": "Thông báo",
+  "refresh": "Làm mới",
+  "markAll": "Đánh dấu đã đọc tất cả",
+  "deleteAll": "Xóa tất cả",
+  "loading": "Đang tải...",
+  "empty": "Chưa có thông báo",
+  "open": "Mở",
+  "openClassDetail": "Mở chi tiết lớp học",
+  "delete": "Xóa thông báo",
+  "classLabel": "Lớp: {{name}}",
+  "confirmDeleteOne": "Xóa thông báo này?\nHành động này không thể hoàn tác.",
+  "confirmDeleteAll": "Xóa TẤT CẢ thông báo?\nHành động này không thể hoàn tác.",
+  "deleteOneFailed": "Xóa thông báo thất bại",
+  "deleteAllFailed": "Xóa tất cả thông báo thất bại",
+  "markAllFailed": "Đánh dấu tất cả là đã đọc thất bại",
+  "classNotFound": "Không tìm thấy lớp học hoặc lớp đã bị xóa.",
+  "tuitionDueTitle": "Học phí đến hạn"
+},
+
+"profile": {
+  "account": "Tài khoản",
+  "manageSettings": "Quản lý cài đặt hồ sơ của bạn",
+  "role": "Vai trò",
+  "unknown": "không xác định",
+  "errorPrefix": "Lỗi: ",
+  "successPrefix": "Thành công: ",
+
+  "basicInformation": "Thông tin cơ bản",
+  "edit": "Chỉnh sửa",
+  "avatarAlt": "ảnh đại diện",
+  "uploading": "Đang tải lên...",
+  "changeAvatar": "Đổi ảnh đại diện",
+  "avatarHint": "Khuyến nghị JPG/PNG/WEBP • Tối đa 3MB",
+
+  "name": "Tên",
+  "namePlaceholder": "Tên của bạn",
+  "email": "Email",
+  "gender": "Giới tính",
+  "select": "Chọn",
+  "male": "Nam",
+  "female": "Nữ",
+  "other": "Khác",
+  "dateOfBirth": "Ngày sinh",
+  "dobPlaceholder": "DD/MM/YYYY",
+  "languageOrSpeciality": "Ngôn ngữ / Chuyên môn",
+  "languageOrSpecialityPlaceholder": "ví dụ: English, IELTS, Math...",
+
+  "cancel": "Hủy",
+  "save": "Lưu",
+  "saving": "Đang lưu...",
+
+  "changePassword": "Đổi mật khẩu",
+  "change": "Đổi",
+  "currentPassword": "Mật khẩu hiện tại",
+  "currentPasswordPlaceholder": "Mật khẩu hiện tại",
+  "newPassword": "Mật khẩu mới",
+  "newPasswordPlaceholder": "Mật khẩu mới",
+  "confirmNewPassword": "Xác nhận mật khẩu mới",
+  "confirmNewPasswordPlaceholder": "Xác nhận mật khẩu mới",
+  "togglePassword": "Bật/tắt hiển thị mật khẩu",
+  "passwordHint": "Mật khẩu phải có ít nhất 8 ký tự.",
+  "updating": "Đang cập nhật...",
+
+  "nameRequired": "Tên là bắt buộc",
+  "profileUpdated": "Cập nhật hồ sơ thành công",
+  "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
+  "updateProfileFailed": "Cập nhật hồ sơ thất bại",
+
+  "avatarMaxSize": "Ảnh đại diện phải <= {{size}}MB",
+  "avatarTypeInvalid": "Chỉ chấp nhận JPG/PNG/WEBP",
+  "avatarUpdated": "Cập nhật ảnh đại diện thành công",
+  "avatarEndpointNotFound": "Không tìm thấy API ảnh đại diện (PATCH /user/me/avatar). Hãy thêm ở backend hoặc đổi endpoint phía frontend.",
+  "updateAvatarFailed": "Cập nhật ảnh đại diện thất bại",
+
+  "currentPasswordRequired": "Vui lòng nhập mật khẩu hiện tại",
+  "newPasswordRequired": "Vui lòng nhập mật khẩu mới",
+  "passwordMin": "Mật khẩu phải có ít nhất 8 ký tự.",
+  "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu mới",
+  "confirmPasswordMismatch": "Mật khẩu xác nhận không khớp",
+  "passwordChanged": "Đổi mật khẩu thành công",
+  "currentPasswordIncorrect": "Mật khẩu hiện tại không đúng",
+  "changePasswordFailed": "Đổi mật khẩu thất bại",
+
+  "roles": {
+    "center": "Trung tâm",
+    "teacher": "Giáo viên",
+    "student": "Học sinh"
+  }
+},
+
+"createTeacherModal": {
+  "title": "Tạo giáo viên",
+  "subtitle": "Vui lòng đặt mật khẩu ban đầu",
+  "close": "Đóng",
+  "name": "Tên",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "cancel": "Hủy",
+  "create": "Tạo",
+  "creating": "Đang tạo...",
+
+  "errorNameRequired": "Tên là bắt buộc",
+  "errorEmailRequired": "Email là bắt buộc",
+  "errorEmailInvalid": "Định dạng email không hợp lệ",
+  "errorPasswordRequired": "Mật khẩu là bắt buộc",
+  "errorPasswordMin": "Mật khẩu phải có ít nhất 8 ký tự",
+  "errorEmailExists": "Email đã tồn tại",
+  "errorCreateFailed": "Tạo giáo viên thất bại. Vui lòng thử lại."
+},
+
+"fullFeedback": {
+  "back": "Quay lại",
+  "title": "Toàn bộ phản hồi",
+  "reload": "Tải lại",
+  "total": "Tổng",
+  "avg": "Trung bình",
+  "loading": "Đang tải phản hồi...",
+  "noFeedback": "Chưa có phản hồi.",
+  "failedToLoad": "Tải phản hồi thất bại",
+  "emptyValue": "—",
+  "ratingAria": "Đánh giá {{value}} trên 5"
+},
+
+"teacherDetail": {
+  "loading": "Đang tải...",
+  "notFound": "Không tìm thấy giáo viên",
+  "failedToLoadTeacher": "Tải giáo viên thất bại",
+  "failedToLoadLogs": "Tải lịch sử điểm danh thất bại",
+  "failedToLoadFeedback": "Tải phản hồi thất bại",
+  "failedToClearLogs": "Xóa lịch sử điểm danh thất bại",
+  "failedToDeleteTeacher": "Xóa giáo viên thất bại",
+
+  "back": "Quay lại",
+  "delete": "Xóa",
+  "reload": "Tải lại",
+  "clear": "Xóa",
+  "open": "Mở",
+  "hidden": "Ẩn",
+  "loadingShort": "Đang tải...",
+  "avg": "Trung bình",
+
+  "avatarAlt": "ảnh đại diện giáo viên",
+  "unnamedTeacher": "Chưa có tên",
+  "emptyValue": "—",
+
+  "email": "Email",
+  "dob": "Ngày sinh",
+  "gender": "Giới tính",
+  "language": "Ngôn ngữ",
+  "male": "Nam",
+  "female": "Nữ",
+
+  "studentFeedback": "Phản hồi học sinh",
+  "classesTaught": "Lớp đang dạy",
+  "viewFullFeedbacks": "Xem toàn bộ phản hồi",
+
+  "noPermissionFeedback": "Bạn không có quyền xem phản hồi của giáo viên này.",
+  "noPermissionLogs": "Bạn không có quyền xem lịch sử điểm danh của giáo viên này.",
+  "noFeedback": "Chưa có phản hồi.",
+  "noAttendance": "Chưa có hoạt động điểm danh.",
+
+  "confirmClearLogs": "Hành động này sẽ xóa toàn bộ lịch sử điểm danh của giáo viên này. Tiếp tục?",
+  "confirmDeleteTeacher": "Xóa giáo viên \"{{name}}\"?\nHành động này không thể hoàn tác.",
+
+  "feedbackCount_one": "{{count}} phản hồi",
+  "feedbackCount_other": "{{count}} phản hồi",
+  "attendanceCount_one": "{{count}} lượt điểm danh",
+  "attendanceCount_other": "{{count}} lượt điểm danh",
+
+  "showingLatestThree": "Đang hiển thị 3 mục mới nhất. Nhấn “Xem toàn bộ phản hồi” để xem tất cả.",
+  "attendanceLogLine": "Điểm danh {{date}} - {{time}}",
+  "ratingAria": "Đánh giá {{value}} trên 5"
+},
+
+"teacherPage": {
+  "loading": "Đang tải...",
+  "failedToLoad": "Tải danh sách giáo viên thất bại",
+  "failedToDelete": "Xóa giáo viên thất bại",
+  "missingTeacherId": "Thiếu mã giáo viên",
+
+  "myTeachers": "Giáo viên của tôi",
+  "centerTeachers": "Giáo viên của {{name}}",
+  "centerFallback": "Trung tâm",
+  "addTeachers": "＋ Giáo viên",
+  "noTeachers": "Chưa có giáo viên nào. Hãy nhấn “＋ Giáo viên”",
+
+  "deleteTeacher": "Xóa giáo viên",
+  "unnamedTeacher": "Chưa có tên",
+  "openTeacherAria": "Mở {{name}}",
+  "confirmDelete": "Xóa giáo viên \"{{name}}\"?\nHành động này không thể hoàn tác."
+},
+
+"workspaceLayout": {
+  "classes": "Lớp học",
+  "calendar": "Lịch",
+  "teachers": "Giáo viên",
+  "notifications": "Thông báo",
+  "logoAlt": "Logo EDUZO",
+  "logoSmallAlt": "Logo EDUZO nhỏ",
+  "openMenu": "Mở menu",
+  "menu": "Menu",
+  "expandSidebar": "Mở rộng thanh bên",
+  "collapseSidebar": "Thu gọn thanh bên",
+  "copyright": "Bản quyền © 2025 EDUZO."
+}
+
+}

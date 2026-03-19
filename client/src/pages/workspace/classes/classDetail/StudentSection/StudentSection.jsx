@@ -1,6 +1,7 @@
 // src/pages/workspace/classes/classDetail/StudentSection/StudentSection.jsx
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./StudentSection.css";
 
 const getStudentId = (s) => String(s?._id || s?.id || "");
@@ -41,6 +42,7 @@ export default function StudentsSection({
     fmtDMY,
 }) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const canClickSendTuition =
         canSendTuition && !sendingTuition && heldCount >= threshold;
@@ -51,7 +53,7 @@ export default function StudentsSection({
     return (
         <div className="cd-section">
             <div className="cd-section-head">
-                <h2>Students</h2>
+                <h2>{t("studentSection.title")}</h2>
 
                 <div className="cd-controls">
                     {canSendTuition && (
@@ -66,31 +68,37 @@ export default function StudentsSection({
                             disabled={!canClickSendTuition || !!tuitionSent}
                             title={
                                 heldCount < threshold
-                                    ? `Need ${
-                                          threshold - heldCount
-                                      } more session(s) (${heldCount}/${threshold})`
+                                    ? t("studentSection.needMoreSessions", {
+                                          count: threshold - heldCount,
+                                          held: heldCount,
+                                          threshold,
+                                      })
                                     : tuitionSent
-                                      ? "Tuition email already sent"
+                                      ? t("studentSection.tuitionAlreadySent")
                                       : undefined
                             }
                         >
                             {tuitionSent
-                                ? "Tuition email sent"
+                                ? t("studentSection.tuitionSent")
                                 : sendingTuition
-                                  ? "Sending..."
-                                  : "Send tuition email"}
+                                  ? t("studentSection.sending")
+                                  : t("studentSection.sendTuition")}
                         </button>
                     )}
 
                     <div className="cd-date">
-                        <span className="cd-date-label">Date</span>
+                        <span className="cd-date-label">
+                            {t("studentSection.date")}
+                        </span>
 
                         <div className="cd-date-input">
                             <input
                                 className="cd-date-text"
                                 type="text"
                                 inputMode="numeric"
-                                placeholder="dd/mm/yyyy"
+                                placeholder={t(
+                                    "studentSection.datePlaceholder",
+                                )}
                                 value={displayDate}
                                 onChange={onChangeDisplayDate}
                                 onBlur={onDateBlur}
@@ -108,7 +116,7 @@ export default function StudentsSection({
                                 type="button"
                                 className="cd-date-icon-btn"
                                 onClick={onOpenDatePicker}
-                                aria-label="Open date picker"
+                                aria-label={t("studentSection.openDatePicker")}
                             >
                                 <svg
                                     viewBox="0 0 24 24"
@@ -140,18 +148,20 @@ export default function StudentsSection({
                 <table className="cd-table cd-table-att">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
+                            <th>{t("studentSection.no")}</th>
+                            <th>{t("studentSection.name")}</th>
 
                             {sessionDates.map((d, i) => (
                                 <Fragment key={`head-${i}`}>
                                     <th>{fmtDMY(d)}</th>
-                                    <th>Homework</th>
+                                    <th>{t("studentSection.homework")}</th>
                                 </Fragment>
                             ))}
 
-                            <th>Tuition</th>
-                            {canDeleteStudent && <th>Action</th>}
+                            <th>{t("studentSection.tuition")}</th>
+                            {canDeleteStudent && (
+                                <th>{t("studentSection.action")}</th>
+                            )}
                         </tr>
                     </thead>
 
@@ -160,10 +170,14 @@ export default function StudentsSection({
                             const studentId = getStudentId(s);
                             if (!studentId) return null;
 
+                            const studentName = s.fullName || s.name;
+
                             return (
                                 <tr key={studentId}>
-                                    <td data-label="No">{idx + 1}</td>
-                                    <td data-label="Name">
+                                    <td data-label={t("studentSection.no")}>
+                                        {idx + 1}
+                                    </td>
+                                    <td data-label={t("studentSection.name")}>
                                         <button
                                             type="button"
                                             className="cd-link"
@@ -173,7 +187,7 @@ export default function StudentsSection({
                                                 )
                                             }
                                         >
-                                            {s.fullName || s.name}
+                                            {studentName}
                                         </button>
                                     </td>
 
@@ -186,13 +200,22 @@ export default function StudentsSection({
                                             >
                                                 <td
                                                     className="cd-center"
-                                                    data-label={`${dLabel} (Attendance)`}
+                                                    data-label={t(
+                                                        "studentSection.attendanceDataLabel",
+                                                        {
+                                                            date: dLabel,
+                                                        },
+                                                    )}
                                                 >
                                                     <input
                                                         type="checkbox"
-                                                        aria-label={`${
-                                                            s.fullName || s.name
-                                                        } attendance ${dLabel}`}
+                                                        aria-label={t(
+                                                            "studentSection.attendanceAria",
+                                                            {
+                                                                name: studentName,
+                                                                date: dLabel,
+                                                            },
+                                                        )}
                                                         checked={
                                                             !!checkState?.[
                                                                 studentId
@@ -220,13 +243,22 @@ export default function StudentsSection({
 
                                                 <td
                                                     className="cd-center"
-                                                    data-label={`${dLabel} (Homework)`}
+                                                    data-label={t(
+                                                        "studentSection.homeworkDataLabel",
+                                                        {
+                                                            date: dLabel,
+                                                        },
+                                                    )}
                                                 >
                                                     <input
                                                         type="checkbox"
-                                                        aria-label={`${
-                                                            s.fullName || s.name
-                                                        } homework ${dLabel}`}
+                                                        aria-label={t(
+                                                            "studentSection.homeworkAria",
+                                                            {
+                                                                name: studentName,
+                                                                date: dLabel,
+                                                            },
+                                                        )}
                                                         checked={
                                                             !!checkState?.[
                                                                 studentId
@@ -257,13 +289,16 @@ export default function StudentsSection({
 
                                     <td
                                         className="cd-center"
-                                        data-label="Tuition"
+                                        data-label={t("studentSection.tuition")}
                                     >
                                         <input
                                             type="checkbox"
-                                            aria-label={`${
-                                                s.fullName || s.name
-                                            } tuition paid`}
+                                            aria-label={t(
+                                                "studentSection.tuitionAria",
+                                                {
+                                                    name: studentName,
+                                                },
+                                            )}
                                             checked={
                                                 !!checkState?.[studentId]
                                                     ?.tuition
@@ -288,7 +323,9 @@ export default function StudentsSection({
                                     {canDeleteStudent && (
                                         <td
                                             className="cd-center"
-                                            data-label="Action"
+                                            data-label={t(
+                                                "studentSection.action",
+                                            )}
                                         >
                                             <button
                                                 type="button"
@@ -297,7 +334,7 @@ export default function StudentsSection({
                                                     onDeleteStudent?.(s)
                                                 }
                                             >
-                                                Delete
+                                                {t("studentSection.delete")}
                                             </button>
                                         </td>
                                     )}
@@ -308,7 +345,7 @@ export default function StudentsSection({
                         {students.length === 0 && (
                             <tr>
                                 <td colSpan={colSpan} className="cd-empty">
-                                    No students
+                                    {t("studentSection.noStudents")}
                                 </td>
                             </tr>
                         )}
@@ -323,7 +360,7 @@ export default function StudentsSection({
                         onClick={onCancelAttendance}
                         type="button"
                     >
-                        Cancel
+                        {t("studentSection.cancel")}
                     </button>
 
                     <button
@@ -332,7 +369,9 @@ export default function StudentsSection({
                         type="button"
                         disabled={isSavingAttendance}
                     >
-                        {isSavingAttendance ? "Saving..." : "Save"}
+                        {isSavingAttendance
+                            ? t("studentSection.saving")
+                            : t("studentSection.save")}
                     </button>
                 </div>
             )}

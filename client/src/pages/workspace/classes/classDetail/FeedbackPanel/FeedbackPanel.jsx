@@ -1,6 +1,7 @@
 // src/pages/workspace/classes/classDetail/FeedbackPanel/FeedbackPanel.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../utils/newRequest";
 import "./FeedbackPanel.css";
 
@@ -38,10 +39,10 @@ const avgRating = (items) => {
     return Math.round((sum / nums.length) * 10) / 10;
 };
 
-function Stars({ value = 0 }) {
+function Stars({ value = 0, ariaLabel }) {
     const v = Math.max(0, Math.min(5, Number(value) || 0));
     return (
-        <span className="fp-stars" aria-label={`Rating ${v} out of 5`}>
+        <span className="fp-stars" aria-label={ariaLabel}>
             {"★★★★★".split("").map((ch, i) => (
                 <span
                     key={i}
@@ -60,6 +61,7 @@ export default function FeedbackPanel({
     userInfo,
     classNameValue,
 }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const params = useParams();
@@ -98,8 +100,8 @@ export default function FeedbackPanel({
 
     const teacherName =
         role === "teacher"
-            ? userInfo?.fullName || userInfo?.name || "Teacher"
-            : "Center";
+            ? userInfo?.fullName || userInfo?.name || t("feedbackPanel.teacher")
+            : t("feedbackPanel.center");
 
     const students = useMemo(() => {
         const list = cls?.students;
@@ -179,7 +181,9 @@ export default function FeedbackPanel({
             const list = data?.feedbacks ?? data?.records ?? data ?? [];
             setFeedbacks(Array.isArray(list) ? list : []);
         } catch (e) {
-            setErr(e?.response?.data?.message || "Failed to load feedback");
+            setErr(
+                e?.response?.data?.message || t("feedbackPanel.failedToLoad"),
+            );
             setFeedbacks([]);
         } finally {
             setLoading(false);
@@ -189,7 +193,7 @@ export default function FeedbackPanel({
     useEffect(() => {
         fetchFeedbacks();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [effectiveClassId]);
+    }, [effectiveClassId, t]);
 
     useEffect(() => {
         if (!studentId) return;
@@ -207,12 +211,12 @@ export default function FeedbackPanel({
 
         const sn = safeStr(studentName).trim();
         if (!sn) {
-            alert("Please enter student's name");
+            alert(t("feedbackPanel.enterStudentName"));
             return;
         }
         const r = Number(rating);
         if (!(r >= 1 && r <= 5)) {
-            alert("Please choose a rating from 1 to 5");
+            alert(t("feedbackPanel.chooseRating"));
             return;
         }
 
@@ -241,11 +245,11 @@ export default function FeedbackPanel({
 
             fetchFeedbacks();
 
-            alert("Thanks! Your feedback was submitted.");
+            alert(t("feedbackPanel.thanksSubmitted"));
         } catch (err2) {
             alert(
                 err2?.response?.data?.message ||
-                    "Submit failed. Please try again.",
+                    t("feedbackPanel.submitFailed"),
             );
         }
     };
@@ -254,9 +258,9 @@ export default function FeedbackPanel({
         if (!publicFormUrl) return;
         try {
             await navigator.clipboard.writeText(publicFormUrl);
-            alert("Link copied");
+            alert(t("feedbackPanel.linkCopied"));
         } catch {
-            window.prompt("Copy this link:", publicFormUrl);
+            window.prompt(t("feedbackPanel.copyThisLink"), publicFormUrl);
         }
     };
 
@@ -264,31 +268,30 @@ export default function FeedbackPanel({
 
     return (
         <>
-            <section className="fp-wrap" aria-label="Feedback panel">
+            <section
+                className="fp-wrap"
+                aria-label={t("feedbackPanel.panelAria")}
+            >
                 <div className="fp-head">
                     <div>
-                        <h3 className="fp-title">Feedback</h3>
+                        <h3 className="fp-title">{t("feedbackPanel.title")}</h3>
                         <div className="fp-sub">
-                            {teacherId ? (
-                                <>
-                                    {" "}
-                                    • Teacher: <strong>{teacherName}</strong>
-                                </>
-                            ) : (
-                                <>
-                                    {" "}
-                                    • Teacher: <strong>Center</strong>
-                                </>
-                            )}
+                            {" • "}
+                            {t("feedbackPanel.teacherLabel")}:{" "}
+                            <strong>{teacherName}</strong>
                         </div>
                     </div>
 
                     <div className="fp-badges">
                         <span className="fp-chip">
-                            Avg: <strong>{avg ? avg : "—"}</strong>
+                            {t("feedbackPanel.avg")}:{" "}
+                            <strong>{avg ? avg : "—"}</strong>
                         </span>
                         <span className="fp-chip">
-                            <strong>{feedbacks.length}</strong> feedback
+                            <strong>{feedbacks.length}</strong>{" "}
+                            {t("feedbackPanel.feedbackCount", {
+                                count: feedbacks.length,
+                            })}
                         </span>
                     </div>
                 </div>
@@ -297,11 +300,10 @@ export default function FeedbackPanel({
                     <div className="fp-qrCard">
                         <div className="fp-qrLeft">
                             <div className="fp-qrTitle">
-                                Share QR for students
+                                {t("feedbackPanel.shareQrTitle")}
                             </div>
                             <div className="fp-qrDesc">
-                                Students scan the QR → open the form → submit
-                                feedback.
+                                {t("feedbackPanel.shareQrDesc")}
                             </div>
 
                             <div className="fp-linkRow">
@@ -309,7 +311,9 @@ export default function FeedbackPanel({
                                     className="fp-linkInput"
                                     readOnly
                                     value={publicFormUrl || ""}
-                                    placeholder="Public feedback link"
+                                    placeholder={t(
+                                        "feedbackPanel.publicFeedbackLink",
+                                    )}
                                 />
                                 <button
                                     type="button"
@@ -317,7 +321,7 @@ export default function FeedbackPanel({
                                     onClick={copyLink}
                                     disabled={!publicFormUrl}
                                 >
-                                    Copy
+                                    {t("feedbackPanel.copy")}
                                 </button>
                             </div>
                         </div>
@@ -328,22 +332,22 @@ export default function FeedbackPanel({
                                     type="button"
                                     className="fp-qrTrigger"
                                     onClick={() => setIsQrOpen(true)}
-                                    aria-label="Open large QR code"
-                                    title="Click to enlarge QR"
+                                    aria-label={t("feedbackPanel.openLargeQr")}
+                                    title={t("feedbackPanel.clickToEnlarge")}
                                 >
                                     <img
                                         src={qrImgSrc}
-                                        alt="Class feedback QR"
+                                        alt={t("feedbackPanel.classFeedbackQr")}
                                         className="fp-qrImg"
                                         draggable={false}
                                     />
                                     <span className="fp-qrZoomHint">
-                                        Click to enlarge
+                                        {t("feedbackPanel.clickToEnlarge")}
                                     </span>
                                 </button>
                             ) : (
                                 <div className="fp-qrPlaceholder">
-                                    QR unavailable
+                                    {t("feedbackPanel.qrUnavailable")}
                                 </div>
                             )}
                         </div>
@@ -355,7 +359,7 @@ export default function FeedbackPanel({
                         <div className="fp-formGrid">
                             <div className="fp-field">
                                 <label className="fp-label">
-                                    Student’s name
+                                    {t("feedbackPanel.studentName")}
                                 </label>
                                 <input
                                     className="fp-input"
@@ -363,13 +367,15 @@ export default function FeedbackPanel({
                                     onChange={(e) =>
                                         setStudentName(e.target.value)
                                     }
-                                    placeholder="Enter student name"
+                                    placeholder={t(
+                                        "feedbackPanel.enterStudentNamePlaceholder",
+                                    )}
                                 />
                             </div>
 
                             <div className="fp-field">
                                 <label className="fp-label">
-                                    Student’s class
+                                    {t("feedbackPanel.studentClass")}
                                 </label>
                                 <input
                                     className="fp-input"
@@ -380,7 +386,7 @@ export default function FeedbackPanel({
 
                             <div className="fp-field fp-field--full">
                                 <label className="fp-label">
-                                    Choose student (optional)
+                                    {t("feedbackPanel.chooseStudentOptional")}
                                 </label>
                                 <select
                                     className="fp-select"
@@ -394,10 +400,14 @@ export default function FeedbackPanel({
                                 >
                                     <option value="">
                                         {clsLoading
-                                            ? "Loading students..."
+                                            ? t("feedbackPanel.loadingStudents")
                                             : students.length
-                                              ? "Select from roster"
-                                              : "No roster available"}
+                                              ? t(
+                                                    "feedbackPanel.selectFromRoster",
+                                                )
+                                              : t(
+                                                    "feedbackPanel.noRosterAvailable",
+                                                )}
                                     </option>
                                     {students.map((s, idx) => {
                                         const id = String(
@@ -416,12 +426,14 @@ export default function FeedbackPanel({
 
                             <div className="fp-field fp-field--full">
                                 <label className="fp-label">
-                                    Rate teaching quality
+                                    {t("feedbackPanel.rateTeachingQuality")}
                                 </label>
                                 <div
                                     className="fp-rateRow"
                                     role="radiogroup"
-                                    aria-label="Teaching quality rating"
+                                    aria-label={t(
+                                        "feedbackPanel.teachingQualityRating",
+                                    )}
                                 >
                                     {[1, 2, 3, 4, 5].map((n) => {
                                         const on = n === rating;
@@ -437,27 +449,36 @@ export default function FeedbackPanel({
                                                 onClick={() => setRating(n)}
                                                 role="radio"
                                                 aria-checked={on}
-                                                aria-label={`Rate ${n} out of 5`}
+                                                aria-label={t(
+                                                    "feedbackPanel.rateOutOfFive",
+                                                    {
+                                                        value: n,
+                                                    },
+                                                )}
                                             >
                                                 ★
                                             </button>
                                         );
                                     })}
                                     <span className="fp-rateVal">
-                                        {rating}/5
+                                        {t("feedbackPanel.outOfFive", {
+                                            value: rating,
+                                        })}
                                     </span>
                                 </div>
                             </div>
 
                             <div className="fp-field fp-field--full">
                                 <label className="fp-label">
-                                    Short paragraph
+                                    {t("feedbackPanel.shortParagraph")}
                                 </label>
                                 <textarea
                                     className="fp-textarea"
                                     value={comment}
                                     onChange={(e) => setComment(e.target.value)}
-                                    placeholder="Write your feedback..."
+                                    placeholder={t(
+                                        "feedbackPanel.writeYourFeedback",
+                                    )}
                                     rows={4}
                                 />
                             </div>
@@ -468,14 +489,16 @@ export default function FeedbackPanel({
                                 type="submit"
                                 className="fp-btn fp-btn--primary"
                             >
-                                Submit feedback
+                                {t("feedbackPanel.submitFeedback")}
                             </button>
                         </div>
                     </form>
                 )}
 
                 <div className="fp-listHead">
-                    <h4 className="fp-listTitle">Recent feedback</h4>
+                    <h4 className="fp-listTitle">
+                        {t("feedbackPanel.recentFeedback")}
+                    </h4>
                     <button
                         type="button"
                         className="fp-btn fp-btn--ghost"
@@ -486,15 +509,21 @@ export default function FeedbackPanel({
                         }
                         disabled={!effectiveClassId}
                     >
-                        View full feedbacks
+                        {t("feedbackPanel.viewFullFeedbacks")}
                     </button>
                 </div>
 
-                {loading && <div className="fp-muted">Loading feedback...</div>}
+                {loading && (
+                    <div className="fp-muted">
+                        {t("feedbackPanel.loadingFeedback")}
+                    </div>
+                )}
                 {!loading && err && <div className="fp-error">{err}</div>}
 
                 {!loading && !err && feedbacks.length === 0 && (
-                    <div className="fp-empty">No feedback yet.</div>
+                    <div className="fp-empty">
+                        {t("feedbackPanel.noFeedbackYet")}
+                    </div>
                 )}
 
                 {!loading && !err && feedbacks.length > 0 && (
@@ -516,7 +545,13 @@ export default function FeedbackPanel({
                                             {name}
                                         </div>
                                         <div className="fp-itemMeta">
-                                            <Stars value={r} />
+                                            <Stars
+                                                value={r}
+                                                ariaLabel={t(
+                                                    "feedbackPanel.ratingAria",
+                                                    { value: r },
+                                                )}
+                                            />
                                             <span className="fp-itemTime">
                                                 {fmtDT(ts)}
                                             </span>
@@ -534,8 +569,7 @@ export default function FeedbackPanel({
 
                         {feedbacks.length > 10 && (
                             <div className="fp-muted" style={{ marginTop: 8 }}>
-                                Showing latest 10. Click “View full feedbacks”
-                                to see all.
+                                {t("feedbackPanel.showingLatestTen")}
                             </div>
                         )}
                     </div>
@@ -548,7 +582,7 @@ export default function FeedbackPanel({
                     onClick={() => setIsQrOpen(false)}
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Large QR code"
+                    aria-label={t("feedbackPanel.largeQrAria")}
                 >
                     <div
                         className="fp-modal"
@@ -556,13 +590,13 @@ export default function FeedbackPanel({
                     >
                         <div className="fp-modalHead">
                             <div className="fp-modalTitle">
-                                QR feedback link
+                                {t("feedbackPanel.qrFeedbackLink")}
                             </div>
                             <button
                                 type="button"
                                 className="fp-modalClose"
                                 onClick={() => setIsQrOpen(false)}
-                                aria-label="Close QR popup"
+                                aria-label={t("feedbackPanel.closeQrPopup")}
                             >
                                 ×
                             </button>
@@ -571,7 +605,7 @@ export default function FeedbackPanel({
                         <div className="fp-modalBody">
                             <img
                                 src={qrImgLargeSrc}
-                                alt="Large class feedback QR"
+                                alt={t("feedbackPanel.largeClassFeedbackQr")}
                                 className="fp-qrImgLarge"
                                 draggable={false}
                             />

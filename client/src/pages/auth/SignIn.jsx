@@ -1,13 +1,14 @@
-// src/pages/auth/SignIn.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/AuthContext";
 import "./auth.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { useTranslation } from "react-i18next";
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function SignIn() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -39,10 +40,12 @@ export default function SignIn() {
         const errs = {};
         const email = inputs.email.trim().toLowerCase();
 
-        if (!email) errs.email = "Email is required";
-        else if (!isValidEmail(email)) errs.email = "Invalid email format";
+        if (!email) errs.email = t("auth.signIn.errorEmailRequired");
+        else if (!isValidEmail(email))
+            errs.email = t("auth.signIn.errorEmailInvalid");
 
-        if (!inputs.password) errs.password = "Password is required";
+        if (!inputs.password)
+            errs.password = t("auth.signIn.errorPasswordRequired");
 
         return errs;
     };
@@ -66,7 +69,9 @@ export default function SignIn() {
             const result = await login(email, password);
 
             if (!result?.success) {
-                const errs = { password: "Invalid email or password" };
+                const errs = {
+                    password: t("auth.signIn.errorInvalidCredentials"),
+                };
                 setErrors(errs);
                 focusFirstError(errs);
                 return;
@@ -77,7 +82,7 @@ export default function SignIn() {
             const msg =
                 err?.response?.data?.message ||
                 err?.message ||
-                "Invalid email or password";
+                t("auth.signIn.errorInvalidCredentials");
 
             const errs = { password: msg };
             setErrors(errs);
@@ -89,28 +94,35 @@ export default function SignIn() {
 
     return (
         <>
-            <h2 className="auth-title">Sign In</h2>
-            <p className="auth-subtitle">Great to see you again</p>
+            <h2 className="auth-title">{t("auth.signIn.title")}</h2>
+            <p className="auth-subtitle">{t("auth.signIn.subtitle")}</p>
 
             <form className="auth-form" onSubmit={onSubmit}>
                 {/* EMAIL */}
                 <div className="auth-field">
-                    <label className="auth-label">Email</label>
+                    <label className="auth-label">
+                        {t("auth.signIn.email")}
+                    </label>
+
                     <div className="auth-input-wrap">
                         <span className="auth-input-icon">
                             <i className="fa-solid fa-envelope" />
                         </span>
+
                         <input
                             type="email"
                             name="email"
-                            placeholder="Enter your email"
+                            placeholder={t("auth.signIn.emailPlaceholder")}
                             value={inputs.email}
                             onChange={onChange}
-                            className={`auth-input ${errors.email ? "error" : ""}`}
+                            className={`auth-input ${
+                                errors.email ? "error" : ""
+                            }`}
                             autoComplete="email"
                             disabled={isLoading}
                         />
                     </div>
+
                     <p className={`auth-error ${errors.email ? "show" : ""}`}>
                         {errors.email}
                     </p>
@@ -118,26 +130,33 @@ export default function SignIn() {
 
                 {/* PASSWORD */}
                 <div className="auth-field">
-                    <label className="auth-label">Password</label>
+                    <label className="auth-label">
+                        {t("auth.signIn.password")}
+                    </label>
+
                     <div className="auth-input-wrap">
                         <span className="auth-input-icon">
                             <i className="fa-solid fa-lock" />
                         </span>
+
                         <input
                             type={showPassword ? "text" : "password"}
                             name="password"
-                            placeholder="Enter your password"
+                            placeholder={t("auth.signIn.passwordPlaceholder")}
                             value={inputs.password}
                             onChange={onChange}
-                            className={`auth-input ${errors.password ? "error" : ""}`}
+                            className={`auth-input ${
+                                errors.password ? "error" : ""
+                            }`}
                             autoComplete="current-password"
                             disabled={isLoading}
                         />
+
                         <button
                             type="button"
                             className="auth-eye-btn"
                             onClick={() => setShowPassword((v) => !v)}
-                            aria-label="Toggle password visibility"
+                            aria-label={t("auth.signIn.togglePassword")}
                             disabled={isLoading}
                         >
                             {showPassword ? (
@@ -147,8 +166,11 @@ export default function SignIn() {
                             )}
                         </button>
                     </div>
+
                     <p
-                        className={`auth-error ${errors.password ? "show" : ""}`}
+                        className={`auth-error ${
+                            errors.password ? "show" : ""
+                        }`}
                     >
                         {errors.password}
                     </p>
@@ -157,18 +179,20 @@ export default function SignIn() {
                 <div className="auth-row">
                     <span />
                     <Link className="auth-link" to="/auth/forgot-password">
-                        Forgot your password?
+                        {t("auth.signIn.forgot")}
                     </Link>
                 </div>
 
                 <button className="auth-btn" type="submit" disabled={isLoading}>
-                    {isLoading ? "Signing In..." : "Sign In"}
+                    {isLoading
+                        ? t("auth.signIn.signing")
+                        : t("auth.signIn.signInBtn")}
                 </button>
 
                 <div className="auth-footer">
-                    <span>Are you new here? </span>
+                    <span>{t("auth.signIn.newUser")}</span>
                     <Link className="auth-link" to="/auth/signup">
-                        Create a free account
+                        {t("auth.signIn.createAccount")}
                     </Link>
                 </div>
             </form>

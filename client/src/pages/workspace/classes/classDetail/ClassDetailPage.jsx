@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../utils/newRequest";
 import "./ClassDetailPage.css";
 import CreateStudent from "../createModal/CreateStudent";
@@ -215,6 +216,7 @@ export default function ClassDetailPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const { userInfo } = useAuth();
+    const { t } = useTranslation();
 
     const role = userInfo?.role;
     const canUseNotes = role === "teacher" || role === "center";
@@ -243,7 +245,6 @@ export default function ClassDetailPage() {
     const [pendingHomework, setPendingHomework] = useState({});
     const [pendingTuition, setPendingTuition] = useState({});
 
-    // sessions summary
     const [heldCount, setHeldCount] = useState(0);
     const [cycleHeld, setCycleHeld] = useState(0);
     const [threshold, setThreshold] = useState(12);
@@ -259,7 +260,6 @@ export default function ClassDetailPage() {
         };
     };
 
-    /** ===== load class ===== */
     const loadClass = async () => {
         const res = await apiUtils.get(`/classes/${classId}`);
         const data = res?.data?.metadata || res?.data || {};
@@ -303,7 +303,6 @@ export default function ClassDetailPage() {
         return () => {
             alive = false;
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classId]);
 
     useEffect(() => {
@@ -328,7 +327,6 @@ export default function ClassDetailPage() {
     );
     const dateKeysParam = useMemo(() => dateKeys.join(","), [dateKeys]);
 
-    /** ===== fetch attendance records ===== */
     useEffect(() => {
         if (!classId) return;
         let alive = true;
@@ -385,7 +383,7 @@ export default function ClassDetailPage() {
                     return next;
                 });
             } catch {
-                // ignore
+                //
             }
         })();
 
@@ -403,13 +401,14 @@ export default function ClassDetailPage() {
             setHeldCount(Number(meta.heldCount || 0));
             setCycleHeld(Number(meta.cycleHeld || 0));
             setThreshold(Math.max(1, Number(meta.threshold) || 12));
-        } catch {}
+        } catch {
+            //
+        }
     };
 
     useEffect(() => {
         if (!classId) return;
         fetchSessionSummary();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classId]);
 
     useEffect(() => {
@@ -417,14 +416,14 @@ export default function ClassDetailPage() {
         const tab = sp.get("tab");
         if (tab !== "tuition") return;
 
-        const t = setTimeout(() => {
+        const tmr = setTimeout(() => {
             tuitionBtnRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "center",
             });
         }, 250);
 
-        return () => clearTimeout(t);
+        return () => clearTimeout(tmr);
     }, [location.search, cycleHeld, threshold]);
 
     const toggleLocal = (studentId, type, dateKey, value) => {
@@ -555,16 +554,13 @@ export default function ClassDetailPage() {
                 const klass = await loadClass();
                 setCls(klass);
             } catch {
-                // ignore
+                //
             }
 
             exitAttendanceEditMode();
         } catch (err) {
             console.error(err);
-            alert(
-                err?.response?.data?.message ||
-                    "Save failed. Please try again.",
-            );
+            alert(err?.response?.data?.message || t("classDetail.saveFailed"));
         } finally {
             setIsSavingAttendance(false);
         }
@@ -580,7 +576,12 @@ export default function ClassDetailPage() {
         if (!canSendTuition) return;
 
         if (cycleHeld < threshold) {
-            alert(`Not enough sessions held: ${cycleHeld}/${threshold}`);
+            alert(
+                t("classDetail.notEnoughSessions", {
+                    held: cycleHeld,
+                    threshold,
+                }),
+            );
             return;
         }
 
@@ -589,7 +590,12 @@ export default function ClassDetailPage() {
 
             const res = await apiUtils.post(`/classes/${classId}/tuition/send`);
             const meta = res?.data?.metadata || {};
-            alert(`Tuition emails sent: ${meta.sent || 0}/${meta.total || 0}`);
+            alert(
+                t("classDetail.tuitionEmailsSent", {
+                    sent: meta.sent || 0,
+                    total: meta.total || 0,
+                }),
+            );
 
             await fetchSessionSummary();
 
@@ -598,29 +604,31 @@ export default function ClassDetailPage() {
         } catch (err) {
             alert(
                 err?.response?.data?.message ||
-                    "Failed to send tuition emails.",
+                    t("classDetail.sendTuitionFailed"),
             );
         } finally {
             setSendingTuition(false);
         }
     };
 
-    if (loading) return <div className="cd-muted">Loading...</div>;
-    if (!cls) return <div className="cd-muted">Class not found</div>;
+    if (loading)
+        return <div className="cd-muted">{t("classDetail.loading")}</div>;
+    if (!cls)
+        return <div className="cd-muted">{t("classDetail.classNotFound")}</div>;
 
     const nextSessionInfo = getNextSessionSlot(cls, startDate);
     const nextSession = nextSessionInfo?.date || null;
     const nextSessionSlot = nextSessionInfo?.slot || null;
 
     const nextSessionDayLabel = nextSession
-        ? DAY_NAME[nextSession.getDay()]
+        ? t(`weekdays.${DAY_NAME[nextSession.getDay()].toLowerCase()}`)
         : "";
 
     const nextSessionSubLabel = nextSession
         ? `${fmtDMY(nextSession)}${
               nextSessionSlot?.time ? `, ${nextSessionSlot.time}` : ""
           }`
-        : "—";
+        : t("classDetail.emptyValue");
 
     const students = cls.students || [];
 
@@ -631,8 +639,11 @@ export default function ClassDetailPage() {
         const studentId = getStudentId(student);
         if (!studentId) return;
 
-        const name = student?.fullName || student?.name || "this student";
-        const ok = window.confirm(`Remove ${name} from this class?`);
+        const name =
+            student?.fullName || student?.name || t("classDetail.thisStudent");
+        const ok = window.confirm(
+            t("classDetail.confirmDeleteStudent", { name }),
+        );
         if (!ok) return;
 
         try {
@@ -658,22 +669,24 @@ export default function ClassDetailPage() {
                 return next;
             });
         } catch (err) {
-            alert(err?.response?.data?.message || "Failed to delete student");
+            alert(
+                err?.response?.data?.message ||
+                    t("classDetail.deleteStudentFailed"),
+            );
         }
     };
 
     return (
         <div className="cd-wrap">
-            {/* ===== HEADER ===== */}
             <div className="cd-top">
                 <div className="cd-title">
-                    {cls.name || cls.className || "{classes.name}"}
+                    {cls.name || cls.className || t("classDetail.unnamedClass")}
                     {isCenter && tuitionDue && (
                         <span
                             className="cd-badge-danger"
                             style={{ marginLeft: 10 }}
                         >
-                            Tuition Due
+                            {t("classDetail.tuitionDue")}
                         </span>
                     )}
                     {isCenter && tuitionSent && (
@@ -681,7 +694,7 @@ export default function ClassDetailPage() {
                             className="cd-badge-ok"
                             style={{ marginLeft: 10 }}
                         >
-                            Tuition Sent
+                            {t("classDetail.tuitionSent")}
                         </span>
                     )}
                 </div>
@@ -693,9 +706,9 @@ export default function ClassDetailPage() {
                         onClick={() =>
                             navigate(`/workspace/classes/${classId}/attendance`)
                         }
-                        title="View full attendance"
+                        title={t("classDetail.viewFullAttendance")}
                     >
-                        View full attendance
+                        {t("classDetail.viewFullAttendance")}
                     </button>
 
                     <button
@@ -703,12 +716,12 @@ export default function ClassDetailPage() {
                         type="button"
                         onClick={() => setOpenStudent(true)}
                     >
-                        + Student
+                        {t("classDetail.addStudent")}
                     </button>
                 </div>
 
                 <div className="cd-schedule">
-                    {cls.scheduleText || "Mon, Wed, Fri - 9:00 AM"}
+                    {cls.scheduleText || t("classDetail.defaultSchedule")}
                 </div>
             </div>
 
@@ -751,50 +764,64 @@ export default function ClassDetailPage() {
                 }}
             />
 
-            {/* ===== STATS ===== */}
             <div className="cd-stats">
                 <div className="cd-stat">
-                    <div className="cd-stat-label">Total Students</div>
+                    <div className="cd-stat-label">
+                        {t("classDetail.totalStudents")}
+                    </div>
                     <div className="cd-stat-value">
                         {cls.totalStudents ?? cls.studentCount ?? 0}
                     </div>
-                    <div className="cd-stat-sub">Enrolled</div>
+                    <div className="cd-stat-sub">
+                        {t("classDetail.enrolled")}
+                    </div>
                 </div>
 
                 <div className="cd-stat">
-                    <div className="cd-stat-label">Next Session</div>
+                    <div className="cd-stat-label">
+                        {t("classDetail.nextSession")}
+                    </div>
                     <div className="cd-stat-value">
-                        {nextSession ? nextSessionDayLabel : "—"}
+                        {nextSession
+                            ? nextSessionDayLabel
+                            : t("classDetail.emptyValue")}
                     </div>
                     <div className="cd-stat-sub">{nextSessionSubLabel}</div>
                 </div>
 
                 <div className="cd-stat">
-                    <div className="cd-stat-label">Duration</div>
-                    <div className="cd-stat-value">
-                        {cls?.durationMinutes ?? 90} min
+                    <div className="cd-stat-label">
+                        {t("classDetail.duration")}
                     </div>
-                    <div className="cd-stat-sub">Per session</div>
+                    <div className="cd-stat-value">
+                        {t("classDetail.durationMinutes", {
+                            count: cls?.durationMinutes ?? 90,
+                        })}
+                    </div>
+                    <div className="cd-stat-sub">
+                        {t("classDetail.perSession")}
+                    </div>
                 </div>
 
                 <div className="cd-stat">
-                    <div className="cd-stat-label">Sessions held</div>
+                    <div className="cd-stat-label">
+                        {t("classDetail.sessionsHeld")}
+                    </div>
                     <div className="cd-stat-value">
                         {cycleHeld}/{threshold}
                     </div>
                     <div className="cd-stat-sub">
                         {isCenter
                             ? tuitionSent
-                                ? "Tuition sent"
+                                ? t("classDetail.tuitionSent")
                                 : tuitionDue
-                                  ? "Due tuition"
-                                  : "Not ready"
-                            : "—"}
+                                  ? t("classDetail.dueTuition")
+                                  : t("classDetail.notReady")
+                            : t("classDetail.emptyValue")}
                     </div>
                 </div>
             </div>
 
-            {/* ===== STUDENTS SECTION ===== */}
             <StudentsSection
                 students={students}
                 sessionDates={sessionDates}
@@ -841,7 +868,6 @@ export default function ClassDetailPage() {
                 fmtDMY={fmtDMY}
             />
 
-            {/* ===== NOTES PANEL ===== */}
             {canUseNotes && (
                 <NotesPanel
                     classId={classId}
@@ -851,7 +877,6 @@ export default function ClassDetailPage() {
                 />
             )}
 
-            {/* ===== FEEDBACK PANEL ===== */}
             <FeedbackPanel classId={classId} role={role} userInfo={userInfo} />
         </div>
     );

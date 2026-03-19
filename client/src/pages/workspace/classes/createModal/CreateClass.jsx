@@ -1,17 +1,18 @@
 // src/pages/workspace/classes/createModal/CreateClass.jsx
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../utils/newRequest";
 import "./CreateModal.css";
 
 const DAYS = [
-    { key: "mon", label: "Mon", value: "Mon" },
-    { key: "tue", label: "Tue", value: "Tue" },
-    { key: "wed", label: "Wed", value: "Wed" },
-    { key: "thu", label: "Thu", value: "Thu" },
-    { key: "fri", label: "Fri", value: "Fri" },
-    { key: "sat", label: "Sat", value: "Sat" },
-    { key: "sun", label: "Sun", value: "Sun" },
+    { key: "mon", labelKey: "shortWeekdays.mon", value: "Mon" },
+    { key: "tue", labelKey: "shortWeekdays.tue", value: "Tue" },
+    { key: "wed", labelKey: "shortWeekdays.wed", value: "Wed" },
+    { key: "thu", labelKey: "shortWeekdays.thu", value: "Thu" },
+    { key: "fri", labelKey: "shortWeekdays.fri", value: "Fri" },
+    { key: "sat", labelKey: "shortWeekdays.sat", value: "Sat" },
+    { key: "sun", labelKey: "shortWeekdays.sun", value: "Sun" },
 ];
 
 const DEFAULT_DAYS = ["Mon", "Wed", "Fri"];
@@ -63,7 +64,6 @@ const parseTimeParts = (timeText, selectedPeriod = "AM") => {
     const raw = String(timeText).trim().toLowerCase();
     if (!raw) return null;
 
-    // 9am / 9:30 pm
     const ampmMatch = raw.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
     if (ampmMatch) {
         const hour = Number(ampmMatch[1]);
@@ -79,7 +79,6 @@ const parseTimeParts = (timeText, selectedPeriod = "AM") => {
         };
     }
 
-    // 13g / 13g30 / 13g 30
     const gMatch = raw.match(/^(\d{1,2})\s*g\s*(\d{1,2})?$/i);
     if (gMatch) {
         const hour24 = Number(gMatch[1]);
@@ -94,7 +93,6 @@ const parseTimeParts = (timeText, selectedPeriod = "AM") => {
         };
     }
 
-    // 21:00 / 9:30
     const hmMatch = raw.match(/^(\d{1,2}):(\d{2})$/);
     if (hmMatch) {
         const hour = Number(hmMatch[1]);
@@ -117,7 +115,6 @@ const parseTimeParts = (timeText, selectedPeriod = "AM") => {
         };
     }
 
-    // 21 / 9
     const hourOnlyMatch = raw.match(/^(\d{1,2})$/);
     if (hourOnlyMatch) {
         const hour = Number(hourOnlyMatch[1]);
@@ -201,6 +198,8 @@ const toPayloadScheduleSlots = (slots = []) => {
 };
 
 export default function CreateClass({ open, onClose, onCreated }) {
+    const { t } = useTranslation();
+
     const [form, setForm] = useState(DEFAULT_FORM);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -461,7 +460,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
             setError(
                 err?.response?.data?.message ||
                     err?.message ||
-                    "Create class failed. Please try again.",
+                    t("createClass.createFailed"),
             );
         } finally {
             setSubmitting(false);
@@ -482,19 +481,19 @@ export default function CreateClass({ open, onClose, onCreated }) {
                     className="cm-close"
                     type="button"
                     onClick={onClose}
-                    aria-label="Close"
+                    aria-label={t("createClass.close")}
                 >
                     ×
                 </button>
 
-                <h3 className="cm-title">Create class</h3>
+                <h3 className="cm-title">{t("createClass.title")}</h3>
 
                 <form className="cm-form" onSubmit={handleSubmit}>
                     <label className="cm-label">
-                        <span>Class Name</span>
+                        <span>{t("createClass.className")}</span>
                         <input
                             className="cm-input"
-                            placeholder="e.g: IELTS 1"
+                            placeholder={t("createClass.classNamePlaceholder")}
                             value={form.name}
                             onChange={update("name")}
                             autoFocus
@@ -502,10 +501,10 @@ export default function CreateClass({ open, onClose, onCreated }) {
                     </label>
 
                     <label className="cm-label">
-                        <span>Subject</span>
+                        <span>{t("createClass.subject")}</span>
                         <input
                             className="cm-input"
-                            placeholder="e.g: English"
+                            placeholder={t("createClass.subjectPlaceholder")}
                             value={form.subject}
                             onChange={update("subject")}
                         />
@@ -513,7 +512,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
 
                     <div className="cm-label">
                         <div className="cm-schedule-header">
-                            <span>Schedule</span>
+                            <span>{t("createClass.schedule")}</span>
 
                             {!form.useCustomSchedule ? (
                                 <button
@@ -521,7 +520,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                     className="cm-link-btn"
                                     onClick={enableCustomSchedule}
                                 >
-                                    Customize per day
+                                    {t("createClass.customizePerDay")}
                                 </button>
                             ) : (
                                 <button
@@ -529,7 +528,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                     className="cm-link-btn"
                                     onClick={disableCustomSchedule}
                                 >
-                                    Use common time
+                                    {t("createClass.useCommonTime")}
                                 </button>
                             )}
                         </div>
@@ -553,7 +552,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                                     toggleDay(d.value)
                                                 }
                                             >
-                                                {d.label}
+                                                {t(d.labelKey)}
                                             </button>
                                         );
                                     })}
@@ -578,7 +577,9 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                             }));
                                         }}
                                         onBlur={handleBlurCommonTime}
-                                        placeholder="e.g: 9:00, 21:00, 21g"
+                                        placeholder={t(
+                                            "createClass.timePlaceholder",
+                                        )}
                                     />
 
                                     <select
@@ -599,8 +600,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                 </div>
 
                                 <div className="cm-helper">
-                                    Same time will be applied to all selected
-                                    days.
+                                    {t("createClass.sameTimeHelper")}
                                 </div>
                             </>
                         ) : (
@@ -625,7 +625,7 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                                         key={d.key}
                                                         value={d.value}
                                                     >
-                                                        {d.label}
+                                                        {t(d.labelKey)}
                                                     </option>
                                                 ))}
                                             </select>
@@ -652,12 +652,13 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                                             index,
                                                         )
                                                     }
-                                                    placeholder="e.g: 9:00, 21:00, 21g"
+                                                    placeholder={t(
+                                                        "createClass.timePlaceholder",
+                                                    )}
                                                 />
 
                                                 <select
                                                     className="cm-input cm-period-select"
-                                                    // style={{ width: 90 }}
                                                     value={slot.period || "AM"}
                                                     onChange={(e) =>
                                                         updateSlot(index, {
@@ -685,8 +686,12 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                                     form.scheduleSlots.length <=
                                                     1
                                                 }
-                                                title="Remove schedule row"
-                                                aria-label="Remove schedule row"
+                                                title={t(
+                                                    "createClass.removeScheduleRow",
+                                                )}
+                                                aria-label={t(
+                                                    "createClass.removeScheduleRow",
+                                                )}
                                             >
                                                 ×
                                             </button>
@@ -699,15 +704,18 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                     className="cm-add-slot"
                                     onClick={addSlot}
                                 >
-                                    + Add schedule row
+                                    {t("createClass.addScheduleRow")}
                                 </button>
                             </div>
                         )}
 
                         {scheduleTouched && (
                             <div className="cm-helper">
-                                Preview:{" "}
-                                <b>{scheduleTextPreview || "No schedule"}</b>
+                                {t("createClass.preview")}{" "}
+                                <b>
+                                    {scheduleTextPreview ||
+                                        t("createClass.noSchedule")}
+                                </b>
                             </div>
                         )}
 
@@ -718,15 +726,17 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                     className="cm-helper"
                                     style={{ color: "var(--primary-color)" }}
                                 >
-                                    Time format must be like <b>9:00</b> or{" "}
-                                    <b>21:00</b>. AM/PM can be adjusted in the
-                                    dropdown.
+                                    {t("createClass.timeFormatHelper.before")}{" "}
+                                    <b>9:00</b>{" "}
+                                    {t("createClass.timeFormatHelper.or")}{" "}
+                                    <b>21:00</b>.{" "}
+                                    {t("createClass.timeFormatHelper.after")}
                                 </div>
                             )}
                     </div>
 
                     <label className="cm-label">
-                        <span>Duration (minutes)</span>
+                        <span>{t("createClass.durationMinutes")}</span>
                         <input
                             className="cm-input"
                             type="number"
@@ -739,12 +749,12 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                     durationMinutes: e.target.value,
                                 }))
                             }
-                            placeholder="e.g: 90"
+                            placeholder={t("createClass.durationPlaceholder")}
                         />
                     </label>
 
                     <label className="cm-label">
-                        <span>Total sessions</span>
+                        <span>{t("createClass.totalSessions")}</span>
                         <input
                             className="cm-input"
                             type="number"
@@ -757,12 +767,13 @@ export default function CreateClass({ open, onClose, onCreated }) {
                                     totalSessions: e.target.value,
                                 }))
                             }
-                            placeholder="e.g: 10"
+                            placeholder={t(
+                                "createClass.totalSessionsPlaceholder",
+                            )}
                         />
 
                         <div className="cm-helper">
-                            Tuition email unlocks after completing these
-                            sessions.
+                            {t("createClass.totalSessionsHelper")}
                         </div>
                     </label>
 
@@ -775,7 +786,9 @@ export default function CreateClass({ open, onClose, onCreated }) {
                         type="submit"
                         disabled={!canSubmit || submitting}
                     >
-                        {submitting ? "Creating..." : "Create"}
+                        {submitting
+                            ? t("createClass.creating")
+                            : t("createClass.create")}
                     </button>
                 </form>
             </div>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../../utils/newRequest";
 import "./FullClassFeedback.css";
 
@@ -28,10 +29,10 @@ const avgRating = (items) => {
     return Math.round((sum / nums.length) * 10) / 10;
 };
 
-function Stars({ value = 0 }) {
+function Stars({ value = 0, ariaLabel }) {
     const v = Math.max(0, Math.min(5, Number(value) || 0));
     return (
-        <span className="fcf-stars" aria-label={`Rating ${v} out of 5`}>
+        <span className="fcf-stars" aria-label={ariaLabel}>
             {"★★★★★".split("").map((ch, i) => (
                 <span
                     key={i}
@@ -45,6 +46,7 @@ function Stars({ value = 0 }) {
 }
 
 export default function FullClassFeedback() {
+    const { t } = useTranslation();
     const { classId } = useParams();
     const navigate = useNavigate();
 
@@ -70,7 +72,10 @@ export default function FullClassFeedback() {
                 klass?.name || klass?.className || data?.className || "",
             );
         } catch (e) {
-            setErr(e?.response?.data?.message || "Failed to load feedback");
+            setErr(
+                e?.response?.data?.message ||
+                    t("fullClassFeedback.failedToLoad"),
+            );
             setFeedbacks([]);
             setClassName("");
         } finally {
@@ -92,32 +97,40 @@ export default function FullClassFeedback() {
                     type="button"
                     onClick={() => navigate(-1)}
                 >
-                    Back
+                    {t("fullClassFeedback.back")}
                 </button>
 
                 <div className="fcf-title">
-                    Full Class Feedback {className ? `• ${className}` : ""}
+                    {t("fullClassFeedback.title")}
+                    {className ? ` • ${className}` : ""}
                 </div>
 
                 <button className="fcf-btn" type="button" onClick={fetchAll}>
-                    Reload
+                    {t("fullClassFeedback.reload")}
                 </button>
             </div>
 
             <div className="fcf-summary">
                 <span className="fcf-chip">
-                    Total: <b>{feedbacks.length}</b>
+                    {t("fullClassFeedback.total")}: <b>{feedbacks.length}</b>
                 </span>
                 <span className="fcf-chip">
-                    Avg: <b>{avg ? avg : "—"}</b>
+                    {t("fullClassFeedback.avg")}: <b>{avg ? avg : "—"}</b>
                 </span>
             </div>
 
-            {loading && <div className="fcf-muted">Loading feedback...</div>}
+            {loading && (
+                <div className="fcf-muted">
+                    {t("fullClassFeedback.loading")}
+                </div>
+            )}
+
             {!loading && err && <div className="fcf-error">{err}</div>}
 
             {!loading && !err && feedbacks.length === 0 && (
-                <div className="fcf-muted">No feedback yet.</div>
+                <div className="fcf-muted">
+                    {t("fullClassFeedback.noFeedback")}
+                </div>
             )}
 
             {!loading && !err && feedbacks.length > 0 && (
@@ -138,7 +151,13 @@ export default function FullClassFeedback() {
                                     </div>
 
                                     <div className="fcf-meta">
-                                        <Stars value={r} />
+                                        <Stars
+                                            value={r}
+                                            ariaLabel={t(
+                                                "fullClassFeedback.ratingAria",
+                                                { value: r },
+                                            )}
+                                        />
                                         <span className="fcf-time">
                                             {fmtDT(ts)}
                                         </span>
@@ -146,7 +165,8 @@ export default function FullClassFeedback() {
                                 </div>
 
                                 <div className="fcf-sub">
-                                    Teacher: <b>{teacherName}</b>
+                                    {t("fullClassFeedback.teacher")}:{" "}
+                                    <b>{teacherName}</b>
                                 </div>
 
                                 {c ? (

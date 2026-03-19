@@ -1,6 +1,7 @@
 // client/src/pages/workspace/notification/Notification.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/auth/AuthContext";
 import {
     getMyNotifications,
@@ -17,6 +18,7 @@ const getMyId = (userInfo) => userInfo?._id || userInfo?.userId;
 
 export default function NotificationsPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { userInfo } = useAuth();
     const myId = useMemo(() => getMyId(userInfo), [userInfo]);
 
@@ -41,11 +43,8 @@ export default function NotificationsPage() {
     const isRead = (n) =>
         myId ? (n.readBy || []).some((x) => String(x) === String(myId)) : false;
 
-    // ===== delete one notification =====
     const deleteOne = async (n) => {
-        const ok = window.confirm(
-            "Delete this notification?\nThis action cannot be undone.",
-        );
+        const ok = window.confirm(t("notifications.confirmDeleteOne"));
         if (!ok) return;
 
         try {
@@ -53,16 +52,14 @@ export default function NotificationsPage() {
             setItems((prev) => prev.filter((x) => x._id !== n._id));
         } catch (err) {
             alert(
-                err?.response?.data?.message || "Failed to delete notification",
+                err?.response?.data?.message ||
+                    t("notifications.deleteOneFailed"),
             );
         }
     };
 
-    // ===== delete all notifications =====
     const deleteAll = async () => {
-        const ok = window.confirm(
-            "Delete ALL notifications?\nThis action cannot be undone.",
-        );
+        const ok = window.confirm(t("notifications.confirmDeleteAll"));
         if (!ok) return;
 
         try {
@@ -71,13 +68,12 @@ export default function NotificationsPage() {
         } catch (err) {
             alert(
                 err?.response?.data?.message ||
-                    "Failed to delete all notifications",
+                    t("notifications.deleteAllFailed"),
             );
         }
     };
 
     const openNoti = async (n) => {
-        // mark read locally + api
         if (!isRead(n)) {
             try {
                 await markNotificationRead(n._id);
@@ -93,17 +89,20 @@ export default function NotificationsPage() {
             }
         }
 
-        // go class detail (if exists)
         if (n.classId) {
             try {
                 await apiUtils.get(`/classes/${n.classId}`);
 
-                const q = n.title === "Tuition due" ? "?tab=tuition" : "";
+                const isTuition =
+                    n.title === "Tuition due" ||
+                    n.title === t("notifications.tuitionDueTitle");
+
+                const q = isTuition ? "?tab=tuition" : "";
                 navigate(`/workspace/classes/${n.classId}${q}`);
             } catch (err) {
                 alert(
                     err?.response?.data?.message ||
-                        "The class is not found or has been deleted.",
+                        t("notifications.classNotFound"),
                 );
             }
         }
@@ -123,7 +122,7 @@ export default function NotificationsPage() {
         } catch (err) {
             alert(
                 err?.response?.data?.message ||
-                    "Failed to mark all notifications as read",
+                    t("notifications.markAllFailed"),
             );
         }
     };
@@ -131,7 +130,7 @@ export default function NotificationsPage() {
     return (
         <div className="noti-wrap">
             <div className="noti-head">
-                <div className="noti-title">Notifications</div>
+                <div className="noti-title">{t("notifications.title")}</div>
 
                 <div className="noti-actions">
                     <button
@@ -140,7 +139,7 @@ export default function NotificationsPage() {
                         onClick={refresh}
                         disabled={loading}
                     >
-                        Refresh
+                        {t("notifications.refresh")}
                     </button>
 
                     <button
@@ -149,7 +148,7 @@ export default function NotificationsPage() {
                         onClick={markAll}
                         disabled={loading || !items.length}
                     >
-                        Mark all as read
+                        {t("notifications.markAll")}
                     </button>
 
                     <button
@@ -158,23 +157,26 @@ export default function NotificationsPage() {
                         onClick={deleteAll}
                         disabled={loading || !items.length}
                     >
-                        Delete all
+                        {t("notifications.deleteAll")}
                     </button>
                 </div>
             </div>
 
-            {loading && <div className="noti-muted">Loading...</div>}
+            {loading && (
+                <div className="noti-muted">{t("notifications.loading")}</div>
+            )}
 
             {!loading && items.length === 0 && (
-                <div className="noti-empty">No notifications yet</div>
+                <div className="noti-empty">{t("notifications.empty")}</div>
             )}
 
             <div className="noti-list">
                 {items.map((n) => {
                     const read = isRead(n);
-                    const isTuition = n.title === "Tuition due";
+                    const isTuition =
+                        n.title === "Tuition due" ||
+                        n.title === t("notifications.tuitionDueTitle");
 
-                    //  IMPORTANT: use div role="button" to avoid nested button warning
                     return (
                         <div
                             key={n._id}
@@ -190,7 +192,11 @@ export default function NotificationsPage() {
                                     openNoti(n);
                                 }
                             }}
-                            title={n.classId ? "Open class detail" : "Open"}
+                            title={
+                                n.classId
+                                    ? t("notifications.openClassDetail")
+                                    : t("notifications.open")
+                            }
                         >
                             <div className="noti-item-top">
                                 <div className="noti-item-time">
@@ -210,7 +216,8 @@ export default function NotificationsPage() {
                                     <button
                                         type="button"
                                         className="noti-delete"
-                                        title="Delete notification"
+                                        title={t("notifications.delete")}
+                                        aria-label={t("notifications.delete")}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             deleteOne(n);
@@ -222,14 +229,19 @@ export default function NotificationsPage() {
                                 </div>
                             </div>
 
-                            {/*  show title if exists */}
                             {!!n.title && (
-                                <div className="noti-item-title">{n.title}</div>
+                                <div className="noti-item-title">
+                                    {n.title === "Tuition due"
+                                        ? t("notifications.tuitionDueTitle")
+                                        : n.title}
+                                </div>
                             )}
 
                             {!!n.className && (
                                 <div className="noti-item-sub">
-                                    Class: {n.className}
+                                    {t("notifications.classLabel", {
+                                        name: n.className,
+                                    })}
                                 </div>
                             )}
 

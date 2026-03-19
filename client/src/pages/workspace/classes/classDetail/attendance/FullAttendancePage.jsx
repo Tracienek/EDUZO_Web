@@ -1,7 +1,7 @@
-// src/pages/workspace/classes/fullAttendance/FullAttendancePage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiUtils } from "../../../../../utils/newRequest";
+import { useTranslation } from "react-i18next";
 import "./FullAttendancePage.css";
 
 /** ===== helpers ===== */
@@ -74,7 +74,6 @@ function parseScheduleTextToSlots(scheduleText = "") {
     const text = String(scheduleText || "").trim();
     if (!text) return [];
 
-    // format mới: "Wed - 19:00 AM, Thu - 9:00 PM, Sat - 9:00 AM"
     const directPattern = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*-\s*([^,]+)/gi;
     const directSlots = [];
     let match;
@@ -90,7 +89,6 @@ function parseScheduleTextToSlots(scheduleText = "") {
         return normalizeScheduleSlots(directSlots);
     }
 
-    // format cũ: "Mon, Wed, Fri - 9:00 AM"
     const legacyMatch = text.match(
         /^((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)(?:\s*,\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun))*)\s*-\s*(.+)$/i,
     );
@@ -175,6 +173,7 @@ function normalizeStudentId(s, idx) {
 }
 
 export default function FullAttendancePage() {
+    const { t } = useTranslation();
     const { classId } = useParams();
     const navigate = useNavigate();
 
@@ -206,7 +205,7 @@ export default function FullAttendancePage() {
             } catch {
                 if (!alive) return;
                 setCls(null);
-                setError("Class not found");
+                setError(t("fullAttendance.classNotFound"));
             } finally {
                 if (alive) setLoading(false);
             }
@@ -215,7 +214,7 @@ export default function FullAttendancePage() {
         return () => {
             alive = false;
         };
-    }, [classId]);
+    }, [classId, t]);
 
     useEffect(() => {
         setDisplayMonth(isoToDMY(monthISO));
@@ -298,9 +297,15 @@ export default function FullAttendancePage() {
         };
     }, [classId, allDateKeys]);
 
-    if (loading) return <div className="fa-muted">Loading...</div>;
-    if (!cls)
-        return <div className="fa-muted">{error || "Class not found"}</div>;
+    if (loading)
+        return <div className="fa-muted">{t("fullAttendance.loading")}</div>;
+    if (!cls) {
+        return (
+            <div className="fa-muted">
+                {error || t("fullAttendance.classNotFound")}
+            </div>
+        );
+    }
 
     const students = Array.isArray(cls.students) ? cls.students : [];
 
@@ -327,7 +332,7 @@ export default function FullAttendancePage() {
 
                 cells.push(
                     <Cell key={`h-${i}`} className="fa-th-hw">
-                        HW
+                        {t("fullAttendance.hw")}
                     </Cell>,
                 );
             } else {
@@ -361,7 +366,9 @@ export default function FullAttendancePage() {
                             readOnly
                         />
                     ) : (
-                        <span className="fa-dash">—</span>
+                        <span className="fa-dash">
+                            {t("fullAttendance.dash")}
+                        </span>
                     )}
                 </td>,
             );
@@ -376,7 +383,9 @@ export default function FullAttendancePage() {
                             readOnly
                         />
                     ) : (
-                        <span className="fa-dash">—</span>
+                        <span className="fa-dash">
+                            {t("fullAttendance.dash")}
+                        </span>
                     )}
                 </td>,
             );
@@ -393,24 +402,33 @@ export default function FullAttendancePage() {
                     type="button"
                     onClick={() => navigate(-1)}
                 >
-                    Back
+                    {t("fullAttendance.back")}
                 </button>
 
-                <div className="fa-title" title={cls?.name || "Class"}>
-                    Full Attendance —{" "}
-                    <span className="fa-title-sub">{cls?.name || "Class"}</span>
+                <div
+                    className="fa-title"
+                    title={cls?.name || t("fullAttendance.class")}
+                >
+                    {t("fullAttendance.title")}{" "}
+                    <span className="fa-title-sub">
+                        {cls?.name || t("fullAttendance.class")}
+                    </span>
                 </div>
 
                 <div className="fa-actions">
                     <div className="fa-filter">
-                        <label className="fa-label">Month</label>
+                        <label className="fa-label">
+                            {t("fullAttendance.month")}
+                        </label>
 
                         <div className="fa-date-input">
                             <input
                                 className="fa-date-text"
                                 type="text"
                                 inputMode="numeric"
-                                placeholder="dd/mm/yyyy"
+                                placeholder={t(
+                                    "fullAttendance.datePlaceholder",
+                                )}
                                 value={displayMonth}
                                 onChange={(e) => {
                                     const v = normalizeDMYTyping(
@@ -435,7 +453,7 @@ export default function FullAttendancePage() {
                                 type="date"
                                 value={monthISO}
                                 onChange={(e) => setMonthISO(e.target.value)}
-                                title="Pick any date in the month"
+                                title={t("fullAttendance.pickDateTitle")}
                             />
 
                             <button
@@ -448,7 +466,7 @@ export default function FullAttendancePage() {
                                     if (el.showPicker) el.showPicker();
                                     else el.focus();
                                 }}
-                                aria-label="Open date picker"
+                                aria-label={t("fullAttendance.openDatePicker")}
                             >
                                 <svg viewBox="0 0 24 24" fill="none">
                                     <path
@@ -470,15 +488,13 @@ export default function FullAttendancePage() {
                 </div>
             </div>
 
-            <div className="fa-note">
-                Tip: This view shows only session days in the selected month
-                (based on schedule). Read-only.
-            </div>
+            <div className="fa-note">{t("fullAttendance.tip")}</div>
 
             <div className="fa-cards">
                 {students.map((s, idx) => {
                     const sid = normalizeStudentId(s, idx);
-                    const name = s.fullName || s.name || "—";
+                    const name =
+                        s.fullName || s.name || t("fullAttendance.dash");
                     const email = s.email || "";
 
                     return (
@@ -487,9 +503,11 @@ export default function FullAttendancePage() {
                                 <table className="fa-card-table">
                                     <thead>
                                         <tr>
-                                            <th className="fa-col-no">No</th>
+                                            <th className="fa-col-no">
+                                                {t("fullAttendance.no")}
+                                            </th>
                                             <th className="fa-col-name">
-                                                Name
+                                                {t("fullAttendance.name")}
                                             </th>
                                             {renderHeaderCells(datesA, "th")}
                                         </tr>
@@ -534,7 +552,9 @@ export default function FullAttendancePage() {
                 })}
 
                 {students.length === 0 && (
-                    <div className="fa-empty">No students</div>
+                    <div className="fa-empty">
+                        {t("fullAttendance.noStudents")}
+                    </div>
                 )}
             </div>
         </div>

@@ -1,5 +1,6 @@
 // src/pages/workspace/profile/ProfilePage.jsx
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./ProfilePage.css";
 import { apiUtils } from "../../../utils/newRequest";
 import { useAuth } from "../../../context/auth/AuthContext";
@@ -39,6 +40,7 @@ const dmyToISO = (value) => {
 };
 
 export default function ProfilePage() {
+    const { t } = useTranslation();
     const { userInfo, loadUserMe } = useAuth();
 
     const role = useMemo(
@@ -145,19 +147,13 @@ export default function ProfilePage() {
         !!pwDraft.newPassword &&
         !!pwDraft.confirmNewPassword;
 
-    const isPwMinLength = pwDraft.newPassword.length >= 8;
-
-    const isPwMismatch =
-        !!pwDraft.confirmNewPassword &&
-        pwDraft.newPassword !== pwDraft.confirmNewPassword;
-
     const canSavePw = editingPw && isPwFilled && !savingPw;
 
     const onSaveProfile = async () => {
         setMsg({ type: "", text: "" });
 
         if (!profileDraft.fullName.trim()) {
-            return toast("error", "Name is required");
+            return toast("error", t("profile.nameRequired"));
         }
 
         const dobISO = dmyToISO(profileDraft.dob);
@@ -175,16 +171,16 @@ export default function ProfilePage() {
             });
 
             await loadUserMe();
-            toast("success", "Profile updated successfully");
+            toast("success", t("profile.profileUpdated"));
             setEditingProfile(false);
         } catch (e) {
             const status = e?.response?.status;
             const serverMsg = e?.response?.data?.message;
 
             if (status === 401) {
-                toast("error", "Unauthorized. Please sign in again.");
+                toast("error", t("profile.unauthorized"));
             } else {
-                toast("error", serverMsg || "Update profile failed");
+                toast("error", serverMsg || t("profile.updateProfileFailed"));
             }
         } finally {
             setSavingProfile(false);
@@ -203,12 +199,12 @@ export default function ProfilePage() {
 
         const maxMB = 3;
         if (file.size > maxMB * 1024 * 1024) {
-            return toast("error", `Avatar must be <= ${maxMB}MB`);
+            return toast("error", t("profile.avatarMaxSize", { size: maxMB }));
         }
 
         const okTypes = ["image/jpeg", "image/png", "image/webp"];
         if (!okTypes.includes(file.type)) {
-            return toast("error", "Only JPG/PNG/WEBP are allowed");
+            return toast("error", t("profile.avatarTypeInvalid"));
         }
 
         try {
@@ -229,20 +225,17 @@ export default function ProfilePage() {
             }
 
             await loadUserMe();
-            toast("success", "Avatar updated");
+            toast("success", t("profile.avatarUpdated"));
         } catch (e) {
             const status = e?.response?.status;
             const serverMsg = e?.response?.data?.message;
 
             if (status === 404) {
-                toast(
-                    "error",
-                    "Avatar endpoint not found (PATCH /user/me/avatar). Add it on backend or change FE endpoint.",
-                );
+                toast("error", t("profile.avatarEndpointNotFound"));
             } else if (status === 401) {
-                toast("error", "Unauthorized. Please sign in again.");
+                toast("error", t("profile.unauthorized"));
             } else {
-                toast("error", serverMsg || "Update avatar failed");
+                toast("error", serverMsg || t("profile.updateAvatarFailed"));
             }
         } finally {
             setSavingAvatar(false);
@@ -261,24 +254,27 @@ export default function ProfilePage() {
         };
 
         if (!pwDraft.currentPassword) {
-            nextErrors.currentPassword = "Please enter current password";
+            nextErrors.currentPassword = t("profile.currentPasswordRequired");
             hasError = true;
         }
 
         if (!pwDraft.newPassword) {
-            nextErrors.newPassword = "Please enter new password";
+            nextErrors.newPassword = t("profile.newPasswordRequired");
             hasError = true;
         } else if (pwDraft.newPassword.length < 8) {
-            nextErrors.newPassword =
-                "Password should be at least 8 characters.";
+            nextErrors.newPassword = t("profile.passwordMin");
             hasError = true;
         }
 
         if (!pwDraft.confirmNewPassword) {
-            nextErrors.confirmNewPassword = "Please confirm new password";
+            nextErrors.confirmNewPassword = t(
+                "profile.confirmPasswordRequired",
+            );
             hasError = true;
         } else if (pwDraft.newPassword !== pwDraft.confirmNewPassword) {
-            nextErrors.confirmNewPassword = "Confirm password does not match";
+            nextErrors.confirmNewPassword = t(
+                "profile.confirmPasswordMismatch",
+            );
             hasError = true;
         }
 
@@ -301,7 +297,7 @@ export default function ProfilePage() {
                 confirmNewPassword: "",
             });
             resetPwErrors();
-            setPwSuccess("Password changed successfully");
+            setPwSuccess(t("profile.passwordChanged"));
 
             await loadUserMe();
             setEditingPw(false);
@@ -314,7 +310,7 @@ export default function ProfilePage() {
             if (status === 401) {
                 setPwErrors((prev) => ({
                     ...prev,
-                    currentPassword: "Unauthorized. Please sign in again.",
+                    currentPassword: t("profile.unauthorized"),
                 }));
             } else if (
                 normalizedMsg.includes("current password") &&
@@ -324,12 +320,13 @@ export default function ProfilePage() {
             ) {
                 setPwErrors((prev) => ({
                     ...prev,
-                    currentPassword: "Current password is incorrect",
+                    currentPassword: t("profile.currentPasswordIncorrect"),
                 }));
             } else {
                 setPwErrors((prev) => ({
                     ...prev,
-                    confirmNewPassword: serverMsg || "Change password failed",
+                    confirmNewPassword:
+                        serverMsg || t("profile.changePasswordFailed"),
                 }));
             }
         } finally {
@@ -360,10 +357,14 @@ export default function ProfilePage() {
             <div className="profile-shell">
                 <div className="profile-head">
                     <div className="profile-head-left">
-                        <h1 className="profile-title">Account</h1>
+                        <h1 className="profile-title">
+                            {t("profile.account")}
+                        </h1>
                         <p className="profile-subtitle">
-                            Manage your profile settings • Role:{" "}
-                            <b className="profile-role">{role || "unknown"}</b>
+                            {t("profile.manageSettings")} • {t("profile.role")}:{" "}
+                            <b className="profile-role">
+                                {role || t("profile.unknown")}
+                            </b>
                             {isCenter ? "" : ""}
                         </p>
                     </div>
@@ -371,7 +372,11 @@ export default function ProfilePage() {
 
                 {msg.text && (
                     <div className={`profile-toast ${msg.type}`}>
-                        <b>{msg.type === "error" ? "Error: " : "Success: "}</b>
+                        <b>
+                            {msg.type === "error"
+                                ? t("profile.errorPrefix")
+                                : t("profile.successPrefix")}
+                        </b>
                         {msg.text}
                     </div>
                 )}
@@ -379,7 +384,7 @@ export default function ProfilePage() {
                 <section className="profile-card">
                     <div className="profile-card-head">
                         <h2 className="profile-card-title">
-                            Basic Information
+                            {t("profile.basicInformation")}
                         </h2>
 
                         {!editingProfile && (
@@ -391,7 +396,7 @@ export default function ProfilePage() {
                                     setEditingProfile(true);
                                 }}
                             >
-                                Edit
+                                {t("profile.edit")}
                             </button>
                         )}
                     </div>
@@ -400,7 +405,7 @@ export default function ProfilePage() {
                         <img
                             className="profile-avatar"
                             src={avatarSrc || FALLBACK_AVATAR}
-                            alt="avatar"
+                            alt={t("profile.avatarAlt")}
                             onError={(e) => {
                                 if (
                                     e.currentTarget.src.endsWith(
@@ -431,17 +436,21 @@ export default function ProfilePage() {
                                     e.target.value = "";
                                 }}
                             />
-                            {savingAvatar ? "Uploading..." : "Change avatar"}
+                            {savingAvatar
+                                ? t("profile.uploading")
+                                : t("profile.changeAvatar")}
                         </label>
 
                         <div className="profile-hint">
-                            JPG/PNG/WEBP recommended • Max 3MB
+                            {t("profile.avatarHint")}
                         </div>
                     </div>
 
                     <div className="profile-grid">
                         <div className="profile-field">
-                            <label className="profile-label">Name</label>
+                            <label className="profile-label">
+                                {t("profile.name")}
+                            </label>
                             <input
                                 className="profile-input"
                                 value={profileDraft.fullName}
@@ -452,12 +461,14 @@ export default function ProfilePage() {
                                         fullName: e.target.value,
                                     }))
                                 }
-                                placeholder="Your name"
+                                placeholder={t("profile.namePlaceholder")}
                             />
                         </div>
 
                         <div className="profile-field">
-                            <label className="profile-label">Email</label>
+                            <label className="profile-label">
+                                {t("profile.email")}
+                            </label>
                             <input
                                 className="profile-input readOnly"
                                 value={profileDraft.email}
@@ -466,7 +477,9 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="profile-field">
-                            <label className="profile-label">Gender</label>
+                            <label className="profile-label">
+                                {t("profile.gender")}
+                            </label>
                             <select
                                 className="profile-input"
                                 value={profileDraft.gender}
@@ -478,16 +491,22 @@ export default function ProfilePage() {
                                     }))
                                 }
                             >
-                                <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="">{t("profile.select")}</option>
+                                <option value="male">
+                                    {t("profile.male")}
+                                </option>
+                                <option value="female">
+                                    {t("profile.female")}
+                                </option>
+                                <option value="other">
+                                    {t("profile.other")}
+                                </option>
                             </select>
                         </div>
 
                         <div className="profile-field">
                             <label className="profile-label">
-                                Date of Birth
+                                {t("profile.dateOfBirth")}
                             </label>
                             <input
                                 type="text"
@@ -500,14 +519,14 @@ export default function ProfilePage() {
                                         dob: e.target.value,
                                     }))
                                 }
-                                placeholder="DD/MM/YYYY"
+                                placeholder={t("profile.dobPlaceholder")}
                                 inputMode="numeric"
                             />
                         </div>
 
                         <div className="profile-field">
                             <label className="profile-label">
-                                Language / Speciality
+                                {t("profile.languageOrSpeciality")}
                             </label>
                             <input
                                 className="profile-input"
@@ -519,7 +538,9 @@ export default function ProfilePage() {
                                         languageOrSpeciality: e.target.value,
                                     }))
                                 }
-                                placeholder="e.g., English, IELTS, Math..."
+                                placeholder={t(
+                                    "profile.languageOrSpecialityPlaceholder",
+                                )}
                             />
                         </div>
                     </div>
@@ -532,7 +553,7 @@ export default function ProfilePage() {
                                 onClick={onCancelProfile}
                                 disabled={savingProfile || savingAvatar}
                             >
-                                Cancel
+                                {t("profile.cancel")}
                             </button>
 
                             <button
@@ -541,7 +562,9 @@ export default function ProfilePage() {
                                 disabled={savingProfile}
                                 type="button"
                             >
-                                {savingProfile ? "Saving..." : "Save"}
+                                {savingProfile
+                                    ? t("profile.saving")
+                                    : t("profile.save")}
                             </button>
                         </div>
                     )}
@@ -549,7 +572,9 @@ export default function ProfilePage() {
 
                 <section className="profile-card">
                     <div className="profile-card-head">
-                        <h2 className="profile-card-title">Change Password</h2>
+                        <h2 className="profile-card-title">
+                            {t("profile.changePassword")}
+                        </h2>
 
                         {!editingPw && (
                             <button
@@ -561,7 +586,7 @@ export default function ProfilePage() {
                                     setEditingPw(true);
                                 }}
                             >
-                                Change
+                                {t("profile.change")}
                             </button>
                         )}
                     </div>
@@ -569,7 +594,7 @@ export default function ProfilePage() {
                     <div className="profile-grid three">
                         <div className="profile-field">
                             <label className="profile-label">
-                                Current password
+                                {t("profile.currentPassword")}
                             </label>
 
                             <div className="profile-input-wrap">
@@ -596,7 +621,9 @@ export default function ProfilePage() {
                                         }));
                                         setPwSuccess("");
                                     }}
-                                    placeholder="Current password"
+                                    placeholder={t(
+                                        "profile.currentPasswordPlaceholder",
+                                    )}
                                     autoComplete="current-password"
                                 />
 
@@ -604,6 +631,7 @@ export default function ProfilePage() {
                                     type="button"
                                     className="profile-eye-btn"
                                     disabled={!editingPw}
+                                    aria-label={t("profile.togglePassword")}
                                     onClick={() =>
                                         setPwVisible((v) => ({
                                             ...v,
@@ -628,7 +656,7 @@ export default function ProfilePage() {
 
                         <div className="profile-field">
                             <label className="profile-label">
-                                New password
+                                {t("profile.newPassword")}
                             </label>
 
                             <div className="profile-input-wrap">
@@ -655,12 +683,16 @@ export default function ProfilePage() {
                                                 pwDraft.confirmNewPassword &&
                                                 value !==
                                                     pwDraft.confirmNewPassword
-                                                    ? "Confirm password does not match"
+                                                    ? t(
+                                                          "profile.confirmPasswordMismatch",
+                                                      )
                                                     : "",
                                         }));
                                         setPwSuccess("");
                                     }}
-                                    placeholder="New password"
+                                    placeholder={t(
+                                        "profile.newPasswordPlaceholder",
+                                    )}
                                     autoComplete="new-password"
                                 />
 
@@ -668,6 +700,7 @@ export default function ProfilePage() {
                                     type="button"
                                     className="profile-eye-btn"
                                     disabled={!editingPw}
+                                    aria-label={t("profile.togglePassword")}
                                     onClick={() =>
                                         setPwVisible((v) => ({
                                             ...v,
@@ -692,7 +725,7 @@ export default function ProfilePage() {
 
                         <div className="profile-field">
                             <label className="profile-label">
-                                Confirm new password
+                                {t("profile.confirmNewPassword")}
                             </label>
 
                             <div className="profile-input-wrap">
@@ -719,12 +752,16 @@ export default function ProfilePage() {
                                             confirmNewPassword:
                                                 value &&
                                                 pwDraft.newPassword !== value
-                                                    ? "Confirm password does not match"
+                                                    ? t(
+                                                          "profile.confirmPasswordMismatch",
+                                                      )
                                                     : "",
                                         }));
                                         setPwSuccess("");
                                     }}
-                                    placeholder="Confirm new password"
+                                    placeholder={t(
+                                        "profile.confirmNewPasswordPlaceholder",
+                                    )}
                                     autoComplete="new-password"
                                 />
 
@@ -732,6 +769,7 @@ export default function ProfilePage() {
                                     type="button"
                                     className="profile-eye-btn"
                                     disabled={!editingPw}
+                                    aria-label={t("profile.togglePassword")}
                                     onClick={() =>
                                         setPwVisible((v) => ({
                                             ...v,
@@ -762,7 +800,7 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="profile-hint">
-                        Password should be at least 8 characters.
+                        {t("profile.passwordHint")}
                     </div>
 
                     {editingPw && (
@@ -773,7 +811,7 @@ export default function ProfilePage() {
                                 onClick={onCancelPw}
                                 disabled={savingPw}
                             >
-                                Cancel
+                                {t("profile.cancel")}
                             </button>
 
                             <button
@@ -782,7 +820,9 @@ export default function ProfilePage() {
                                 disabled={!canSavePw}
                                 type="button"
                             >
-                                {savingPw ? "Updating..." : "Save"}
+                                {savingPw
+                                    ? t("profile.updating")
+                                    : t("profile.save")}
                             </button>
                         </div>
                     )}

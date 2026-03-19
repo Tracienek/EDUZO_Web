@@ -159,6 +159,55 @@
     outline-offset: 3px;
 }
 
+/* ---------- Language Switch ---------- */
+.lp-lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    flex: 0 0 auto;
+}
+
+.lp-lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-color-dark);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    min-width: 48px;
+    transition:
+        all 0.25s ease,
+        transform 0.2s ease;
+}
+
+.lp-lang-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--hover-btn);
+    transform: translateY(-1px);
+}
+
+.lp-lang-btn.active {
+    background: linear-gradient(
+        90deg,
+        var(--primary-color),
+        var(--secondary-color)
+    );
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.lp-lang-btn:focus-visible {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
 /* ---------- Tablet / iPad ---------- */
 @media (max-width: 1024px) {
     .lp-nav {
@@ -229,6 +278,17 @@
         font-size: 12px;
         min-height: 40px;
     }
+
+    .lp-lang-switch {
+        gap: 4px;
+        padding: 3px;
+    }
+
+    .lp-lang-btn {
+        font-size: 12px;
+        padding: 7px 10px;
+        min-width: 42px;
+    }
 }
 
 /* ---------- Very Small Phones ---------- */
@@ -239,5 +299,14 @@
 
     .lp-brand-text {
         display: none;
+    }
+
+    .lp-lang-switch {
+        transform: scale(0.95);
+    }
+
+    .lp-lang-btn {
+        padding: 6px 8px;
+        min-width: 38px;
     }
 }

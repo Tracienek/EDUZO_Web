@@ -1,11 +1,12 @@
 // pages/workspace/classes/ClassesPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../utils/newRequest";
 import "./ClassesPage.css";
 import { useAuth } from "../../../context/auth/AuthContext";
 
-function ClassCard({ c, onOpen, onDelete, canDelete }) {
+function ClassCard({ c, onOpen, onDelete, canDelete, t }) {
     const isOnline = !!c?.isOnline;
     const duration = c?.durationMinutes ?? 90;
 
@@ -22,7 +23,6 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
                 }
             }}
         >
-            {/* TOP */}
             <div className="class-card-top">
                 <div className="class-card-title-wrap">
                     <span
@@ -31,11 +31,13 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
 
                     <div className="class-card-title-text">
                         <div className="class-card-title">
-                            {c?.name || c?.className || "Unnamed class"}
+                            {c?.name ||
+                                c?.className ||
+                                t("classesPage.unnamedClass")}
                         </div>
 
                         <div className="class-card-sub">
-                            {c?.subject || "—"}
+                            {c?.subject || t("classesPage.emptyValue")}
                         </div>
                     </div>
                 </div>
@@ -44,7 +46,7 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
                     <button
                         className="class-card-delete"
                         type="button"
-                        title="Delete class"
+                        title={t("classesPage.deleteClass")}
                         onClick={(e) => {
                             e.stopPropagation();
                             onDelete?.(c);
@@ -57,27 +59,31 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
 
             <div className="class-card-meta">
                 <div className="class-card-row">
-                    <span className="label">Students</span>
+                    <span className="label">{t("classesPage.students")}</span>
                     <span className="pill">
-                        {c?.totalStudents ?? c?.studentCount ?? "—"}
+                        {c?.totalStudents ??
+                            c?.studentCount ??
+                            t("classesPage.emptyValue")}
                     </span>
                 </div>
 
                 <div className="class-card-row">
-                    <span className="label">Schedule</span>
+                    <span className="label">{t("classesPage.schedule")}</span>
                     <span className="value">
-                        {c?.scheduleText || "Mon, Wed, Fri - 9:00 AM"}
+                        {c?.scheduleText || t("classesPage.defaultSchedule")}
                     </span>
                 </div>
 
                 <div className="class-card-row">
-                    <span className="label">Duration</span>
-                    <span className="value">{duration} min</span>
+                    <span className="label">{t("classesPage.duration")}</span>
+                    <span className="value">
+                        {t("classesPage.durationMinutes", { count: duration })}
+                    </span>
                 </div>
             </div>
 
             <div className="class-card-footer">
-                <span className="linkish">View Details</span>
+                <span className="linkish">{t("classesPage.viewDetails")}</span>
             </div>
         </div>
     );
@@ -85,15 +91,17 @@ function ClassCard({ c, onOpen, onDelete, canDelete }) {
 
 export default function ClassesPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
     const [classes, setClasses] = useState([]);
     const { userInfo } = useAuth();
     const isCenter = userInfo?.role === "center";
 
-    const pageTitle =
-        userInfo?.role === "center"
-            ? `${userInfo?.fullName || "Center"}’s Classes`
-            : "My Classes";
+    const pageTitle = isCenter
+        ? t("classesPage.centerClasses", {
+              name: userInfo?.fullName || t("classesPage.centerFallback"),
+          })
+        : t("classesPage.myClasses");
 
     const fetchClasses = async (setLoadingFlag = false) => {
         try {
@@ -123,14 +131,14 @@ export default function ClassesPage() {
             await fetchClasses(true);
         })();
 
-        const t = setInterval(() => {
+        const timer = setInterval(() => {
             if (!alive) return;
             fetchClasses(false);
         }, 20000);
 
         return () => {
             alive = false;
-            clearInterval(t);
+            clearInterval(timer);
         };
     }, []);
 
@@ -148,12 +156,14 @@ export default function ClassesPage() {
 
     const handleDelete = async (cls) => {
         if (!isCenter) {
-            alert("You are not allowed to delete classes.");
+            alert(t("classesPage.notAllowedDelete"));
             return;
         }
 
         const ok = window.confirm(
-            `Delete class "${cls?.name || "Unnamed"}"?\nThis action cannot be undone.`,
+            t("classesPage.confirmDelete", {
+                name: cls?.name || t("classesPage.unnamedShort"),
+            }),
         );
         if (!ok) return;
 
@@ -161,22 +171,25 @@ export default function ClassesPage() {
             await apiUtils.delete(`/classes/${cls._id}`);
             setClasses((prev) => prev.filter((c) => c._id !== cls._id));
         } catch (err) {
-            alert(err?.response?.data?.message || "Failed to delete class");
+            alert(
+                err?.response?.data?.message || t("classesPage.deleteFailed"),
+            );
         }
     };
 
     return (
         <div className="classes-page">
-            {/* ===== Online Class Section ===== */}
             <div className="classes-page-header">
-                <h2>Online Class</h2>
+                <h2>{t("classesPage.onlineClass")}</h2>
             </div>
 
-            {loading && <div className="classes-muted">Loading...</div>}
+            {loading && (
+                <div className="classes-muted">{t("classesPage.loading")}</div>
+            )}
 
             {!loading && onlineClasses.length === 0 && (
                 <div className="classes-muted">
-                    No class is active right now
+                    {t("classesPage.noActiveClass")}
                 </div>
             )}
 
@@ -189,18 +202,20 @@ export default function ClassesPage() {
                             onOpen={() => openClass(c)}
                             onDelete={handleDelete}
                             canDelete={isCenter}
+                            t={t}
                         />
                     ))}
                 </div>
             )}
 
-            {/* ===== Your Classes (Offline) ===== */}
             <div className="classes-page-header" style={{ marginTop: 18 }}>
                 <h2 title={pageTitle}>{pageTitle}</h2>
             </div>
 
             {!loading && offlineClasses.length === 0 && (
-                <div className="classes-muted">No available classes</div>
+                <div className="classes-muted">
+                    {t("classesPage.noAvailableClasses")}
+                </div>
             )}
 
             {!loading && offlineClasses.length > 0 && (
@@ -212,6 +227,7 @@ export default function ClassesPage() {
                             onOpen={() => openClass(c)}
                             onDelete={handleDelete}
                             canDelete={isCenter}
+                            t={t}
                         />
                     ))}
                 </div>

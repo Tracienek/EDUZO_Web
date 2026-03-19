@@ -1,5 +1,5 @@
-// CreateTeacherModal.jsx
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../utils/newRequest";
 import "./CreateTeacherModal.css";
 
@@ -11,6 +11,8 @@ const unwrap = (res) => {
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function CreateTeacherModal({ open, onClose, onCreated }) {
+    const { t } = useTranslation();
+
     const [inputs, setInputs] = useState({
         fullName: "",
         email: "",
@@ -23,7 +25,7 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
         const nameOk = inputs.fullName.trim().length > 0;
         const email = inputs.email.trim().toLowerCase();
         const emailOk = email.length > 0 && isValidEmail(email);
-        const pwOk = String(inputs.password || "").trim().length >= 4;
+        const pwOk = String(inputs.password || "").trim().length >= 8;
         return nameOk && emailOk && pwOk && !isSubmitting;
     }, [inputs, isSubmitting]);
 
@@ -52,16 +54,17 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
     const validate = () => {
         const errs = {};
 
-        if (!inputs.fullName.trim()) errs.fullName = "Name is required";
+        if (!inputs.fullName.trim())
+            errs.fullName = t("createTeacher.nameRequired");
 
         const email = inputs.email.trim().toLowerCase();
-        if (!email) errs.email = "Email is required";
-        else if (!isValidEmail(email)) errs.email = "Invalid email format";
+        if (!email) errs.email = t("createTeacher.emailRequired");
+        else if (!isValidEmail(email))
+            errs.email = t("createTeacher.emailInvalid");
 
         const pw = String(inputs.password || "").trim();
-        if (!pw) errs.password = "Password is required";
-        else if (pw.length < 8)
-            errs.password = "Password must be at least 8 characters";
+        if (!pw) errs.password = t("createTeacher.passwordRequired");
+        else if (pw.length < 8) errs.password = t("createTeacher.passwordMin");
 
         return errs;
     };
@@ -96,10 +99,13 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
             const msg =
                 err?.response?.data?.message ||
                 err?.message ||
-                "Create teacher failed. Try again.";
+                t("createTeacher.createFailed");
 
             if (status === 409) {
-                setErrors((p) => ({ ...p, email: "Email already exists" }));
+                setErrors((p) => ({
+                    ...p,
+                    email: t("createTeacher.emailExists"),
+                }));
                 return;
             }
 
@@ -121,10 +127,10 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                 <div className="ctm-header">
                     <div>
                         <h3 id="ctm-title" className="ctm-title">
-                            Create Teacher
+                            {t("createTeacher.title")}
                         </h3>
                         <p className="ctm-subtitle">
-                            Please set an initial password
+                            {t("createTeacher.subtitle")}
                         </p>
                     </div>
 
@@ -132,7 +138,7 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                         className="ctm-x"
                         onClick={onClose}
                         type="button"
-                        aria-label="Close"
+                        aria-label={t("createTeacher.close")}
                     >
                         ×
                     </button>
@@ -140,13 +146,14 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
 
                 <form className="ctm-form" onSubmit={submit}>
                     <div className="ctm-field">
-                        <label>Name</label>
+                        <label>{t("createTeacher.name")}</label>
                         <input
                             name="fullName"
                             value={inputs.fullName}
                             onChange={onChange}
                             className={errors.fullName ? "error" : ""}
                             autoFocus
+                            placeholder={t("createTeacher.namePlaceholder")}
                         />
                         {errors.fullName && (
                             <p className="ctm-error">{errors.fullName}</p>
@@ -154,13 +161,14 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                     </div>
 
                     <div className="ctm-field">
-                        <label>Email</label>
+                        <label>{t("createTeacher.email")}</label>
                         <input
                             type="email"
                             name="email"
                             value={inputs.email}
                             onChange={onChange}
                             className={errors.email ? "error" : ""}
+                            placeholder={t("createTeacher.emailPlaceholder")}
                         />
                         {errors.email && (
                             <p className="ctm-error">{errors.email}</p>
@@ -168,13 +176,14 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                     </div>
 
                     <div className="ctm-field">
-                        <label>Password</label>
+                        <label>{t("createTeacher.password")}</label>
                         <input
                             type="password"
                             name="password"
                             value={inputs.password}
                             onChange={onChange}
                             className={errors.password ? "error" : ""}
+                            placeholder={t("createTeacher.passwordPlaceholder")}
                         />
                         {errors.password && (
                             <p className="ctm-error">{errors.password}</p>
@@ -194,14 +203,16 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                             disabled={isSubmitting}
                             className="ctm-btn ctm-btn--ghost"
                         >
-                            Cancel
+                            {t("createTeacher.cancel")}
                         </button>
                         <button
                             type="submit"
                             disabled={!canSubmit}
                             className="ctm-btn"
                         >
-                            {isSubmitting ? "Creating..." : "Create"}
+                            {isSubmitting
+                                ? t("createTeacher.creating")
+                                : t("createTeacher.create")}
                         </button>
                     </div>
                 </form>

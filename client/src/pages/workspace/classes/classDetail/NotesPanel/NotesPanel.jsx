@@ -1,6 +1,7 @@
 // src/pages/workspace/classes/classDetail/NotesPanel/NotesPanel.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../utils/newRequest";
 import "./NotesPanel.css";
 import "../ClassDetailPage.css";
@@ -30,6 +31,8 @@ export default function NotesPanel({
     classNameValue = "",
 }) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
     const canUseNotes = role === "teacher" || role === "center";
     const myId = useMemo(() => getMyId(userInfo), [userInfo]);
 
@@ -67,14 +70,14 @@ export default function NotesPanel({
 
         const content = noteText.trim();
         if (!content) {
-            alert("content is required");
+            alert(t("notesPanel.contentRequired"));
             return;
         }
 
         const toRole = role === "teacher" ? "center" : "teacher";
 
         if (role === "teacher" && !userInfo?.centerId) {
-            alert("centerId is missing on this account");
+            alert(t("notesPanel.centerIdMissing"));
             return;
         }
 
@@ -102,7 +105,7 @@ export default function NotesPanel({
             setNotes((prev) => [created || fallback, ...prev]);
             setNoteText("");
         } catch (e) {
-            alert(e?.response?.data?.message || "Send note failed");
+            alert(e?.response?.data?.message || t("notesPanel.sendNoteFailed"));
         } finally {
             setNoteLoading(false);
         }
@@ -115,7 +118,7 @@ export default function NotesPanel({
     return (
         <div className="cd-section">
             <div className="cd-section-head">
-                <h2>Notes</h2>
+                <h2>{t("notesPanel.title")}</h2>
 
                 <button
                     type="button"
@@ -124,9 +127,9 @@ export default function NotesPanel({
                         navigate(`/workspace/classes/${classId}/notes`)
                     }
                     disabled={!classId}
-                    title="View all notes"
+                    title={t("notesPanel.viewAll")}
                 >
-                    View all notes
+                    {t("notesPanel.viewAll")}
                 </button>
             </div>
 
@@ -138,8 +141,8 @@ export default function NotesPanel({
                     onChange={(e) => setNoteText(e.target.value)}
                     placeholder={
                         role === "teacher"
-                            ? "Write a note for Center (shows in Center notifications)..."
-                            : "Write a note for Teacher (shows in Teachers notifications)..."
+                            ? t("notesPanel.placeholderTeacher")
+                            : t("notesPanel.placeholderCenter")
                     }
                 />
 
@@ -150,7 +153,9 @@ export default function NotesPanel({
                         onClick={submitNote}
                         disabled={!noteText.trim() || noteLoading}
                     >
-                        {noteLoading ? "Sending..." : "Send note"}
+                        {noteLoading
+                            ? t("notesPanel.sending")
+                            : t("notesPanel.sendNote")}
                     </button>
                 </div>
             </div>
@@ -158,13 +163,13 @@ export default function NotesPanel({
             <div className="cd-note-list">
                 {loading && (
                     <div className="cd-empty" style={{ marginTop: 10 }}>
-                        Loading...
+                        {t("notesPanel.loading")}
                     </div>
                 )}
 
                 {!loading && notes.length === 0 && (
                     <div className="cd-empty" style={{ marginTop: 10 }}>
-                        No notes yet
+                        {t("notesPanel.noNotes")}
                     </div>
                 )}
 
@@ -174,7 +179,9 @@ export default function NotesPanel({
                             <div className="cd-note-meta">
                                 {!!classNameValue && !!n.classId && (
                                     <div className="cd-note-sub">
-                                        Class: {classNameValue}
+                                        {t("notesPanel.classLabel", {
+                                            name: classNameValue,
+                                        })}
                                     </div>
                                 )}
                                 <span className="cd-note-time">
@@ -185,12 +192,6 @@ export default function NotesPanel({
                             <div className="cd-note-msg">{n.content || ""}</div>
                         </div>
                     ))}
-
-                {/* {!loading && notes.length > 5 && (
-                    <div className="cd-empty" style={{ marginTop: 6 }}>
-                        Showing latest 5 of {notes.length} notes
-                    </div>
-                )} */}
             </div>
         </div>
     );

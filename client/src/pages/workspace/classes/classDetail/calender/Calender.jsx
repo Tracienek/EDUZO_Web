@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../utils/newRequest";
 import "./Calender.css";
 
@@ -45,15 +46,11 @@ const DAY_ALIASES = {
     sunday: "Sun",
 };
 
-const WEEKDAY_LABELS = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-];
+const getWeekdayLabel = (date, language) => {
+    return new Intl.DateTimeFormat(language, {
+        weekday: "long",
+    }).format(date);
+};
 
 const EVENT_COLORS = [
     "ec-event--purple",
@@ -320,6 +317,7 @@ const buildOverlapLayout = (events) => {
 export default function CalenderPage() {
     const navigate = useNavigate();
     const { classId } = useParams();
+    const { t, i18n } = useTranslation();
 
     const [loading, setLoading] = useState(true);
     const [classes, setClasses] = useState([]);
@@ -432,7 +430,7 @@ export default function CalenderPage() {
     };
 
     if (loading) {
-        return <div className="ec-loading">Loading calendar...</div>;
+        return <div className="ec-loading">{t("calendar.loading")}</div>;
     }
 
     return (
@@ -449,12 +447,12 @@ export default function CalenderPage() {
                                     : navigate("/workspace/classes")
                             }
                         >
-                            Back
+                            {t("calendar.back")}
                         </button>
                     </div>
 
                     <div>
-                        <h1 className="ec-title">Calendar</h1>
+                        <h1 className="ec-title">{t("calendar.title")}</h1>
                     </div>
 
                     <div className="ec-toolbar-right">
@@ -488,7 +486,7 @@ export default function CalenderPage() {
                                 onClick={() => setSelectedDateKey(dateKey)}
                             >
                                 <span className="ec-week-day-name">
-                                    {WEEKDAY_LABELS[date.getDay()]}
+                                    {getWeekdayLabel(date)}
                                 </span>
                                 <span className="ec-week-day-number">
                                     {date.getDate()} <p>/</p>{" "}
@@ -502,10 +500,12 @@ export default function CalenderPage() {
                 <div className="ec-selected-label">
                     <p>
                         {selectedDate
-                            ? `${WEEKDAY_LABELS[selectedDate.getDay()]}`
+                            ? getWeekdayLabel(selectedDate, i18n.language)
                             : ""}
                         {" · "}
-                        {selectedDayEvents.length} class(es)
+                        {t("calendar.classCount", {
+                            count: selectedDayEvents.length,
+                        })}
                     </p>
                 </div>
 
@@ -576,7 +576,7 @@ export default function CalenderPage() {
                                             {event.title}
                                             {event.isOnline && (
                                                 <span className="ec-online-badge">
-                                                    Online
+                                                    {t("calendar.online")}
                                                 </span>
                                             )}
                                         </div>
@@ -587,10 +587,9 @@ export default function CalenderPage() {
 
                                         <div className="ec-event-meta">
                                             <span>
-                                                {event.totalStudents} student
-                                                {event.totalStudents !== 1
-                                                    ? "s"
-                                                    : ""}
+                                                {t("calendar.students", {
+                                                    count: event.totalStudents,
+                                                })}
                                             </span>
                                         </div>
                                     </button>
@@ -601,9 +600,7 @@ export default function CalenderPage() {
                 </div>
 
                 {!selectedDayEvents.length && (
-                    <div className="ec-empty">
-                        No classes scheduled for this day.
-                    </div>
+                    <div className="ec-empty">{t("calendar.noClasses")}</div>
                 )}
             </div>
         </div>

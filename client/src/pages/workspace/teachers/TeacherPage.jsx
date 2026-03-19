@@ -1,6 +1,7 @@
 // TeacherPage.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import teacherImg from "../../../assets/images/teacher.svg";
 import { apiUtils } from "../../../utils/newRequest";
 import "./TeacherPage.css";
@@ -26,7 +27,10 @@ const getTeacherId = (t) =>
 /** -------- card -------- */
 function TeacherCard({ t, onClick, onDelete }) {
     const navigate = useNavigate();
+    const { t: i18nT } = useTranslation();
     const id = getTeacherId(t);
+    const teacherName =
+        t?.fullName || t?.name || i18nT("teacherPage.unnamedTeacher");
 
     const go = () => {
         onClick?.(t);
@@ -52,12 +56,15 @@ function TeacherCard({ t, onClick, onDelete }) {
                     go();
                 }
             }}
-            aria-label={`Open ${t?.fullName || t?.name || "teacher"}`}
+            aria-label={i18nT("teacherPage.openTeacherAria", {
+                name: teacherName,
+            })}
         >
             <button
                 className="teacher-card-delete"
                 type="button"
-                title="Delete teacher"
+                title={i18nT("teacherPage.deleteTeacher")}
+                aria-label={i18nT("teacherPage.deleteTeacher")}
                 onClick={(e) => {
                     e.stopPropagation();
                     onDelete?.(t);
@@ -78,13 +85,14 @@ function TeacherCard({ t, onClick, onDelete }) {
                 />
             </div>
 
-            <div className="teacher-name">{t?.fullName || t?.name || "—"}</div>
+            <div className="teacher-name">{teacherName}</div>
         </div>
     );
 }
 
 /** -------- page -------- */
 export default function TeacherPage({ onOpenTeacher }) {
+    const { t } = useTranslation();
     const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [pageError, setPageError] = useState("");
@@ -94,8 +102,10 @@ export default function TeacherPage({ onOpenTeacher }) {
 
     const pageTitle =
         userInfo?.role === "center"
-            ? `${userInfo?.fullName || "Center"}’s Teachers`
-            : "My Teachers";
+            ? t("teacherPage.centerTeachers", {
+                  name: userInfo?.fullName || t("teacherPage.centerFallback"),
+              })
+            : t("teacherPage.myTeachers");
 
     useEffect(() => {
         let mounted = true;
@@ -116,7 +126,7 @@ export default function TeacherPage({ onOpenTeacher }) {
                 setPageError(
                     err?.response?.data?.message ||
                         err?.message ||
-                        "Failed to load teachers",
+                        t("teacherPage.failedToLoad"),
                 );
             } finally {
                 if (mounted) setLoading(false);
@@ -126,7 +136,7 @@ export default function TeacherPage({ onOpenTeacher }) {
         return () => {
             mounted = false;
         };
-    }, []);
+    }, [t]);
 
     const onCreated = (teacher) => {
         if (!teacher) return;
@@ -134,45 +144,45 @@ export default function TeacherPage({ onOpenTeacher }) {
         const newId = getTeacherId(teacher);
         setTeachers((prev) => {
             if (!newId) return [teacher, ...prev];
-            const filtered = prev.filter((t) => getTeacherId(t) !== newId);
+            const filtered = prev.filter((x) => getTeacherId(x) !== newId);
             return [teacher, ...filtered];
         });
     };
 
     const handleDeleteTeacher = async (teacher) => {
         const id = getTeacherId(teacher);
-        const name = teacher?.fullName || teacher?.name || "Unnamed";
+        const name =
+            teacher?.fullName ||
+            teacher?.name ||
+            t("teacherPage.unnamedTeacher");
 
         if (!id) {
-            alert("Missing teacher id");
+            alert(t("teacherPage.missingTeacherId"));
             return;
         }
 
-        const ok = window.confirm(
-            `Delete teacher "${name}"?\nThis action cannot be undone.`,
-        );
+        const ok = window.confirm(t("teacherPage.confirmDelete", { name }));
         if (!ok) return;
 
         try {
             await apiUtils.delete(`/center/teachers/${id}`);
-
             setTeachers((prev) => prev.filter((x) => getTeacherId(x) !== id));
         } catch (err) {
-            alert(err?.response?.data?.message || "Failed to delete teacher");
+            alert(
+                err?.response?.data?.message || t("teacherPage.failedToDelete"),
+            );
         }
     };
 
     const content = useMemo(() => {
-        if (loading) return <p className="tp-muted">Loading...</p>;
+        if (loading)
+            return <p className="tp-muted">{t("teacherPage.loading")}</p>;
         if (pageError) return <p className="tp-error">{pageError}</p>;
-        if (!teachers.length)
-            return (
-                <p className="tp-muted">
-                    No teachers yet. Click “＋ Teachers”.
-                </p>
-            );
+        if (!teachers.length) {
+            return <p className="tp-muted">{t("teacherPage.noTeachers")}</p>;
+        }
         return null;
-    }, [loading, pageError, teachers.length]);
+    }, [loading, pageError, teachers.length, t]);
 
     return (
         <section className="teachers-panel">
@@ -184,23 +194,25 @@ export default function TeacherPage({ onOpenTeacher }) {
                     className="teachers-add"
                     onClick={() => setOpenCreate(true)}
                 >
-                    ＋ Teachers
+                    {t("teacherPage.addTeachers")}
                 </button>
             </div>
 
             {content}
 
             <div className="teachers-grid">
-                {teachers.map((t, i) => {
-                    const id = getTeacherId(t);
+                {teachers.map((teacher, i) => {
+                    const id = getTeacherId(teacher);
                     return (
                         <TeacherCard
                             key={
                                 id ||
-                                `${t?.email || t?.fullName || "teacher"}-${i}`
+                                `${teacher?.email || teacher?.fullName || "teacher"}-${i}`
                             }
-                            t={t}
-                            onClick={(teacher) => onOpenTeacher?.(teacher)}
+                            t={teacher}
+                            onClick={(selectedTeacher) =>
+                                onOpenTeacher?.(selectedTeacher)
+                            }
                             onDelete={handleDeleteTeacher}
                         />
                     );

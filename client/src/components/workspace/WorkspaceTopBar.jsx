@@ -1,10 +1,10 @@
-// components/workspace/WorkspaceTopBar.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./workspaceTopBar.css";
 import { useAuth } from "../../context/auth/AuthContext";
 import { apiUtils } from "../../utils/newRequest";
 import CreateClass from "../../pages/workspace/classes/createModal/CreateClass";
+import { useTranslation } from "react-i18next";
 
 /* ===== helpers ===== */
 const getServerOrigin = () => {
@@ -23,9 +23,9 @@ const resolveAvatar = (url) => {
 };
 
 export default function WorkspaceTopBar() {
+    const { t, i18n } = useTranslation();
     const { userInfo, logout } = useAuth();
     const role = userInfo?.role;
-    // const isCenter = userInfo?.role === "center";
 
     const [openCreate, setOpenCreate] = useState(false);
 
@@ -34,6 +34,7 @@ export default function WorkspaceTopBar() {
 
     const isStaffsPage = location.pathname.startsWith("/workspace/staffs");
     const canCreateStaff = role === "center";
+    const canShowClassesButton = role !== "teacher";
 
     const showCreateBtn = useMemo(() => {
         if (isStaffsPage) return canCreateStaff;
@@ -41,9 +42,9 @@ export default function WorkspaceTopBar() {
     }, [isStaffsPage, canCreateStaff]);
 
     const createBtnLabel = useMemo(() => {
-        if (isStaffsPage) return "Create Staff";
-        return "Create";
-    }, [isStaffsPage]);
+        if (isStaffsPage) return t("workspaceTopBar.createStaff");
+        return t("workspaceTopBar.create");
+    }, [isStaffsPage, t]);
 
     /* ============ GLOBAL SEARCH ============ */
     const [q, setQ] = useState("");
@@ -66,7 +67,7 @@ export default function WorkspaceTopBar() {
         setLoading(true);
         const reqId = ++lastReq.current;
 
-        const t = setTimeout(async () => {
+        const timer = setTimeout(async () => {
             try {
                 const res = await apiUtils.get(
                     `/search?q=${encodeURIComponent(keyword)}`,
@@ -84,17 +85,17 @@ export default function WorkspaceTopBar() {
                     });
                 }
             } catch {
-                if (reqId === lastReq.current)
+                if (reqId === lastReq.current) {
                     setResults({ students: [], classes: [] });
+                }
             } finally {
                 if (reqId === lastReq.current) setLoading(false);
             }
         }, 280);
 
-        return () => clearTimeout(t);
+        return () => clearTimeout(timer);
     }, [q]);
 
-    // close search on outside click
     useEffect(() => {
         const close = (e) => {
             if (!searchWrapRef.current) return;
@@ -161,7 +162,6 @@ export default function WorkspaceTopBar() {
 
     return (
         <header className="workspace-topbar">
-            {/* LEFT: SEARCH */}
             <div
                 className="workspace-topbar-search-wrapper"
                 ref={searchWrapRef}
@@ -170,7 +170,7 @@ export default function WorkspaceTopBar() {
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     onFocus={() => q.trim() && setOpenSearch(true)}
-                    placeholder="Search students or classes..."
+                    placeholder={t("workspaceTopBar.searchPlaceholder")}
                     className="workspace-topbar-search-input"
                 />
 
@@ -178,20 +178,20 @@ export default function WorkspaceTopBar() {
                     <div className="workspace-search-dropdown">
                         {loading && (
                             <div className="workspace-search-row workspace-search-muted">
-                                Searching...
+                                {t("workspaceTopBar.searching")}
                             </div>
                         )}
 
                         {!loading && !hasAny && (
                             <div className="workspace-search-row workspace-search-muted">
-                                No results
+                                {t("workspaceTopBar.noResults")}
                             </div>
                         )}
 
                         {!loading && results.students?.length > 0 && (
                             <div className="workspace-search-group">
                                 <div className="workspace-search-title">
-                                    Students
+                                    {t("workspaceTopBar.students")}
                                 </div>
 
                                 {results.students.slice(0, 8).map((s) => (
@@ -207,13 +207,20 @@ export default function WorkspaceTopBar() {
                                             </div>
                                             <div className="workspace-search-item-sub">
                                                 {s.className
-                                                    ? `Class: ${s.className}`
-                                                    : "Class: —"}
+                                                    ? t(
+                                                          "workspaceTopBar.classLabel",
+                                                          {
+                                                              name: s.className,
+                                                          },
+                                                      )
+                                                    : t(
+                                                          "workspaceTopBar.classEmpty",
+                                                      )}
                                             </div>
                                         </div>
 
                                         <div className="workspace-search-item-hint">
-                                            Open
+                                            {t("workspaceTopBar.open")}
                                         </div>
                                     </button>
                                 ))}
@@ -223,7 +230,7 @@ export default function WorkspaceTopBar() {
                         {!loading && results.classes?.length > 0 && (
                             <div className="workspace-search-group">
                                 <div className="workspace-search-title">
-                                    Classes
+                                    {t("workspaceTopBar.classes")}
                                 </div>
 
                                 {results.classes.slice(0, 8).map((c) => (
@@ -237,17 +244,26 @@ export default function WorkspaceTopBar() {
                                             <div className="workspace-search-item-name">
                                                 {c.name ||
                                                     c.className ||
-                                                    "Unnamed class"}
+                                                    t(
+                                                        "workspaceTopBar.unnamedClass",
+                                                    )}
                                             </div>
                                             <div className="workspace-search-item-sub">
                                                 {c.folderName
-                                                    ? `Folder: ${c.folderName}`
-                                                    : "Folder: —"}
+                                                    ? t(
+                                                          "workspaceTopBar.folderLabel",
+                                                          {
+                                                              name: c.folderName,
+                                                          },
+                                                      )
+                                                    : t(
+                                                          "workspaceTopBar.folderEmpty",
+                                                      )}
                                             </div>
                                         </div>
 
                                         <div className="workspace-search-item-hint">
-                                            Open
+                                            {t("workspaceTopBar.open")}
                                         </div>
                                     </button>
                                 ))}
@@ -257,28 +273,63 @@ export default function WorkspaceTopBar() {
                 )}
             </div>
 
-            {/* MIDDLE: + Classes */}
-            <div className="workspace-topbar-mid">
-                <button
-                    className="workspace-topbar-primary"
-                    type="button"
-                    onClick={() => setOpenCreate(true)}
-                >
-                    + Classes
-                </button>
+            {canShowClassesButton && (
+                <>
+                    <button
+                        className="workspace-topbar-primary"
+                        type="button"
+                        onClick={() => setOpenCreate(true)}
+                    >
+                        {t("workspaceTopBar.classesButton")}
+                    </button>
 
-                <CreateClass
-                    open={openCreate}
-                    onClose={() => setOpenCreate(false)}
-                    onCreated={(newClass) => {
-                        if (!newClass?._id) return;
-                        navigate(`/workspace/classes/${newClass._id}`);
-                    }}
-                />
-            </div>
+                    <CreateClass
+                        open={openCreate}
+                        onClose={() => setOpenCreate(false)}
+                        onCreated={(newClass) => {
+                            if (!newClass?._id) return;
+                            navigate(`/workspace/classes/${newClass._id}`);
+                        }}
+                    />
+                </>
+            )}
 
-            {/* RIGHT: USER */}
             <div className="workspace-topbar-actions">
+                <div
+                    className="workspace-lang-switch"
+                    aria-label="Language switcher"
+                >
+                    <button
+                        type="button"
+                        className={`workspace-lang-btn ${
+                            i18n.language === "vi" ? "active" : ""
+                        }`}
+                        onClick={() => i18n.changeLanguage("vi")}
+                    >
+                        VI
+                    </button>
+
+                    <button
+                        type="button"
+                        className={`workspace-lang-btn ${
+                            i18n.language === "en" ? "active" : ""
+                        }`}
+                        onClick={() => i18n.changeLanguage("en")}
+                    >
+                        EN
+                    </button>
+
+                    <button
+                        type="button"
+                        className={`workspace-lang-btn ${
+                            i18n.language === "zh" ? "active" : ""
+                        }`}
+                        onClick={() => i18n.changeLanguage("zh")}
+                    >
+                        中文
+                    </button>
+                </div>
+
                 {showCreateBtn && (
                     <button className="workspace-topbar-btn" type="button">
                         {createBtnLabel}
@@ -296,11 +347,13 @@ export default function WorkspaceTopBar() {
                             className="workspace-user-avatar"
                             src={avatarSrc}
                             onError={() => setAvatarSrc(FALLBACK_AVATAR)}
-                            alt={userInfo?.fullName || "User"}
+                            alt={
+                                userInfo?.fullName || t("workspaceTopBar.user")
+                            }
                         />
 
                         <span className="workspace-user-name">
-                            {userInfo?.fullName || "User"}
+                            {userInfo?.fullName || t("workspaceTopBar.user")}
                         </span>
 
                         <svg
@@ -322,7 +375,8 @@ export default function WorkspaceTopBar() {
                         <div className="workspace-user-menu">
                             <div className="workspace-user-header">
                                 <div className="workspace-user-header-name">
-                                    {userInfo?.fullName || "User"}
+                                    {userInfo?.fullName ||
+                                        t("workspaceTopBar.user")}
                                 </div>
                                 <div className="workspace-user-header-email">
                                     {userInfo?.email || ""}
@@ -336,7 +390,7 @@ export default function WorkspaceTopBar() {
                                 className="workspace-user-item"
                                 onClick={() => setUserOpen(false)}
                             >
-                                Account
+                                {t("workspaceTopBar.account")}
                             </Link>
 
                             <button
@@ -344,7 +398,7 @@ export default function WorkspaceTopBar() {
                                 type="button"
                                 onClick={logout}
                             >
-                                Logout
+                                {t("workspaceTopBar.logout")}
                             </button>
                         </div>
                     )}

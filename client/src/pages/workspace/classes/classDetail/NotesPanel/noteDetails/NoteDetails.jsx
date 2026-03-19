@@ -1,6 +1,7 @@
 // src/pages/workspace/classes/classDetail/NotesPanel/noteDetails/NoteDetails.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../../utils/newRequest";
 import "./NoteDetails.css";
 
@@ -23,15 +24,16 @@ const formatDDMMYYYY_HHMM = (iso) => {
 export default function NoteDetails() {
     const navigate = useNavigate();
     const { classId } = useParams();
+    const { t } = useTranslation();
 
     const [loading, setLoading] = useState(true);
     const [pageError, setPageError] = useState("");
     const [notes, setNotes] = useState([]);
 
     const countText = useMemo(() => {
-        if (loading) return "Loading...";
-        return `${notes.length} notes`;
-    }, [loading, notes.length]);
+        if (loading) return t("noteDetails.loading");
+        return t("noteDetails.count", { count: notes.length });
+    }, [loading, notes.length, t]);
 
     const fetchNotes = async () => {
         if (!classId) return;
@@ -53,7 +55,7 @@ export default function NoteDetails() {
             setPageError(
                 err?.response?.data?.message ||
                     err?.message ||
-                    "Failed to load notes",
+                    t("noteDetails.failedToLoad"),
             );
         } finally {
             setLoading(false);
@@ -73,11 +75,11 @@ export default function NoteDetails() {
                     type="button"
                     onClick={() => navigate(-1)}
                 >
-                    Back
+                    {t("noteDetails.back")}
                 </button>
 
-                <div className="nd-title" title="Notes">
-                    Notes
+                <div className="nd-title" title={t("noteDetails.title")}>
+                    {t("noteDetails.title")}
                 </div>
 
                 <div className="nd-actions">
@@ -89,19 +91,21 @@ export default function NoteDetails() {
                         onClick={fetchNotes}
                         disabled={loading}
                     >
-                        Refresh
+                        {t("noteDetails.refresh")}
                     </button>
                 </div>
             </div>
 
-            {loading && <div className="nd-muted">Loading...</div>}
+            {loading && (
+                <div className="nd-muted">{t("noteDetails.loading")}</div>
+            )}
 
             {!loading && pageError && (
                 <div className="nd-error">{pageError}</div>
             )}
 
             {!loading && !pageError && notes.length === 0 && (
-                <div className="nd-empty">No notes yet</div>
+                <div className="nd-empty">{t("noteDetails.noNotes")}</div>
             )}
 
             {!loading && !pageError && notes.length > 0 && (
@@ -113,14 +117,19 @@ export default function NoteDetails() {
                                     {formatDDMMYYYY_HHMM(n?.createdAt)}
                                 </span>
 
-                                {/* Optional badges (if your note has roles) */}
                                 {(n?.fromRole || n?.toRole) && (
                                     <span className="nd-badge">
                                         {n?.fromRole
-                                            ? `From: ${n.fromRole}`
+                                            ? t("noteDetails.from", {
+                                                  role: n.fromRole,
+                                              })
                                             : ""}
                                         {n?.fromRole && n?.toRole ? " • " : ""}
-                                        {n?.toRole ? `To: ${n.toRole}` : ""}
+                                        {n?.toRole
+                                            ? t("noteDetails.to", {
+                                                  role: n.toRole,
+                                              })
+                                            : ""}
                                     </span>
                                 )}
                             </div>
