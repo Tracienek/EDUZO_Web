@@ -9,7 +9,7 @@ const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 const {
     BREVO_API_KEY,
-    FROM_NAME = "SoulEase",
+    FROM_NAME = "EDUZO",
     FROM_EMAIL = "phapluu2k5tqt@gmail.com",
 } = process.env;
 
