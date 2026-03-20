@@ -121,15 +121,49 @@
         "id": "class-management",
         "icon": "fa-solid fa-school",
         "title": "Quản lý lớp học",
-        "desc": "Tạo và quản lý lớp học dễ dàng."
-      }
+        "desc": "Tạo và tổ chức lớp học dễ dàng. Theo dõi học sinh, lịch học và tài liệu tất cả ở cùng một nơi."
+
+        },
+        {
+        "id": "student-feedback",
+        "icon": "fa-solid fa-comment",
+        "title": "Phản hồi của học sinh",
+        "desc": "Thu thập phản hồi có ý nghĩa từ học sinh trong một giao diện đơn giản, thân thiện với học sinh."
+
+        },
+        {
+        "id": "student-tracking",
+        "icon": "fa-solid fa-user-group",
+        "title": "Theo dõi học sinh",
+        "desc": "Theo dõi việc đăng ký và sự tham gia của học sinh trên tất cả các lớp học." },
+        {
+        "id": "rating-system",
+        "icon": "fa-solid fa-star",
+        "title": "Hệ thống đánh giá",
+        "desc": "Xếp hạng sao nhanh giúp dễ dàng đo lường sự hài lòng."
+
+        },
+        {
+        "id": "feedback-analytics",
+        "icon": "fa-solid fa-chart-line",
+        "title": "Phân tích phản hồi",
+        "desc": "Theo dõi xu hướng phản hồi và cải thiện việc giảng dạy."
+
+        },
+        {
+        "id": "simple-interface",
+        "icon": "fa-solid fa-chalkboard",
+        "title": "Giao diện đơn giản",
+        "desc": "Giao diện sạch sẽ và dễ sử dụng cho mọi người."
+
+        }
     ],
 
     "about": {
       "title": "Về EDUZO",
-      "p1": "EDUZO giúp đơn giản hóa quản lý lớp học.",
-      "p2": "Chúng tôi tin vào giao tiếp rõ ràng.",
-      "p3": "Thiết kế đơn giản, dễ sử dụng."
+      "p1": "EDUZO là một nền tảng quản lý tất cả trong một được thiết kế để đơn giản hóa cách thức hoạt động của các trung tâm giáo dục. Được xây dựng với hiệu quả và sự rõ ràng, EDUZO tập hợp các công cụ quản trị thiết yếu vào một hệ thống duy nhất, dễ sử dụng. Cho dù quản lý học sinh, điều phối giáo viên hay tổ chức lớp học, ứng dụng này cung cấp một giải pháp tập trung giúp các tổ chức duy trì cấu trúc, thông tin và kiểm soát.",
+      "p2": "Với các tính năng như lịch tích hợp, hệ thống quản lý giáo viên và theo dõi chi tiết các lớp học, EDUZO đảm bảo việc lập lịch và điều phối nhân viên diễn ra liền mạch. Quản trị viên có thể dễ dàng theo dõi khối lượng công việc của giáo viên, phân công lớp học và duy trì hồ sơ chính xác mà không gặp phải sự phức tạp thường thấy. Đồng thời, tính năng theo dõi điểm danh học sinh cho phép các trung tâm cập nhật về sự tham gia và nhanh chóng xác định các xu hướng hoặc vấn đề.",
+      "p3": "Ngoài quản lý, EDUZO còn tăng cường giao tiếp và sự tham gia thông qua các công cụ thông báo và phản hồi tích hợp. Giáo viên, học sinh và quản trị viên có thể kết nối với các cập nhật theo thời gian thực, trong khi các tính năng phản hồi khuyến khích cải tiến liên tục trong trải nghiệm giảng dạy và học tập. Nhìn chung, EDUZO giúp các trung tâm giáo dục hoạt động hiệu quả hơn. Đồng thời tạo ra một môi trường làm việc có tổ chức và hiệu quả hơn cho tất cả mọi người tham gia."
     },
 
     "cta": {
@@ -616,7 +650,7 @@
 
 "createTeacherModal": {
   "title": "Tạo giáo viên",
-  "subtitle": "Vui lòng đặt mật khẩu ban đầu",
+  "subtitle": "Vui lòng đặt mật khẩu ban đầu cho giáo viên này.",
   "close": "Đóng",
   "name": "Tên",
   "email": "Email",

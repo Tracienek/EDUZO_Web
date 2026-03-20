@@ -54,17 +54,23 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
     const validate = () => {
         const errs = {};
 
-        if (!inputs.fullName.trim())
-            errs.fullName = t("createTeacher.nameRequired");
+        if (!inputs.fullName.trim()) {
+            errs.fullName = t("createTeacherModal.errorNameRequired");
+        }
 
         const email = inputs.email.trim().toLowerCase();
-        if (!email) errs.email = t("createTeacher.emailRequired");
-        else if (!isValidEmail(email))
-            errs.email = t("createTeacher.emailInvalid");
+        if (!email) {
+            errs.email = t("createTeacherModal.errorEmailRequired");
+        } else if (!isValidEmail(email)) {
+            errs.email = t("createTeacherModal.errorEmailInvalid");
+        }
 
         const pw = String(inputs.password || "").trim();
-        if (!pw) errs.password = t("createTeacher.passwordRequired");
-        else if (pw.length < 8) errs.password = t("createTeacher.passwordMin");
+        if (!pw) {
+            errs.password = t("createTeacherModal.errorPasswordRequired");
+        } else if (pw.length < 8) {
+            errs.password = t("createTeacherModal.errorPasswordMin");
+        }
 
         return errs;
     };
@@ -99,12 +105,12 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
             const msg =
                 err?.response?.data?.message ||
                 err?.message ||
-                t("createTeacher.createFailed");
+                t("createTeacherModal.errorCreateFailed");
 
             if (status === 409) {
                 setErrors((p) => ({
                     ...p,
-                    email: t("createTeacher.emailExists"),
+                    email: t("createTeacherModal.errorEmailExists"),
                 }));
                 return;
             }
@@ -127,10 +133,10 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                 <div className="ctm-header">
                     <div>
                         <h3 id="ctm-title" className="ctm-title">
-                            {t("createTeacher.title")}
+                            {t("createTeacherModal.title")}
                         </h3>
                         <p className="ctm-subtitle">
-                            {t("createTeacher.subtitle")}
+                            {t("createTeacherModal.subtitle")}
                         </p>
                     </div>
 
@@ -138,7 +144,7 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                         className="ctm-x"
                         onClick={onClose}
                         type="button"
-                        aria-label={t("createTeacher.close")}
+                        aria-label={t("createTeacherModal.close")}
                     >
                         ×
                     </button>
@@ -146,14 +152,14 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
 
                 <form className="ctm-form" onSubmit={submit}>
                     <div className="ctm-field">
-                        <label>{t("createTeacher.name")}</label>
+                        <label>{t("createTeacherModal.name")}</label>
                         <input
                             name="fullName"
                             value={inputs.fullName}
                             onChange={onChange}
                             className={errors.fullName ? "error" : ""}
                             autoFocus
-                            placeholder={t("createTeacher.namePlaceholder")}
+                            placeholder={t("createTeacherModal.name")}
                         />
                         {errors.fullName && (
                             <p className="ctm-error">{errors.fullName}</p>
@@ -161,14 +167,14 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                     </div>
 
                     <div className="ctm-field">
-                        <label>{t("createTeacher.email")}</label>
+                        <label>{t("createTeacherModal.email")}</label>
                         <input
                             type="email"
                             name="email"
                             value={inputs.email}
                             onChange={onChange}
                             className={errors.email ? "error" : ""}
-                            placeholder={t("createTeacher.emailPlaceholder")}
+                            placeholder={t("createTeacherModal.email")}
                         />
                         {errors.email && (
                             <p className="ctm-error">{errors.email}</p>
@@ -176,14 +182,14 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                     </div>
 
                     <div className="ctm-field">
-                        <label>{t("createTeacher.password")}</label>
+                        <label>{t("createTeacherModal.password")}</label>
                         <input
                             type="password"
                             name="password"
                             value={inputs.password}
                             onChange={onChange}
                             className={errors.password ? "error" : ""}
-                            placeholder={t("createTeacher.passwordPlaceholder")}
+                            placeholder={t("createTeacherModal.password")}
                         />
                         {errors.password && (
                             <p className="ctm-error">{errors.password}</p>
@@ -203,7 +209,7 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                             disabled={isSubmitting}
                             className="ctm-btn ctm-btn--ghost"
                         >
-                            {t("createTeacher.cancel")}
+                            {t("createTeacherModal.cancel")}
                         </button>
                         <button
                             type="submit"
@@ -211,8 +217,8 @@ export default function CreateTeacherModal({ open, onClose, onCreated }) {
                             className="ctm-btn"
                         >
                             {isSubmitting
-                                ? t("createTeacher.creating")
-                                : t("createTeacher.create")}
+                                ? t("createTeacherModal.creating")
+                                : t("createTeacherModal.create")}
                         </button>
                     </div>
                 </form>

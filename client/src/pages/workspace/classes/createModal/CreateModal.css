@@ -45,7 +45,11 @@
 
 .cm-close:hover {
     transform: translateY(-1px);
-    background: rgba(152, 84, 220, 0.14);
+    background: linear-gradient(
+        90deg,
+        var(--tertiary-color),
+        var(--secondary-color)
+    );
 }
 
 /* Title */

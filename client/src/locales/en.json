@@ -157,9 +157,9 @@
 
     "about": {
       "title": "About EDUZO",
-      "p1": "EDUZO is a student-developed platform to simplify classroom management.",
-      "p2": "We believe in clear organization and communication.",
-      "p3": "Designed for simplicity and usability."
+      "p1": "EDUZO is an all-in-one management platform designed to simplify how educational centers operate. Built with efficiency and clarity in mind, EDUZO brings together essential administrative tools into a single, easy-to-use system. Whether managing students, coordinating teachers, or organizing classrooms, the app provides a centralized solution that helps institutions stay structured, informed, and in control.",
+      "p2": "With features like an integrated calendar, teacher management system, and detailed tracking of classes taught, EDUZO ensures that scheduling and staff coordination are seamless. Administrators can easily monitor teacher workloads, assign classes, and maintain accurate records without the usual complexity. At the same time, student attendance tracking allows centers to stay updated on participation and quickly identify trends or issues.",
+      "p3": "Beyond management, EDUZO enhances communication and engagement through built-in notifications and feedback tools. Teachers, students, and administrators can stay connected with real-time updates, while feedback features encourage continuous improvement in teaching and learning experiences. Altogether, EdDUZO empowers educational centers to operate more efficiently while creating a more organized and responsive environment for everyone involved."
     },
 
     "cta": {
