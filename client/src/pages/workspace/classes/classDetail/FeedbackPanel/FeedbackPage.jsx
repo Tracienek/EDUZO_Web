@@ -12,7 +12,7 @@ function clampRating(n) {
 }
 
 export default function FeedbackPage() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { classId } = useParams();
     const cid = useMemo(() => String(classId || "").trim(), [classId]);
 
@@ -245,6 +245,41 @@ export default function FeedbackPage() {
                         </div>
 
                         <div
+                            className="workspace-lang-switch"
+                            aria-label="Language switcher"
+                        >
+                            <button
+                                type="button"
+                                className={`workspace-lang-btn ${
+                                    i18n.language === "vi" ? "active" : ""
+                                }`}
+                                onClick={() => i18n.changeLanguage("vi")}
+                            >
+                                VI
+                            </button>
+
+                            <button
+                                type="button"
+                                className={`workspace-lang-btn ${
+                                    i18n.language === "en" ? "active" : ""
+                                }`}
+                                onClick={() => i18n.changeLanguage("en")}
+                            >
+                                EN
+                            </button>
+
+                            <button
+                                type="button"
+                                className={`workspace-lang-btn ${
+                                    i18n.language === "zh" ? "active" : ""
+                                }`}
+                                onClick={() => i18n.changeLanguage("zh")}
+                            >
+                                中文
+                            </button>
+                        </div>
+
+                        {/* <div
                             className="fbp-chip"
                             title={t("feedbackPage.classId")}
                         >
@@ -252,7 +287,7 @@ export default function FeedbackPage() {
                                 {t("feedbackPage.classId")}
                             </span>
                             <span className="fbp-chip-value">{cid || "—"}</span>
-                        </div>
+                        </div> */}
                     </header>
 
                     {error && (

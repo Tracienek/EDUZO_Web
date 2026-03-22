@@ -453,6 +453,7 @@
     }
 
     .fbp-header {
+        display: flex;
         gap: 12px;
         margin-bottom: 12px;
     }
@@ -486,7 +487,6 @@
         min-height: 110px;
     }
 
-    /* Stars: tránh tràn ngang */
     .fbp-stars {
         gap: 8px;
         flex-wrap: wrap;
@@ -524,9 +524,10 @@
     }
 
     .fbp-header {
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
         align-items: stretch;
-        gap: 10px;
+        gap: 100px;
     }
 
     .fbp-h1 {
