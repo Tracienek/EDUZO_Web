@@ -156,6 +156,26 @@ function buildSessionDatesInRange({ start, end, weekdays }) {
     return res;
 }
 
+function buildAllDatesInRange({ start, end }) {
+    const cur = new Date(start);
+    const res = [];
+
+    while (cur <= end) {
+        res.push(new Date(cur));
+        cur.setDate(cur.getDate() + 1);
+    }
+
+    return res;
+}
+
+function dateFromISODateKey(dateKey) {
+    const [y, m, d] = String(dateKey || "")
+        .split("-")
+        .map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+}
+
 function splitByMidMonth(dates) {
     const a = [];
     const b = [];
@@ -187,6 +207,7 @@ export default function FullAttendancePage() {
     );
 
     const [records, setRecords] = useState({});
+    const [recordDateKeys, setRecordDateKeys] = useState([]);
 
     useEffect(() => {
         let alive = true;
@@ -227,13 +248,42 @@ export default function FullAttendancePage() {
         [monthISO],
     );
 
-    const sessionDates = useMemo(() => {
+    const scheduledSessionDates = useMemo(() => {
         return buildSessionDatesInRange({
             start: monthRange.start,
             end: monthRange.end,
             weekdays,
         });
     }, [monthRange, weekdays]);
+
+    const monthDateKeys = useMemo(() => {
+        return buildAllDatesInRange({
+            start: monthRange.start,
+            end: monthRange.end,
+        }).map(toISODate);
+    }, [monthRange]);
+
+    const monthDateKeysParam = useMemo(
+        () => monthDateKeys.join(","),
+        [monthDateKeys],
+    );
+
+    const sessionDates = useMemo(() => {
+        const map = new Map();
+
+        scheduledSessionDates.forEach((d) => {
+            map.set(toISODate(d), d);
+        });
+
+        recordDateKeys.forEach((dateKey) => {
+            const d = dateFromISODateKey(dateKey);
+            if (d) map.set(dateKey, d);
+        });
+
+        return Array.from(map.entries())
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([, d]) => d);
+    }, [scheduledSessionDates, recordDateKeys]);
 
     const [datesA, datesB] = useMemo(
         () => splitByMidMonth(sessionDates),
@@ -245,10 +295,6 @@ export default function FullAttendancePage() {
         [datesA.length, datesB.length],
     );
 
-    const allDateKeys = useMemo(() => {
-        return [...datesA, ...datesB].map(toISODate);
-    }, [datesA, datesB]);
-
     useEffect(() => {
         if (!classId) return;
 
@@ -256,46 +302,58 @@ export default function FullAttendancePage() {
 
         (async () => {
             try {
-                if (!allDateKeys.length) {
-                    if (alive) setRecords({});
+                if (!monthDateKeysParam) {
+                    if (alive) {
+                        setRecords({});
+                        setRecordDateKeys([]);
+                    }
                     return;
                 }
 
                 const res = await apiUtils.get(
-                    `/classes/${classId}/attendance?dates=${allDateKeys.join(",")}`,
+                    `/classes/${classId}/attendance?dates=${monthDateKeysParam}`,
                 );
 
                 const list = res?.data?.metadata?.records || [];
                 if (!alive) return;
 
                 const next = {};
+                const dateKeySet = new Set();
 
                 for (const r of list) {
                     const sid = String(r.studentId);
+                    const dk = String(r.dateKey || "");
+
+                    if (!sid || !dk || dk === "__TUITION__") continue;
+
+                    dateKeySet.add(dk);
+
                     if (!next[sid]) {
                         next[sid] = { attendance: {}, homework: {} };
                     }
 
                     if (typeof r.attendance === "boolean") {
-                        next[sid].attendance[r.dateKey] = r.attendance;
+                        next[sid].attendance[dk] = r.attendance;
                     }
 
                     if (typeof r.homework === "boolean") {
-                        next[sid].homework[r.dateKey] = r.homework;
+                        next[sid].homework[dk] = r.homework;
                     }
                 }
 
                 setRecords(next);
+                setRecordDateKeys(Array.from(dateKeySet).sort());
             } catch {
                 if (!alive) return;
                 setRecords({});
+                setRecordDateKeys([]);
             }
         })();
 
         return () => {
             alive = false;
         };
-    }, [classId, allDateKeys]);
+    }, [classId, monthDateKeysParam]);
 
     if (loading)
         return <div className="fa-muted">{t("fullAttendance.loading")}</div>;

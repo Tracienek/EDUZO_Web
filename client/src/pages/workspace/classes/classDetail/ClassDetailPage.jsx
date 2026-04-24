@@ -10,6 +10,7 @@ import { useAuth } from "../../../../context/auth/AuthContext";
 import NotesPanel from "./NotesPanel/NotesPanel";
 import FeedbackPanel from "./FeedbackPanel/FeedbackPanel";
 import StudentsSection from "./StudentSection/StudentSection";
+import CreateClass from "../createModal/CreateClass";
 
 /** ---------- helpers ---------- **/
 const pad2 = (n) => String(n).padStart(2, "0");
@@ -224,6 +225,7 @@ export default function ClassDetailPage() {
     const isCenter = role === "center";
 
     const [openStudent, setOpenStudent] = useState(false);
+    const [openEditClass, setOpenEditClass] = useState(false);
     const [loading, setLoading] = useState(true);
     const [cls, setCls] = useState(null);
 
@@ -718,6 +720,16 @@ export default function ClassDetailPage() {
                     >
                         {t("classDetail.addStudent")}
                     </button>
+
+                    {isCenter && (
+                        <button
+                            className="cd-btn"
+                            type="button"
+                            onClick={() => setOpenEditClass(true)}
+                        >
+                            Edit class
+                        </button>
+                    )}
                 </div>
 
                 <div className="cd-schedule">
@@ -878,6 +890,19 @@ export default function ClassDetailPage() {
             )}
 
             <FeedbackPanel classId={classId} role={role} userInfo={userInfo} />
+
+            <CreateClass
+                open={openEditClass}
+                onClose={() => setOpenEditClass(false)}
+                mode="edit"
+                initialClass={cls}
+                onUpdated={(updatedClass) => {
+                    setCls((prev) => ({
+                        ...prev,
+                        ...updatedClass,
+                    }));
+                }}
+            />
         </div>
     );
 }

@@ -197,7 +197,61 @@ const toPayloadScheduleSlots = (slots = []) => {
     }));
 };
 
-export default function CreateClass({ open, onClose, onCreated }) {
+const splitTimePeriod = (timeText = "") => {
+    const raw = String(timeText || "").trim();
+    const match = raw.match(/^(.+?)\s*(AM|PM)$/i);
+
+    if (!match) {
+        return {
+            time: raw || DEFAULT_TIME,
+            period: DEFAULT_PERIOD,
+        };
+    }
+
+    return {
+        time: match[1].trim(),
+        period: match[2].toUpperCase(),
+    };
+};
+
+const classToEditForm = (cls) => {
+    const rawSlots = Array.isArray(cls?.scheduleSlots) ? cls.scheduleSlots : [];
+
+    const slots = rawSlots
+        .map((slot) => {
+            const parsed = splitTimePeriod(slot?.time);
+
+            return {
+                day: String(slot?.day || "").trim(),
+                time: parsed.time,
+                period: parsed.period,
+            };
+        })
+        .filter((slot) => slot.day && slot.time);
+
+    return {
+        name: cls?.name || "",
+        subject: cls?.subject || "",
+        selectedDays: slots.length
+            ? orderDays(slots.map((s) => s.day))
+            : DEFAULT_DAYS,
+        commonTime: slots[0]?.time || DEFAULT_TIME,
+        commonPeriod: slots[0]?.period || DEFAULT_PERIOD,
+        scheduleSlots: slots,
+        useCustomSchedule: true,
+        durationMinutes: String(cls?.durationMinutes || 90),
+        totalSessions: String(cls?.totalSessions || 12),
+    };
+};
+
+export default function CreateClass({
+    open,
+    onClose,
+    onCreated,
+    onUpdated,
+    mode = "create",
+    initialClass = null,
+}) {
     const { t } = useTranslation();
 
     const [form, setForm] = useState(DEFAULT_FORM);
@@ -206,13 +260,18 @@ export default function CreateClass({ open, onClose, onCreated }) {
     const [scheduleTouched, setScheduleTouched] = useState(false);
 
     useEffect(() => {
-        if (open) {
+        if (!open) return;
+
+        if (mode === "edit" && initialClass) {
+            setForm(classToEditForm(initialClass));
+        } else {
             setForm(DEFAULT_FORM);
-            setSubmitting(false);
-            setError("");
-            setScheduleTouched(false);
         }
-    }, [open]);
+
+        setSubmitting(false);
+        setError("");
+        setScheduleTouched(false);
+    }, [open, mode, initialClass]);
 
     useEffect(() => {
         if (!open) return;
@@ -451,10 +510,21 @@ export default function CreateClass({ open, onClose, onCreated }) {
                 totalSessions: Math.max(1, totalSessionsValue ?? 12),
             };
 
-            const res = await apiUtils.post("/classes", payload);
-            const created = unwrap(res);
+            let res;
 
-            onCreated?.(created);
+            if (mode === "edit" && initialClass?._id) {
+                res = await apiUtils.patch(
+                    `/classes/${initialClass._id}`,
+                    payload,
+                );
+                const updated = unwrap(res);
+                onUpdated?.(updated);
+            } else {
+                res = await apiUtils.post("/classes", payload);
+                const created = unwrap(res);
+                onCreated?.(created);
+            }
+
             onClose?.();
         } catch (err) {
             setError(
@@ -486,7 +556,9 @@ export default function CreateClass({ open, onClose, onCreated }) {
                     ×
                 </button>
 
-                <h3 className="cm-title">{t("createClass.title")}</h3>
+                {/* <h3 className="cm-title">{t("createClass.title")}</h3> */}
+
+                <h2>{mode === "edit" ? "Edit class" : "Create class"}</h2>
 
                 <form className="cm-form" onSubmit={handleSubmit}>
                     <label className="cm-label">
@@ -787,8 +859,12 @@ export default function CreateClass({ open, onClose, onCreated }) {
                         disabled={!canSubmit || submitting}
                     >
                         {submitting
-                            ? t("createClass.creating")
-                            : t("createClass.create")}
+                            ? mode === "edit"
+                                ? "Saving..."
+                                : t("createClass.creating")
+                            : mode === "edit"
+                              ? "Save changes"
+                              : t("createClass.create")}
                     </button>
                 </form>
             </div>
