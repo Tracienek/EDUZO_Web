@@ -1,0 +1,719 @@
+{
+  "footer": {
+    "logoAlt": "Eduzo 标志",
+    "legal": "法律",
+    "legalDesc": "Lorem ipsum",
+    "developers": "开发者",
+    "devName": "Pham Tran Bao Tran",
+    "help": "帮助与支持",
+    "helpDesc": "Lorem ipsum",
+    "address": "我们的地址：",
+    "addressDesc": "Lorem ipsum",
+    "copyright": "版权所有 © 2025 EDUZO – 保留所有权利。"
+  },
+
+  "workspaceTopBar": {
+    "create": "创建",
+    "createStaff": "创建员工",
+    "searchPlaceholder": "搜索学生或班级...",
+    "searching": "搜索中...",
+    "noResults": "没有结果",
+    "students": "学生",
+    "classes": "班级",
+    "classLabel": "班级：{{name}}",
+    "classEmpty": "班级：—",
+    "folderLabel": "文件夹：{{name}}",
+    "folderEmpty": "文件夹：—",
+    "open": "打开",
+    "unnamedClass": "未命名班级",
+    "classesButton": "+ 班级",
+    "user": "用户",
+    "account": "账户",
+    "logout": "退出登录"
+  },
+
+   "header": {
+    "homeAria": "Eduzo 首页",
+    "logoAlt": "Eduzo 标志",
+    "navAria": "主导航",
+    "home": "首页",
+    "about": "关于我们",
+    "services": "服务",
+    "signIn": "登录",
+    "startTrial": "免费试用"
+  },
+
+  "auth": {
+    "forgot": {
+      "title": "忘记密码",
+      "subtitle": "输入您的邮箱，我们会发送重置链接。",
+      "emailLabel": "邮箱",
+      "emailPlaceholder": "name@example.com",
+      "sendBtn": "发送重置链接",
+      "sending": "发送中...",
+      "remember": "记得密码了吗？",
+      "backToSignIn": "返回登录",
+      "errorEmpty": "请输入您的邮箱。",
+      "success": "如果该邮箱存在账户，我们已发送重置链接，请检查您的邮箱。"
+    },
+
+    "signIn": {
+      "title": "登录",
+      "subtitle": "很高兴再次见到你",
+      "email": "邮箱",
+      "emailPlaceholder": "请输入邮箱",
+      "password": "密码",
+      "passwordPlaceholder": "请输入密码",
+      "togglePassword": "切换密码显示",
+      "forgot": "忘记密码？",
+      "signInBtn": "登录",
+      "signing": "登录中...",
+      "newUser": "你是新用户吗？",
+      "createAccount": "创建免费账户",
+
+      "errorEmailRequired": "请输入邮箱",
+      "errorEmailInvalid": "邮箱格式无效",
+      "errorPasswordRequired": "请输入密码",
+      "errorInvalidCredentials": "邮箱或密码错误"
+    },
+
+    "signUp": {
+      "title": "注册",
+      "subtitle": "创建你的中心账户",
+      "fullName": "全名",
+      "fullNamePlaceholder": "请输入全名",
+      "email": "邮箱",
+      "emailPlaceholder": "请输入邮箱",
+      "password": "密码",
+      "passwordPlaceholder": "请输入密码",
+      "confirmPassword": "确认密码",
+      "confirmPasswordPlaceholder": "请再次输入密码",
+      "togglePassword": "切换密码显示",
+      "signUpBtn": "注册",
+      "signingUp": "注册中...",
+      "haveAccount": "已经有账户了？",
+      "signIn": "登录",
+
+      "errorFullNameRequired": "请输入全名",
+      "errorEmailRequired": "请输入邮箱",
+      "errorEmailInvalid": "邮箱格式无效",
+      "errorPasswordRequired": "请输入密码",
+      "errorPasswordMin": "密码至少需要 8 个字符",
+      "errorConfirmPasswordRequired": "请确认密码",
+      "errorPasswordMismatch": "两次输入的密码不一致",
+      "errorRegisterFailed": "注册失败，请重试。"
+    }
+  },
+
+  "landing": {
+    "hero": {
+      "title1": "简化课堂管理",
+      "title2": "学生反馈",
+      "desc": "EDUZO 帮助教师高效管理课堂。",
+      "cta": "开始使用"
+    },
+
+    "featuresTitle": "一站式平台",
+    "featuresSubtitle": "简单高效，减少管理复杂度。",
+
+    "about": {
+      "title": "关于 EDUZO",
+      "p1": "EDUZO 是一个教育平台。",
+      "p2": "强调沟通与组织。",
+      "p3": "简单易用。"
+    },
+
+    "cta": {
+      "title": "准备好改变课堂了吗？",
+      "desc": "立即加入 EDUZO。",
+      "button": "开始使用"
+    }
+  },
+
+  "services": {
+    "hero": {
+      "kicker": "面向教师",
+      "title1": "自信地管理",
+      "title2": "你的课堂",
+      "desc": "EDUZO 帮助教师高效管理课堂，同时为学生提供一种简单、友好的方式来分享反馈并更好地参与他们的学习旅程。",
+      "cta": "开始免费试用"
+    },
+    "teacher": {
+      "title": "一个平台满足你的所有需求",
+      "subtitle": "EDUZO 以简单和高效为核心，减少管理复杂度并提升沟通效率。",
+      "dashboardAria": "仪表板预览",
+      "dashboardAlt": "仪表板预览"
+    },
+    "teacherFeatures": [
+      {
+        "icon": "fa-solid fa-check-to-slot",
+        "title": "创建和管理多个班级"
+      },
+      {
+        "icon": "fa-solid fa-user-tie",
+        "title": "创建和管理教师"
+      },
+      {
+        "icon": "fa-solid fa-comment-dots",
+        "title": "收集和查看学生反馈"
+      },
+      {
+        "icon": "fa-solid fa-chart-simple",
+        "title": "查看出勤和参与情况"
+      },
+      {
+        "icon": "fa-solid fa-arrow-trend-up",
+        "title": "跟踪教师表现"
+      },
+      {
+        "icon": "fa-solid fa-clock-rotate-left",
+        "title": "减少行政工作量"
+      }
+    ],
+    "student": {
+      "kicker": "面向学生",
+      "title1": "表达你的声音，",
+      "title2": "塑造你的教育",
+      "subtitle": "EDUZO 让学生能够轻松、舒适地提供有意义的反馈，从而帮助改善他们的学习体验。",
+      "ratingAlt": "学生评分预览"
+    },
+    "studentFeatures": [
+      {
+        "icon": "fa-solid fa-thumbs-up",
+        "title": "简单、适合学生的界面"
+      },
+      {
+        "icon": "fa-solid fa-star-half-stroke",
+        "title": "通过评分快速提交反馈"
+      },
+      {
+        "icon": "fa-solid fa-user-ninja",
+        "title": "匿名且真实的反馈选项"
+      },
+      {
+        "icon": "fa-solid fa-arrow-trend-up",
+        "title": "帮助教师改进你的课堂"
+      }
+    ]
+  },
+
+  
+  "fullAttendance": {
+    "loading": "加载中...",
+    "classNotFound": "未找到班级",
+    "hw": "作业",
+    "dash": "—",
+    "back": "返回",
+    "title": "完整出勤记录 —",
+    "class": "班级",
+    "month": "月份",
+    "datePlaceholder": "dd/mm/yyyy",
+    "pickDateTitle": "选择该月中的任意日期",
+    "openDatePicker": "打开日期选择器",
+    "tip": "提示：此视图仅显示所选月份中的上课日期（基于课程安排）。只读。",
+    "no": "序号",
+    "name": "姓名",
+    "noStudents": "没有学生"
+  },
+
+  "calendar": {
+    "loading": "加载日历...",
+    "back": "返回",
+    "title": "课程表",
+    "online": "在线",
+    "noClasses": "当天没有课程。",
+
+    "classCount": "{{count}} 节课",
+
+    "students": "{{count}} 名学生"
+  },
+
+  "fullClassFeedback": {
+  "back": "返回",
+  "title": "班级完整反馈",
+  "reload": "重新加载",
+  "total": "总数",
+  "avg": "平均分",
+  "loading": "正在加载反馈...",
+  "noFeedback": "暂无反馈。",
+  "teacher": "教师",
+  "failedToLoad": "加载反馈失败",
+  "ratingAria": "评分 {{value}} / 5"
+},
+
+"feedbackPage": {
+  "title": "反馈",
+  "class": "班级",
+  "classId": "班级 ID",
+  "studentOptional": "学生（可选）",
+  "yourName": "你的名字",
+  "overallRatingTitle": "1) 总体评分",
+  "overallRating": "总体评分",
+  "chooseTeacherTitle": "2) 选择教师",
+  "noTeachers": "当前没有可选教师。你仍然可以提交该班级的反馈。",
+  "selected": "已选择",
+  "noTeacherSelected": "未选择教师",
+  "understandTitle": "3) 理解程度",
+  "understand": "理解程度",
+  "teachingWayTitle": "4) 教学方式",
+  "teachingWay": "教学方式",
+  "writeFeedbackTitle": "5) 编写反馈",
+  "writePlaceholder": "请在这里写下你的反馈...",
+  "feedbackRequired": "反馈内容为必填项。",
+  "characters": "{{count}} 个字符",
+  "submit": "提交",
+  "sending": "发送中...",
+  "close": "关闭",
+  "thankYou": "谢谢！",
+  "successMessage": "你的反馈已成功提交。",
+  "successAria": "反馈提交成功",
+  "cannotLoadPage": "无法加载反馈页面",
+  "missingClassId": "缺少 classId。",
+  "writeFeedbackError": "请输入你的反馈。",
+  "submitFailed": "提交失败。",
+  "starsHint": "使用方向键或按 1–5。",
+  "outOfFive": "{{value}}/5",
+  "starAria": "{{label}} {{value}}"
+},
+
+"feedbackPanel": {
+  "panelAria": "反馈面板",
+  "title": "反馈",
+  "teacher": "教师",
+  "center": "中心",
+  "teacherLabel": "教师",
+  "avg": "平均分",
+  "feedbackCount_one": "条反馈",
+  "feedbackCount_other": "条反馈",
+  "shareQrTitle": "向学生分享二维码",
+  "shareQrDesc": "学生扫描二维码 → 打开表单 → 提交反馈。",
+  "publicFeedbackLink": "公开反馈链接",
+  "copy": "复制",
+  "openLargeQr": "打开大二维码",
+  "clickToEnlarge": "点击放大",
+  "classFeedbackQr": "班级反馈二维码",
+  "qrUnavailable": "二维码不可用",
+  "studentName": "学生姓名",
+  "enterStudentNamePlaceholder": "请输入学生姓名",
+  "studentClass": "学生班级",
+  "chooseStudentOptional": "选择学生（可选）",
+  "loadingStudents": "正在加载学生列表...",
+  "selectFromRoster": "从名单中选择",
+  "noRosterAvailable": "没有可用名单",
+  "rateTeachingQuality": "评价教学质量",
+  "teachingQualityRating": "教学质量评分",
+  "rateOutOfFive": "评分 {{value}} / 5",
+  "outOfFive": "{{value}}/5",
+  "shortParagraph": "简短评价",
+  "writeYourFeedback": "写下你的反馈...",
+  "submitFeedback": "提交反馈",
+  "recentFeedback": "最近反馈",
+  "viewFullFeedbacks": "查看全部反馈",
+  "loadingFeedback": "正在加载反馈...",
+  "noFeedbackYet": "暂无反馈。",
+  "showingLatestTen": "当前显示最新 10 条。点击“查看全部反馈”查看所有内容。",
+  "largeQrAria": "大二维码",
+  "qrFeedbackLink": "二维码反馈链接",
+  "closeQrPopup": "关闭二维码弹窗",
+  "largeClassFeedbackQr": "大型班级反馈二维码",
+  "failedToLoad": "加载反馈失败",
+  "enterStudentName": "请输入学生姓名",
+  "chooseRating": "请选择 1 到 5 的评分",
+  "thanksSubmitted": "谢谢！你的反馈已提交。",
+  "submitFailed": "提交失败。请重试。",
+  "linkCopied": "链接已复制",
+  "copyThisLink": "复制此链接：",
+  "ratingAria": "评分 {{value}} / 5"
+},
+
+"noteDetails": {
+  "title": "笔记",
+  "back": "返回",
+  "refresh": "刷新",
+  "loading": "加载中...",
+  "noNotes": "暂无笔记",
+  "failedToLoad": "加载笔记失败",
+  "count": "{{count}} 条笔记",
+  "from": "来自：{{role}}",
+  "to": "发送至：{{role}}"
+},
+
+"notesPanel": {
+  "title": "笔记",
+  "viewAll": "查看全部笔记",
+  "placeholderTeacher": "给中心写一条笔记（会显示在中心通知中）...",
+  "placeholderCenter": "给老师写一条笔记（会显示在老师通知中）...",
+  "sendNote": "发送笔记",
+  "sending": "发送中...",
+  "loading": "加载中...",
+  "noNotes": "暂无笔记",
+  "contentRequired": "内容不能为空",
+  "centerIdMissing": "此账户缺少 centerId",
+  "sendNoteFailed": "发送笔记失败",
+  "classLabel": "班级：{{name}}"
+},
+
+"studentProfile": {
+  "back": "返回",
+  "goBack": "返回",
+  "notFound": "未找到学生",
+  "defaultName": "学生",
+  "emptyValue": "—",
+  "profile": "资料",
+  "created": "创建时间",
+  "currentClass": "当前班级",
+  "openClass": "打开班级",
+  "view": "查看",
+  "noClassHint": "该学生尚未分配到任何班级。添加笔记需要班级信息。",
+  "takeNote": "添加笔记",
+  "notePlaceholder": "写一段关于该学生的简短笔记...",
+  "addNote": "添加笔记",
+  "adding": "添加中...",
+  "notes": "笔记",
+  "noNotes": "暂无笔记",
+  "noNotesDesc": "添加第一条笔记，以便跟踪进度、行为或提醒事项。",
+  "notInClassCannotNote": "学生尚未加入班级，无法创建笔记。",
+  "failedToAddNote": "添加笔记失败"
+},
+
+"studentSection": {
+  "title": "学生",
+  "sendTuition": "发送学费邮件",
+  "tuitionSent": "学费邮件已发送",
+  "tuitionAlreadySent": "学费邮件已发送",
+  "sending": "发送中...",
+  "needMoreSessions": "还需要 {{count}} 节课（{{held}}/{{threshold}}）",
+  "date": "日期",
+  "datePlaceholder": "dd/mm/yyyy",
+  "openDatePicker": "打开日期选择器",
+  "no": "序号",
+  "name": "姓名",
+  "homework": "作业",
+  "tuition": "学费",
+  "action": "操作",
+  "attendanceDataLabel": "{{date}}（出勤）",
+  "homeworkDataLabel": "{{date}}（作业）",
+  "attendanceAria": "{{name}} 在 {{date}} 的出勤",
+  "homeworkAria": "{{name}} 在 {{date}} 的作业",
+  "tuitionAria": "{{name}} 已缴学费",
+  "delete": "删除",
+  "noStudents": "暂无学生",
+  "cancel": "取消",
+  "save": "保存",
+  "saving": "保存中..."
+},
+
+"classDetail": {
+  "loading": "加载中...",
+  "classNotFound": "未找到班级",
+  "saveFailed": "保存失败，请重试。",
+  "notEnoughSessions": "已上课次数不足：{{held}}/{{threshold}}",
+  "tuitionEmailsSent": "学费邮件已发送：{{sent}}/{{total}}",
+  "sendTuitionFailed": "发送学费邮件失败。",
+  "thisStudent": "该学生",
+  "confirmDeleteStudent": "将 {{name}} 从该班级中移除？",
+  "deleteStudentFailed": "删除学生失败",
+  "unnamedClass": "未命名班级",
+  "tuitionDue": "学费到期",
+  "tuitionSent": "学费已发送",
+  "viewFullAttendance": "查看完整考勤",
+  "addStudent": "+ 学生",
+  "defaultSchedule": "周一、周三、周五 - 上午 9:00",
+  "totalStudents": "学生总数",
+  "enrolled": "已报名",
+  "nextSession": "下一节课",
+  "duration": "时长",
+  "durationMinutes": "{{count}} 分钟",
+  "perSession": "每节课",
+  "sessionsHeld": "已上课次数",
+  "dueTuition": "应付学费",
+  "notReady": "未准备好",
+  "emptyValue": "—"
+},
+"weekdays": {
+  "sunday": "星期日",
+  "monday": "星期一",
+  "tuesday": "星期二",
+  "wednesday": "星期三",
+  "thursday": "星期四",
+  "friday": "星期五",
+  "saturday": "星期六"
+},
+
+"createClass": {
+  "close": "关闭",
+  "title": "创建班级",
+  "className": "班级名称",
+  "classNamePlaceholder": "例如：IELTS 1",
+  "subject": "科目",
+  "subjectPlaceholder": "例如：English",
+  "schedule": "课程时间",
+  "customizePerDay": "按天自定义",
+  "useCommonTime": "使用统一时间",
+  "timePlaceholder": "例如：9:00、21:00、21g",
+  "sameTimeHelper": "相同时间将应用到所有已选择的日期。",
+  "addScheduleRow": "+ 添加时间行",
+  "removeScheduleRow": "移除时间行",
+  "preview": "预览：",
+  "noSchedule": "暂无课程时间",
+  "durationMinutes": "时长（分钟）",
+  "durationPlaceholder": "例如：90",
+  "totalSessions": "总课时",
+  "totalSessionsPlaceholder": "例如：10",
+  "totalSessionsHelper": "完成这些课时后即可发送学费邮件。",
+  "create": "创建",
+  "creating": "创建中...",
+  "createFailed": "创建班级失败，请重试。",
+  "timeFormatHelper": {
+    "before": "时间格式必须类似",
+    "or": "或",
+    "after": "AM/PM 可在下拉框中调整。"
+  }
+},
+"shortWeekdays": {
+  "mon": "周一",
+  "tue": "周二",
+  "wed": "周三",
+  "thu": "周四",
+  "fri": "周五",
+  "sat": "周六",
+  "sun": "周日"
+},
+
+"createStudent": {
+  "close": "关闭",
+  "title": "创建学生",
+  "fullName": "姓名",
+  "fullNamePlaceholder": "例如：张三",
+  "email": "邮箱",
+  "emailPlaceholder": "例如：name@email.com",
+  "create": "创建",
+  "creating": "创建中...",
+  "createFailed": "创建学生失败，请重试。"
+},
+
+"classesPage": {
+  "onlineClass": "在线班级",
+  "loading": "加载中...",
+  "noActiveClass": "当前没有正在进行的班级",
+  "noAvailableClasses": "没有可用班级",
+  "students": "学生",
+  "schedule": "课程时间",
+  "duration": "时长",
+  "durationMinutes": "{{count}} 分钟",
+  "viewDetails": "查看详情",
+  "deleteClass": "删除班级",
+  "unnamedClass": "未命名班级",
+  "unnamedShort": "未命名",
+  "emptyValue": "—",
+  "defaultSchedule": "周一、周三、周五 - 上午 9:00",
+  "myClasses": "我的班级",
+  "centerClasses": "{{name}} 的班级",
+  "centerFallback": "中心",
+  "notAllowedDelete": "您无权删除班级。",
+  "confirmDelete": "删除班级“{{name}}”？\n此操作无法撤销。",
+  "deleteFailed": "删除班级失败"
+},
+
+"notifications": {
+  "title": "通知",
+  "refresh": "刷新",
+  "markAll": "全部标为已读",
+  "deleteAll": "删除全部",
+  "loading": "加载中...",
+  "empty": "暂无通知",
+  "open": "打开",
+  "openClassDetail": "查看课程详情",
+  "delete": "删除通知",
+  "classLabel": "课程：{{name}}",
+  "confirmDeleteOne": "删除此通知？\n此操作无法撤销。",
+  "confirmDeleteAll": "删除所有通知？\n此操作无法撤销。",
+  "deleteOneFailed": "删除通知失败",
+  "deleteAllFailed": "删除所有通知失败",
+  "markAllFailed": "全部标为已读失败",
+  "classNotFound": "未找到课程或课程已被删除。",
+  "tuitionDueTitle": "学费到期"
+},
+
+"profile": {
+  "account": "账户",
+  "manageSettings": "管理您的个人资料设置",
+  "role": "角色",
+  "unknown": "未知",
+  "errorPrefix": "错误：",
+  "successPrefix": "成功：",
+
+  "basicInformation": "基本信息",
+  "edit": "编辑",
+  "avatarAlt": "头像",
+  "uploading": "上传中...",
+  "changeAvatar": "更换头像",
+  "avatarHint": "建议使用 JPG/PNG/WEBP • 最大 3MB",
+
+  "name": "姓名",
+  "namePlaceholder": "您的姓名",
+  "email": "电子邮箱",
+  "gender": "性别",
+  "select": "选择",
+  "male": "男",
+  "female": "女",
+  "other": "其他",
+  "dateOfBirth": "出生日期",
+  "dobPlaceholder": "DD/MM/YYYY",
+  "languageOrSpeciality": "语言 / 专业方向",
+  "languageOrSpecialityPlaceholder": "例如：英语、雅思、数学...",
+
+  "cancel": "取消",
+  "save": "保存",
+  "saving": "保存中...",
+
+  "changePassword": "修改密码",
+  "change": "修改",
+  "currentPassword": "当前密码",
+  "currentPasswordPlaceholder": "当前密码",
+  "newPassword": "新密码",
+  "newPasswordPlaceholder": "新密码",
+  "confirmNewPassword": "确认新密码",
+  "confirmNewPasswordPlaceholder": "确认新密码",
+  "togglePassword": "切换密码可见性",
+  "passwordHint": "密码至少需要 8 个字符。",
+  "updating": "更新中...",
+
+  "nameRequired": "姓名为必填项",
+  "profileUpdated": "个人资料更新成功",
+  "unauthorized": "未授权。请重新登录。",
+  "updateProfileFailed": "更新个人资料失败",
+
+  "avatarMaxSize": "头像大小必须不超过 {{size}}MB",
+  "avatarTypeInvalid": "仅支持 JPG/PNG/WEBP 格式",
+  "avatarUpdated": "头像已更新",
+  "avatarEndpointNotFound": "未找到头像接口（PATCH /user/me/avatar）。请在后端添加该接口或修改前端接口地址。",
+  "updateAvatarFailed": "更新头像失败",
+
+  "currentPasswordRequired": "请输入当前密码",
+  "newPasswordRequired": "请输入新密码",
+  "passwordMin": "密码至少需要 8 个字符。",
+  "confirmPasswordRequired": "请确认新密码",
+  "confirmPasswordMismatch": "确认密码不匹配",
+  "passwordChanged": "密码修改成功",
+  "currentPasswordIncorrect": "当前密码不正确",
+  "changePasswordFailed": "修改密码失败"
+},
+
+"createTeacherModal": {
+  "title": "创建教师",
+  "subtitle": "请设置初始密码",
+  "close": "关闭",
+  "name": "姓名",
+  "email": "电子邮箱",
+  "password": "密码",
+  "cancel": "取消",
+  "create": "创建",
+  "creating": "创建中...",
+
+  "errorNameRequired": "姓名为必填项",
+  "errorEmailRequired": "电子邮箱为必填项",
+  "errorEmailInvalid": "邮箱格式无效",
+  "errorPasswordRequired": "密码为必填项",
+  "errorPasswordMin": "密码至少需要 8 个字符",
+  "errorEmailExists": "电子邮箱已存在",
+  "errorCreateFailed": "创建教师失败，请重试。"
+},
+
+"fullFeedback": {
+  "back": "返回",
+  "title": "全部反馈",
+  "reload": "重新加载",
+  "total": "总数",
+  "avg": "平均",
+  "loading": "正在加载反馈...",
+  "noFeedback": "暂无反馈。",
+  "failedToLoad": "加载反馈失败",
+  "emptyValue": "—",
+  "ratingAria": "评分 {{value}} / 5"
+},
+
+"teacherDetail": {
+  "loading": "加载中...",
+  "notFound": "未找到教师",
+  "failedToLoadTeacher": "加载教师失败",
+  "failedToLoadLogs": "加载考勤记录失败",
+  "failedToLoadFeedback": "加载反馈失败",
+  "failedToClearLogs": "清除考勤记录失败",
+  "failedToDeleteTeacher": "删除教师失败",
+
+  "back": "返回",
+  "delete": "删除",
+  "reload": "重新加载",
+  "clear": "清除",
+  "open": "打开",
+  "hidden": "隐藏",
+  "loadingShort": "加载中...",
+  "avg": "平均",
+
+  "avatarAlt": "教师头像",
+  "unnamedTeacher": "未命名",
+  "emptyValue": "—",
+
+  "email": "电子邮箱",
+  "dob": "出生日期",
+  "gender": "性别",
+  "language": "语言",
+  "male": "男",
+  "female": "女",
+
+  "studentFeedback": "学生反馈",
+  "classesTaught": "所教课程",
+  "viewFullFeedbacks": "查看全部反馈",
+
+  "noPermissionFeedback": "您无权查看该教师的反馈。",
+  "noPermissionLogs": "您无权查看该教师的考勤记录。",
+  "noFeedback": "暂无反馈。",
+  "noAttendance": "暂无考勤活动。",
+
+  "confirmClearLogs": "这将删除该教师的所有考勤记录。是否继续？",
+  "confirmDeleteTeacher": "删除教师“{{name}}”？\n此操作无法撤销。",
+
+  "feedbackCount_one": "{{count}} 条反馈",
+  "feedbackCount_other": "{{count}} 条反馈",
+  "attendanceCount_one": "{{count}} 条考勤",
+  "attendanceCount_other": "{{count}} 条考勤",
+
+  "showingLatestThree": "当前仅显示最新 3 条。点击“查看全部反馈”查看全部内容。",
+  "attendanceLogLine": "{{date}} - {{time}} 考勤",
+  "ratingAria": "评分 {{value}} / 5"
+},
+
+"teacherPage": {
+  "loading": "加载中...",
+  "failedToLoad": "加载教师列表失败",
+  "failedToDelete": "删除教师失败",
+  "missingTeacherId": "缺少教师 ID",
+
+  "myTeachers": "我的教师",
+  "centerTeachers": "{{name}} 的教师",
+  "centerFallback": "中心",
+  "addTeachers": "＋ 教师",
+  "noTeachers": "暂无教师。请点击“＋ 教师”。",
+
+  "deleteTeacher": "删除教师",
+  "unnamedTeacher": "未命名",
+  "openTeacherAria": "打开 {{name}}",
+  "confirmDelete": "删除教师“{{name}}”？\n此操作无法撤销。"
+},
+
+"workspaceLayout": {
+  "classes": "课程",
+  "calendar": "日历",
+  "teachers": "教师",
+  "notifications": "通知",
+  "logoAlt": "EDUZO 标志",
+  "logoSmallAlt": "EDUZO 小标志",
+  "openMenu": "打开菜单",
+  "menu": "菜单",
+  "expandSidebar": "展开侧边栏",
+  "collapseSidebar": "收起侧边栏",
+  "copyright": "版权所有 © 2025 EDUZO。"
+}
+
+}
