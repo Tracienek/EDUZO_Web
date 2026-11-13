@@ -349,3 +349,36 @@
         padding: 12px;
     }
 }
+
+/* ========================================
+   WORKSPACE RESPONSIVE IMPROVEMENTS
+   ======================================== */
+
+/* Prevent fixed-width children from
+   forcing the workspace beyond viewport */
+
+.workspace-content,
+.workspace-main {
+    min-width: 0;
+}
+
+.workspace-main > * {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .workspace-content {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .workspace-main {
+        width: 100%;
+    }
+
+    .workspace {
+        min-width: 0;
+    }
+}

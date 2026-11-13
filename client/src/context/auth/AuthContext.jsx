@@ -1,13 +1,11 @@
-// context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
-// import socketIOClient from "socket.io-client";
 
-// Utils
-import { newRequest, apiUtils } from "../../utils/newRequest";
+import { newRequest } from "../../utils/newRequest";
 import { formatEmailToName } from "../../utils/formatter";
 
 const AuthContext = createContext();
+
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
@@ -25,55 +23,34 @@ export const AuthProvider = ({ children }) => {
     const [overlayVisible, setOverlayVisible] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
 
-    // Auth + user data
+    // Authentication & user data
     const [userInfo, setUserInfo] = useState(null);
     const [myCharacters, setMyCharacters] = useState([]);
     const [characterInfo, setCharacterInfo] = useState(null);
-    // const [onlineUsers, setOnlineUsers] = useState([]);
 
     // Loading state
     const [loading, setLoading] = useState(true);
 
-    // Socket
-    // const [socket, setSocket] = useState(null);
-
-    // --------------------------------------------------
-    // 1) Setup socket connection on mount
-    // --------------------------------------------------
-    // useEffect(() => {
-    //     const newSocket = socketIOClient(
-    //         import.meta.env.VITE_ENV === "production"
-    //             ? import.meta.env.VITE_SERVER_ORIGIN
-    //             : import.meta.env.VITE_SERVER_LOCAL_ORIGIN
-    //     );
-
-    //     setSocket(newSocket);
-    //     return () => newSocket.disconnect();
-    // }, []);
-
-    // useEffect(() => {
-    //     if (!socket) return;
-    //     socket.on("getUsers", (users) => setOnlineUsers(users));
-    //     return () => socket.off("getUsers");
-    // }, [socket]);
-
-    // --------------------------------------------------
-    // 2) Fetch userInfo on mount
-    // --------------------------------------------------
+    // Load currently authenticated user
     const loadUserMe = async () => {
         const token = localStorage.getItem("accessToken");
+
         if (!token) {
             setUserInfo(null);
             setLoading(false);
             return null;
         }
+
         try {
             const res = await newRequest.get("/user/me");
             const user = res.data.metadata.user;
+
             user.displayName = formatEmailToName(user.email);
             setUserInfo(user);
+
             return user;
-        } catch {
+        } catch (err) {
+            console.error("Failed to load user:", err);
             setUserInfo(null);
             return null;
         } finally {
@@ -81,42 +58,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // Restore login session when the app starts
     useEffect(() => {
         loadUserMe();
     }, []);
 
-    // // Add socket user after login load
-    // useEffect(() => {
-    //     if (socket && userInfo?._id) {
-    //         socket.emit("addUser", userInfo._id);
-    //     }
-    // }, [socket, userInfo]);
-
-    // --------------------------------------------------
-    // 4) Login & Logout
-    // --------------------------------------------------
-    // const login = async (email, password) => {
-    //     try {
-    //         const res = await newRequest.post("/auth/signIn", {
-    //             email,
-    //             password,
-    //         });
-
-    //         const accessToken = res?.data?.metadata?.accessToken;
-    //         if (accessToken) {
-    //             localStorage.setItem("accessToken", accessToken);
-    //             Cookies.set("accessToken", accessToken);
-
-    //         }
-
-    //         const user = await loadUserMe();
-    //         return { success: true, user };
-    //     } catch (err) {
-    //         console.log("Login failed:", err);
-    //         return { success: false, user: null };
-    //     }
-    // };
-
+    // Login
     const login = async (email, password) => {
         try {
             const res = await newRequest.post("/auth/signIn", {
@@ -130,44 +77,48 @@ export const AuthProvider = ({ children }) => {
                 res?.data?.accessToken ||
                 res?.data?.token;
 
-            console.log("SIGNIN RES:", res.data);
-
+            // Reject login if no access token is returned
             if (!accessToken) {
-                console.log("SignIn response (no token found):", res.data);
-            } else {
-                localStorage.setItem("accessToken", accessToken);
-                Cookies.set("accessToken", accessToken); // optional
+                return { success: false, user: null };
             }
 
+            localStorage.setItem("accessToken", accessToken);
+
             const user = await loadUserMe();
+
+            // Reject incomplete authentication
+            if (!user) {
+                localStorage.removeItem("accessToken");
+                return { success: false, user: null };
+            }
+
             return { success: true, user };
         } catch (err) {
-            console.log("Login failed:", err?.response?.data || err.message);
+            console.error("Login failed:", err?.response?.data || err.message);
+
             return { success: false, user: null };
         }
     };
 
+    // Logout
     const logout = async () => {
-        try {
-            await apiUtils.post("/auth/logout");
-        } catch (err) {
-            console.error("Logout error:", err);
-        }
-
+        // Clear old authentication cookie
         Cookies.remove("accessToken");
+
+        // Remove locally stored JWT
         localStorage.removeItem("accessToken");
+
+        // Clear authenticated user state
         setUserInfo(null);
         setMyCharacters([]);
         setCharacterInfo(null);
 
+        // Redirect without waiting for an API request
         window.location.href = "/auth/signIn";
     };
 
-    // --------------------------------------------------
-    // 5) Context value
-    // --------------------------------------------------
+    // Context values
     const value = {
-        // UI forms
         showLoginForm,
         setShowLoginForm,
         showRegisterForm,
@@ -185,7 +136,7 @@ export const AuthProvider = ({ children }) => {
         showMenu,
         setShowMenu,
 
-        // Auth
+        // Authentication
         userInfo,
         login,
         logout,
@@ -196,10 +147,6 @@ export const AuthProvider = ({ children }) => {
         characterInfo,
         setCharacterInfo,
         myCharacters,
-
-        // Socket
-        // socket,
-        // onlineUsers,
     };
 
     return (

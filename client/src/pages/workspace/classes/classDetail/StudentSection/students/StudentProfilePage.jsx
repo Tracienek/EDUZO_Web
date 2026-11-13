@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { apiUtils } from "../../../../../../utils/newRequest";
+import { useAuth } from "../../../../../../context/auth/AuthContext";
 import "./StudentProfilePage.css";
 
 const fmtDateTime = (iso) => {
@@ -14,6 +15,7 @@ export default function StudentProfilePage() {
     const { studentId } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { userInfo } = useAuth();
 
     const [loading, setLoading] = useState(true);
     const [student, setStudent] = useState(null);
@@ -21,6 +23,8 @@ export default function StudentProfilePage() {
     const [notes, setNotes] = useState([]);
     const [content, setContent] = useState("");
     const [submitting, setSubmitting] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+    const [editingText, setEditingText] = useState("");
 
     const canAddNote = useMemo(() => {
         return !!content.trim() && !!klass?._id && !submitting;
@@ -28,6 +32,7 @@ export default function StudentProfilePage() {
 
     const loadAll = async () => {
         setLoading(true);
+
         try {
             const [pRes, nRes] = await Promise.all([
                 apiUtils.get(`/students/${studentId}/profile`),
@@ -45,6 +50,7 @@ export default function StudentProfilePage() {
     useEffect(() => {
         if (!studentId) return;
         loadAll();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [studentId]);
 
@@ -59,6 +65,7 @@ export default function StudentProfilePage() {
 
         try {
             setSubmitting(true);
+
             await apiUtils.post(`/students/${studentId}/notes`, {
                 content: text,
                 classId: klass._id,
@@ -71,6 +78,30 @@ export default function StudentProfilePage() {
                 err?.response?.data?.message ||
                     t("studentProfile.failedToAddNote"),
             );
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    // Edit an existing student note
+    const saveNote = async () => {
+        const next = editingText.trim();
+
+        if (!next || !editingId) return;
+
+        try {
+            setSubmitting(true);
+
+            await apiUtils.patch(`/students/${studentId}/notes/${editingId}`, {
+                content: next,
+            });
+
+            setEditingId(null);
+            setEditingText("");
+
+            await loadAll();
+        } catch (err) {
+            alert(err?.response?.data?.message || "Unable to update note");
         } finally {
             setSubmitting(false);
         }
@@ -96,6 +127,7 @@ export default function StudentProfilePage() {
                     <div className="sp-empty-title">
                         {t("studentProfile.notFound")}
                     </div>
+
                     <button
                         className="sp-btn"
                         onClick={() => navigate(-1)}
@@ -110,6 +142,7 @@ export default function StudentProfilePage() {
 
     const name =
         student.fullName || student.name || t("studentProfile.defaultName");
+
     const createdAt = fmtDateTime(student.createdAt);
     const className = klass?.name || t("studentProfile.emptyValue");
 
@@ -131,6 +164,7 @@ export default function StudentProfilePage() {
 
             <div className="sp-grid">
                 <div className="sp-col">
+                    {/* Student information */}
                     <div className="sp-card">
                         <div className="sp-cardTitle">
                             {t("studentProfile.profile")}
@@ -140,6 +174,7 @@ export default function StudentProfilePage() {
                             <div className="sp-label">
                                 {t("studentProfile.created")}
                             </div>
+
                             <div className="sp-value">{createdAt}</div>
                         </div>
 
@@ -147,8 +182,10 @@ export default function StudentProfilePage() {
                             <div className="sp-label">
                                 {t("studentProfile.currentClass")}
                             </div>
+
                             <div className="sp-value">
                                 {className}
+
                                 {klass?._id && (
                                     <button
                                         className="sp-linkBtn"
@@ -173,6 +210,7 @@ export default function StudentProfilePage() {
                         )}
                     </div>
 
+                    {/* Create student note */}
                     <div className="sp-card">
                         <div className="sp-cardTitle">
                             {t("studentProfile.takeNote")}
@@ -190,7 +228,10 @@ export default function StudentProfilePage() {
                                     e.key === "Enter"
                                 ) {
                                     e.preventDefault();
-                                    if (canAddNote) createNote();
+
+                                    if (canAddNote) {
+                                        createNote();
+                                    }
                                 }
                             }}
                         />
@@ -198,7 +239,9 @@ export default function StudentProfilePage() {
                         <div className="sp-actions">
                             <button
                                 type="button"
-                                className={`sp-btnPrimary ${!canAddNote ? "disabled" : ""}`}
+                                className={`sp-btnPrimary ${
+                                    !canAddNote ? "disabled" : ""
+                                }`}
                                 onClick={createNote}
                                 disabled={!canAddNote}
                             >
@@ -210,6 +253,7 @@ export default function StudentProfilePage() {
                     </div>
                 </div>
 
+                {/* Student notes */}
                 <div className="sp-col">
                     <div className="sp-card">
                         <div className="sp-cardTitle">
@@ -222,6 +266,7 @@ export default function StudentProfilePage() {
                                 <div className="sp-emptyNotes-title">
                                     {t("studentProfile.noNotes")}
                                 </div>
+
                                 <div className="sp-emptyNotes-sub">
                                     {t("studentProfile.noNotesDesc")}
                                 </div>
@@ -235,9 +280,67 @@ export default function StudentProfilePage() {
                                                 {fmtDateTime(n.createdAt)}
                                             </span>
                                         </div>
-                                        <div className="sp-noteContent">
-                                            {n.content}
-                                        </div>
+
+                                        {editingId === n._id ? (
+                                            <div>
+                                                <textarea
+                                                    className="sp-textarea"
+                                                    value={editingText}
+                                                    onChange={(e) =>
+                                                        setEditingText(
+                                                            e.target.value,
+                                                        )
+                                                    }
+                                                />
+
+                                                <div className="sp-noteControls">
+                                                    <button
+                                                        type="button"
+                                                        disabled={
+                                                            submitting ||
+                                                            !editingText.trim()
+                                                        }
+                                                        onClick={saveNote}
+                                                    >
+                                                        Save
+                                                    </button>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            setEditingId(null)
+                                                        }
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className="sp-noteContent">
+                                                    {n.content}
+                                                </div>
+
+                                                {String(n.fromUserId) ===
+                                                    String(
+                                                        userInfo?._id ||
+                                                            userInfo?.userId,
+                                                    ) && (
+                                                    <button
+                                                        type="button"
+                                                        className="sp-editNote"
+                                                        onClick={() => {
+                                                            setEditingId(n._id);
+                                                            setEditingText(
+                                                                n.content,
+                                                            );
+                                                        }}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
                                 ))}
                             </div>
