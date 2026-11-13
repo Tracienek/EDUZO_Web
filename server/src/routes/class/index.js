@@ -1,5 +1,3 @@
-// server/src/routes/class/index.js
-
 const router = require("express").Router();
 
 const ctrl = require("../../controllers/class.controller");
@@ -29,6 +27,7 @@ router.delete("/:id/students/:studentId", ctrl.removeStudentFromClass);
 
 router.get("/:id/notes", noteCtrl.listByClass);
 router.post("/:id/notes", noteCtrl.create);
+router.patch("/:id/notes/:noteId", noteCtrl.update);
 
 router.get("/:id/sessions/summary", ctrl.getSessionSummary);
 router.post("/:id/tuition/send", ctrl.sendTuitionEmails);

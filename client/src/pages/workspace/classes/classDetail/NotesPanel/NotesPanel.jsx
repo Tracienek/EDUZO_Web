@@ -1,4 +1,3 @@
-// src/pages/workspace/classes/classDetail/NotesPanel/NotesPanel.jsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -12,7 +11,9 @@ const pad2 = (n) => String(n).padStart(2, "0");
 
 const formatDDMMYYYY_HHMM = (iso) => {
     if (!iso) return "";
+
     const d = new Date(iso);
+
     if (Number.isNaN(d.getTime())) return "";
 
     const dd = pad2(d.getDate());
@@ -34,24 +35,31 @@ export default function NotesPanel({
     const { t } = useTranslation();
 
     const canUseNotes = role === "teacher" || role === "center";
+
     const myId = useMemo(() => getMyId(userInfo), [userInfo]);
 
     const [notes, setNotes] = useState([]);
     const [noteText, setNoteText] = useState("");
+    const [editingId, setEditingId] = useState(null);
+    const [editingText, setEditingText] = useState("");
     const [noteLoading, setNoteLoading] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    // Load class notes
     const fetchNotes = async () => {
         if (!classId || !canUseNotes) return;
 
         try {
             setLoading(true);
+
             const res = await apiUtils.get(`/classes/${classId}/notes`);
+
             const list =
                 res?.data?.metadata?.notes ||
                 res?.data?.notes ||
                 res?.data?.metadata ||
                 [];
+
             setNotes(Array.isArray(list) ? list : []);
         } catch {
             setNotes([]);
@@ -62,13 +70,16 @@ export default function NotesPanel({
 
     useEffect(() => {
         fetchNotes();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classId, canUseNotes]);
 
+    // Create class note
     const submitNote = async () => {
         if (!canUseNotes) return;
 
         const content = noteText.trim();
+
         if (!content) {
             alert(t("notesPanel.contentRequired"));
             return;
@@ -103,9 +114,48 @@ export default function NotesPanel({
             };
 
             setNotes((prev) => [created || fallback, ...prev]);
+
             setNoteText("");
         } catch (e) {
             alert(e?.response?.data?.message || t("notesPanel.sendNoteFailed"));
+        } finally {
+            setNoteLoading(false);
+        }
+    };
+
+    // Edit class note
+    const saveEdit = async () => {
+        if (!editingText.trim() || !editingId) {
+            return;
+        }
+
+        try {
+            setNoteLoading(true);
+
+            const res = await apiUtils.patch(
+                `/classes/${classId}/notes/${editingId}`,
+                {
+                    content: editingText.trim(),
+                },
+            );
+
+            const updated = res?.data?.metadata?.note;
+
+            setNotes((previous) =>
+                previous.map((n) =>
+                    n._id === editingId
+                        ? updated || {
+                              ...n,
+                              content: editingText.trim(),
+                          }
+                        : n,
+                ),
+            );
+
+            setEditingId(null);
+            setEditingText("");
+        } catch (err) {
+            alert(err?.response?.data?.message || "Unable to update note");
         } finally {
             setNoteLoading(false);
         }
@@ -133,6 +183,7 @@ export default function NotesPanel({
                 </button>
             </div>
 
+            {/* Create note */}
             <div className="cd-note-box">
                 <textarea
                     className="cd-note-input"
@@ -160,6 +211,7 @@ export default function NotesPanel({
                 </div>
             </div>
 
+            {/* Notes list */}
             <div className="cd-note-list">
                 {loading && (
                     <div className="cd-empty" style={{ marginTop: 10 }}>
@@ -184,12 +236,64 @@ export default function NotesPanel({
                                         })}
                                     </div>
                                 )}
+
                                 <span className="cd-note-time">
                                     {formatDDMMYYYY_HHMM(n?.createdAt)}
                                 </span>
                             </div>
 
-                            <div className="cd-note-msg">{n.content || ""}</div>
+                            {editingId === n._id ? (
+                                <div>
+                                    <textarea
+                                        className="cd-note-input"
+                                        value={editingText}
+                                        onChange={(e) =>
+                                            setEditingText(e.target.value)
+                                        }
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className="cd-btn"
+                                        disabled={
+                                            noteLoading || !editingText.trim()
+                                        }
+                                        onClick={saveEdit}
+                                    >
+                                        Save
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="cd-btn cd-btn--ghost"
+                                        onClick={() => {
+                                            setEditingId(null);
+                                            setEditingText("");
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div className="cd-note-msg">
+                                        {n.content || ""}
+                                    </div>
+
+                                    {String(n.fromUserId) === String(myId) && (
+                                        <button
+                                            type="button"
+                                            className="cd-btn cd-btn--ghost"
+                                            onClick={() => {
+                                                setEditingId(n._id);
+                                                setEditingText(n.content || "");
+                                            }}
+                                        >
+                                            Edit
+                                        </button>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     ))}
             </div>

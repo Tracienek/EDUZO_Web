@@ -1,15 +1,17 @@
-// server/src/controllers/student.controller.js
 const Student = require("../models/Student");
 const Class = require("../models/Class");
+const ClassNote = require("../models/ClassNote");
 
+// POST /students
 exports.createStudent = async (req, res) => {
     try {
-        const { fullName, email, dob, classId, studentCode, parentPhone } = req.body;
+        const { fullName, email, dob, classId, studentCode, parentPhone } =
+            req.body;
 
         if (!fullName?.trim() || !email?.trim()) {
-            return res
-                .status(400)
-                .json({ message: "fullName and email are required" });
+            return res.status(400).json({
+                message: "fullName and email are required",
+            });
         }
 
         const normalizedEmail = email.trim().toLowerCase();
@@ -17,6 +19,7 @@ exports.createStudent = async (req, res) => {
         const existed = await Student.findOne({
             email: normalizedEmail,
         }).lean();
+
         if (existed) {
             return res.status(409).json({
                 message: "Student already exists",
@@ -24,13 +27,17 @@ exports.createStudent = async (req, res) => {
             });
         }
 
-        // validate classId (optional)
         let validClassId = null;
+
         if (classId) {
             const cls = await Class.findById(classId).select("_id").lean();
+
             if (!cls) {
-                return res.status(400).json({ message: "Class not found" });
+                return res.status(400).json({
+                    message: "Class not found",
+                });
             }
+
             validClassId = cls._id;
         }
 
@@ -44,7 +51,6 @@ exports.createStudent = async (req, res) => {
             classId: validClassId,
         });
 
-        // trả về kèm class info để UI dùng luôn nếu cần
         const populated = await Student.findById(created._id)
             .populate({
                 path: "classId",
@@ -52,12 +58,17 @@ exports.createStudent = async (req, res) => {
             })
             .lean();
 
-        return res.status(201).json({ metadata: { student: populated } });
+        return res.status(201).json({
+            metadata: { student: populated },
+        });
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        return res.status(500).json({
+            message: err.message,
+        });
     }
 };
 
+// GET /students
 exports.getAll = async (req, res) => {
     try {
         const withClass = String(req.query.withClass || "") === "1";
@@ -72,12 +83,18 @@ exports.getAll = async (req, res) => {
         }
 
         const list = await q.lean();
-        return res.json({ metadata: { students: list } });
+
+        return res.json({
+            metadata: { students: list },
+        });
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        return res.status(500).json({
+            message: err.message,
+        });
     }
 };
 
+// GET /students/:id
 exports.getById = async (req, res) => {
     try {
         const withClass = String(req.query.withClass || "") === "1";
@@ -92,35 +109,63 @@ exports.getById = async (req, res) => {
         }
 
         const st = await q.lean();
-        if (!st) return res.status(404).json({ message: "Student not found" });
 
-        return res.json({ metadata: { student: st } });
+        if (!st) {
+            return res.status(404).json({
+                message: "Student not found",
+            });
+        }
+
+        return res.json({
+            metadata: { student: st },
+        });
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        return res.status(500).json({
+            message: err.message,
+        });
     }
 };
 
+// PATCH /students/:id
 exports.update = async (req, res) => {
     try {
-        const { fullName, dob, homework, classId, studentCode, parentPhone } = req.body;
+        const { fullName, dob, homework, classId, studentCode, parentPhone } =
+            req.body;
 
         const update = {};
 
-        if (typeof fullName === "string") update.fullName = fullName.trim();
-        if (typeof dob === "string") update.dob = dob;
-        if (typeof studentCode === "string") update.studentCode = studentCode.trim();
-        if (typeof parentPhone === "string") update.parentPhone = parentPhone.trim();
-        if (typeof homework === "boolean") update.homework = homework;
+        if (typeof fullName === "string") {
+            update.fullName = fullName.trim();
+        }
 
-        if (req.body.hasOwnProperty("classId")) {
-            // cho phép gỡ classId bằng null / "" / undefined
+        if (typeof dob === "string") {
+            update.dob = dob;
+        }
+
+        if (typeof studentCode === "string") {
+            update.studentCode = studentCode.trim();
+        }
+
+        if (typeof parentPhone === "string") {
+            update.parentPhone = parentPhone.trim();
+        }
+
+        if (typeof homework === "boolean") {
+            update.homework = homework;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(req.body, "classId")) {
             if (classId === null || classId === "" || classId === undefined) {
                 update.classId = null;
             } else {
                 const cls = await Class.findById(classId).select("_id").lean();
+
                 if (!cls) {
-                    return res.status(400).json({ message: "Class not found" });
+                    return res.status(400).json({
+                        message: "Class not found",
+                    });
                 }
+
                 update.classId = cls._id;
             }
         }
@@ -134,15 +179,21 @@ exports.update = async (req, res) => {
             })
             .lean();
 
-        if (!st) return res.status(404).json({ message: "Student not found" });
+        if (!st) {
+            return res.status(404).json({
+                message: "Student not found",
+            });
+        }
 
-        return res.json({ metadata: { student: st } });
+        return res.json({
+            metadata: { student: st },
+        });
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        return res.status(500).json({
+            message: err.message,
+        });
     }
 };
-
-const ClassNote = require("../models/ClassNote");
 
 // GET /students/:id/profile
 exports.getStudentProfile = async (req, res) => {
@@ -150,11 +201,16 @@ exports.getStudentProfile = async (req, res) => {
         const { id } = req.params;
 
         const student = await Student.findById(id).lean();
-        if (!student)
-            return res.status(404).json({ message: "Student not found" });
 
-        // student belongs to which class? (Class.students is array of ObjectId)
-        const klass = await Class.findOne({ students: id })
+        if (!student) {
+            return res.status(404).json({
+                message: "Student not found",
+            });
+        }
+
+        const klass = await Class.findOne({
+            students: id,
+        })
             .select(
                 "name scheduleText durationMinutes totalSessions heldCount centerId",
             )
@@ -168,7 +224,10 @@ exports.getStudentProfile = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Failed to load profile" });
+
+        return res.status(500).json({
+            message: "Failed to load profile",
+        });
     }
 };
 
@@ -177,15 +236,21 @@ exports.listStudentNotes = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Only notes for this student
-        const notes = await ClassNote.find({ studentId: id })
+        const notes = await ClassNote.find({
+            studentId: id,
+        })
             .sort({ createdAt: -1 })
             .lean();
 
-        return res.status(200).json({ metadata: { notes } });
+        return res.status(200).json({
+            metadata: { notes },
+        });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Failed to load notes" });
+
+        return res.status(500).json({
+            message: "Failed to load notes",
+        });
     }
 };
 
@@ -196,29 +261,39 @@ exports.createStudentNote = async (req, res) => {
         const { content, classId } = req.body;
 
         const text = String(content || "").trim();
-        if (!text)
-            return res.status(400).json({ message: "Content is required" });
 
-        // must provide classId because ClassNote requires it
-        if (!classId) {
-            return res.status(400).json({ message: "classId is required" });
+        if (!text) {
+            return res.status(400).json({
+                message: "Content is required",
+            });
         }
 
-        // get current user info from auth middleware
+        if (!classId) {
+            return res.status(400).json({
+                message: "classId is required",
+            });
+        }
+
         const userId = req.user?._id || req.userInfo?._id;
+
         const role = req.user?.role || req.userInfo?.role;
 
         if (!userId || !role) {
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(401).json({
+                message: "Unauthorized",
+            });
         }
+
         if (role !== "teacher" && role !== "center") {
-            return res.status(403).json({ message: "Forbidden" });
+            return res.status(403).json({
+                message: "Forbidden",
+            });
         }
 
         const toRole = role === "teacher" ? "center" : "teacher";
 
-        // centerId: from class if possible
         const klass = await Class.findById(classId).select("centerId").lean();
+
         const centerId = klass?.centerId || null;
 
         const note = await ClassNote.create({
@@ -231,9 +306,73 @@ exports.createStudentNote = async (req, res) => {
             centerId,
         });
 
-        return res.status(201).json({ metadata: { note } });
+        return res.status(201).json({
+            metadata: { note },
+        });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: "Failed to create note" });
+
+        return res.status(500).json({
+            message: "Failed to create note",
+        });
+    }
+};
+
+// PATCH /students/:id/notes/:noteId
+// Only the original author can edit a note.
+exports.updateStudentNote = async (req, res) => {
+    try {
+        const content = String(req.body?.content || "").trim();
+
+        if (!content) {
+            return res.status(400).json({
+                message: "Content is required",
+            });
+        }
+
+        const userId = req.user?.userId || req.user?._id;
+
+        if (!userId) {
+            return res.status(401).json({
+                message: "Unauthorized",
+            });
+        }
+
+        const note = await ClassNote.findOneAndUpdate(
+            {
+                _id: req.params.noteId,
+                studentId: req.params.id,
+                fromUserId: userId,
+            },
+            {
+                $set: { content },
+            },
+            {
+                new: true,
+                runValidators: true,
+            },
+        );
+
+        if (!note) {
+            return res.status(404).json({
+                message: "Note not found or permission denied",
+            });
+        }
+
+        return res.json({
+            metadata: { note },
+        });
+    } catch (err) {
+        if (err.name === "CastError") {
+            return res.status(400).json({
+                message: "Invalid note ID",
+            });
+        }
+
+        console.error("update student note:", err);
+
+        return res.status(500).json({
+            message: "Update failed",
+        });
     }
 };

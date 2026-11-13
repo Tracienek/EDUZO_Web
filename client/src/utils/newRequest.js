@@ -1,5 +1,3 @@
-// utils/newRequest.js
-
 import axios from "axios";
 
 const TOKEN_KEY = "accessToken";
@@ -16,65 +14,86 @@ const newRequest = axios.create({
             ? import.meta.env.VITE_SERVER_ORIGIN
             : import.meta.env.VITE_SERVER_LOCAL_ORIGIN) + "/v1/api",
     withCredentials: true,
+    timeout: 20000,
 });
 
-// attach JWT automatically
+// Attach JWT automatically
 newRequest.interceptors.request.use(
     (config) => {
         const token = tokenStore.get();
+
         if (token) {
             config.headers = config.headers || {};
             config.headers.Authorization = `Bearer ${token}`;
         }
+
         return config;
     },
     (error) => Promise.reject(error),
 );
 
-// optional: clear token on 401
-// newRequest.interceptors.response.use(
-//     (res) => res,
-//     (err) => {
-//         const status = err?.response?.status;
-//         const msg = err?.response?.data?.message;
-
-//         // Chỉ clear khi token sai/hết hạn (tuỳ backend bạn trả message gì)
-//         if (status === 401 && msg && msg.toLowerCase().includes("invalid")) {
-//             tokenStore.clear();
-//         }
-
-//         return Promise.reject(err);
-//     },
-// );
+// Response interceptor can be enabled later if needed.
+// Avoid clearing authentication for every API failure.
+// A timeout or server error does not mean the token expired.
 
 const getLoggedInRequestConfig = (data) => {
     let contentType = "application/json";
-    if (data instanceof FormData) contentType = "multipart/form-data";
+
+    if (data instanceof FormData) {
+        contentType = "multipart/form-data";
+    }
+
     return {
         withCredentials: true,
-        headers: { "Content-Type": contentType },
+        headers: {
+            "Content-Type": contentType,
+        },
     };
 };
 
 const apiUtils = {
     async get(url, config = {}) {
-        const requestConfig = { ...getLoggedInRequestConfig(), ...config };
+        const requestConfig = {
+            ...getLoggedInRequestConfig(),
+            ...config,
+        };
+
         return newRequest.get(url, requestConfig);
     },
+
     async post(url, data = {}, config = {}) {
-        const requestConfig = { ...getLoggedInRequestConfig(data), ...config };
+        const requestConfig = {
+            ...getLoggedInRequestConfig(data),
+            ...config,
+        };
+
         return newRequest.post(url, data, requestConfig);
     },
+
     async put(url, data = {}, config = {}) {
-        const requestConfig = { ...getLoggedInRequestConfig(data), ...config };
+        const requestConfig = {
+            ...getLoggedInRequestConfig(data),
+            ...config,
+        };
+
         return newRequest.put(url, data, requestConfig);
     },
+
     async patch(url, data = {}, config = {}) {
-        const requestConfig = { ...getLoggedInRequestConfig(data), ...config };
+        const requestConfig = {
+            ...getLoggedInRequestConfig(data),
+            ...config,
+        };
+
         return newRequest.patch(url, data, requestConfig);
     },
+
     async delete(url, config = {}) {
-        const requestConfig = { ...getLoggedInRequestConfig(), ...config };
+        const requestConfig = {
+            ...getLoggedInRequestConfig(),
+            ...config,
+        };
+
         return newRequest.delete(url, requestConfig);
     },
 };
@@ -89,7 +108,9 @@ function createFormData(inputs, filesKey, files) {
             if (value.length > 0 && typeof value[0] === "object") {
                 formData.append(key, JSON.stringify(value));
             } else {
-                value.forEach((item) => formData.append(`${key}[]`, item));
+                value.forEach((item) => {
+                    formData.append(`${key}[]`, item);
+                });
             }
         } else {
             formData.append(key, value);
@@ -97,7 +118,9 @@ function createFormData(inputs, filesKey, files) {
     });
 
     files?.forEach((file) => {
-        if (file) formData.append(filesKey, file);
+        if (file) {
+            formData.append(filesKey, file);
+        }
     });
 
     return formData;
